@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/logins.css') }}"/>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/logins.css') }}" />
 
 
     <!-- Boostrap Utilidades-->
@@ -36,67 +36,56 @@
                 <h2 class="form__desc">Ingrese sus datos a continuación para crear su cuenta y comenzar
                 </h2>
 
-                <form method="post" action="#"> <!--Se pasa la funcion-->
-                    <!-- Pedir Nombre -->
+                <form method="post" action="{{ url_for('nutriologo.registrarPaciente') }}">
                     <div class="input-container">
-                        <!-- <label for="correo">Correo</label> -->
-
                         <i class="bi bi-person-fill-add icon"></i>
-                        <input type="text" onpaste="return false;"
-                            class="form__inputs {% if correo_no_encontrado %}is-invalid{% endif %} custom-placeholder"
-                            id="correo_no_encontrado" name="correo" maxlength="30" required placeholder="Nombres">
+                        <input type="text" onpaste="return false;" class="form__inputs" name="nombres" maxlength="30"
+                            required placeholder="Nombres">
                     </div>
-                    <!-- Pedir apellidos -->
                     <div class="input-container">
-                        <!-- <label for="correo">Correo</label> -->
                         <i class="bi bi-person-fill-add icon"></i>
-                        <input type="text" onpaste="return false;"
-                            class="form__inputs {% if correo_no_encontrado %}is-invalid{% endif %} custom-placeholder"
-                            id="correo_no_encontrado" name="correo" maxlength="30" required placeholder="Apellidos">
+                        <input type="text" onpaste="return false;" class="form__inputs" name="apellido_paterno"
+                            maxlength="30" required placeholder="Apellido Paterno">
                     </div>
-
-                    <!--Pedir fecha nacimiento-->
                     <div class="input-container">
-                        <!-- <label for="correo">Correo</label> -->
+                        <i class="bi bi-person-fill-add icon"></i>
+                        <input type="text" onpaste="return false;" class="form__inputs" name="apellido_materno"
+                            maxlength="30" placeholder="Apellido Materno">
+                    </div>
+                    <div class="input-container">
                         <i class="bi bi-calendar-event icon"></i>
-                        <input type="date" onpaste="return false;"
-                            class="form__inputs {% if correo_no_encontrado %}is-invalid{% endif %} custom-placeholder"
-                            id="correo_no_encontrado" name="correo" maxlength="30" required>
-
+                        <input type="date" onpaste="return false;" class="form__inputs" name="fecha_nacimiento"
+                            required>
                     </div>
-                    <!--Pedir correo -->
                     <div class="input-container">
-                        <!-- <label for="correo">Correo</label> -->
                         <i class="bi bi-envelope-at-fill icon"></i>
-                        <input type="email" onpaste="return false;"
-                            class="form__inputs {% if correo_no_encontrado %}is-invalid{% endif %} custom-placeholder"
-                            id="correo_no_encontrado" name="correo" maxlength="30" required
-                            placeholder="Correo Electronico">
+                        <input type="email" onpaste="return false;" class="form__inputs" name="correo_electronico"
+                            maxlength="30" required placeholder="Correo Electrónico">
                     </div>
-                    <!--Pedir telefono-->
+                    <!-- Campo para la contraseña -->
                     <div class="input-container">
-                        <!-- <label for="correo">Correo</label> -->
+                        <i class="bi bi-lock icon"></i>
+                        <input type="password" onpaste="return false;" class="form__inputs" name="contrasena"
+                            maxlength="50" required placeholder="Contraseña">
+                    </div>
+                    <div class="input-container">
                         <i class="bi bi-telephone icon"></i>
-                        <input type="tel" onpaste="return false;"
-                            class="form__inputs {% if correo_no_encontrado %}is-invalid{% endif %} custom-placeholder"
-                            id="correo_no_encontrado" name="correo" maxlength="30" required placeholder="Teléfono"
-                            pattern="[0-9]{10}">
+                        <input type="tel" onpaste="return false;" class="form__inputs" name="telefono" maxlength="30"
+                            required placeholder="Teléfono" pattern="[0-9]{10}">
                     </div>
-                    <!--Pedir sexo-->
                     <div class="input-container">
-                        <!-- <i class="bi bi-gender-ambiguous icon"></i>  -->
-                        <select class="form__inputs custom-placeholder" id="genero" name="genero" required>
+                        <select class="form__inputs custom-placeholder" name="sexo" required>
                             <option value="" disabled selected>Selecciona el género</option>
                             <option value="hombre">Hombre</option>
                             <option value="mujer">Mujer</option>
                         </select>
                     </div>
 
-                    <!-- Enviar informacion -->
                     <button type="submit" class="form__inputs form__inputs--enviar">
                         registrar cliente
                     </button>
                 </form>
+
 
 
                 <!--Extras-->

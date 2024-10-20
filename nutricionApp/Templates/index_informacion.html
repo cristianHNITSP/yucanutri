@@ -433,6 +433,72 @@
             /* Ocultar la flecha */
         }
     </style>
+
+    <!-- Estilos para las cartas-->
+    <style>
+        body {
+            background-color: #f9f9f9;
+            /* Color de fondo suave */
+  
+        }
+
+        .card {
+            border: none;
+            /* Sin bordes */
+            border-radius: 12px;
+            /* Bordes redondeados */
+            background-color: #f9f9f9;
+            /* Fondo blanco */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            /* Sombra sutil */
+            padding: 20px;
+            /* Espaciado interno */
+          
+
+            display: flex;
+            flex-direction: column;
+            /* Disposición en columna */
+            justify-content: space-between;
+            /* Espaciado entre elementos */
+        }
+
+        .card-img-top {
+            border-radius: 10px;
+            /* Bordes redondeados en la imagen */
+            width: 100%;
+            /* Imagen ocupa el ancho completo */
+            height: 150px;
+            /* Altura de la imagen */
+            object-fit: cover;
+            /* Ajusta la imagen sin distorsionar */
+        }
+
+        .card-title {
+            font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            /* Fuente similar a la de Apple */
+            font-size: 1.5em;
+            /* Tamaño de fuente para el título */
+            color: #333;
+            /* Color de texto más oscuro */
+            margin: 10px 0;
+            /* Espaciado vertical */
+        }
+
+        .card-text {
+            color: #666;
+            /* Color de texto secundario */
+            line-height: 1.4;
+            /* Mayor espaciado entre líneas */
+            flex-grow: 1;
+            /* Ocupa el espacio restante en la tarjeta */
+        }
+
+        .card-footer {
+            background-color: #f9f9f9;
+            /* Fondo ligeramente más claro para el pie de la carta */
+
+        }
+    </style>
 </head>
 
 <body>
@@ -449,18 +515,22 @@
         <!-- Componente de pestañas -->
         <div class="row scroll-container">
             <div class="col-1"></div>
+
             <div class="col-10">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <button class="nav-link active" id="nav-routines-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-routines" type="button" role="tab" aria-controls="nav-routines"
-                            aria-selected="true">Rutinas de Entrenamiento</button>
-                        <button class="nav-link" id="nav-plans-tab" data-bs-toggle="tab" data-bs-target="#nav-plans"
-                            type="button" role="tab" aria-controls="nav-plans" aria-selected="false">Plan
-                            Alimenticio</button>
-                        <button class="nav-link" id="nav-progress-tab" data-bs-toggle="tab"
+                        <button class="nav-link active" id="nav-progress-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-progress" type="button" role="tab" aria-controls="nav-progress"
-                            aria-selected="false">Progresos</button>
+                            aria-selected="true">Progresos</button>
+
+                        <button class="nav-link" id="nav-routines-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-routines" type="button" role="tab" aria-controls="nav-routines"
+                            aria-selected="false" onclick="openModal('nav-routines-tab')">Rutinas de
+                            Entrenamiento</button>
+
+                        <button class="nav-link" id="nav-plans-tab" data-bs-toggle="tab" data-bs-target="#nav-plans"
+                            type="button" role="tab" aria-controls="nav-plans" aria-selected="false"
+                            onclick="openModal('nav-plans-tab')">Plan Alimenticio</button>
                     </div>
                 </nav>
 
@@ -468,8 +538,8 @@
 
 
                     <!-- Contenido de rutinas de entrenamiento -->
-                    <div class="tab-pane fade show active" id="nav-routines" role="tabpanel"
-                        aria-labelledby="nav-routines-tab" tabindex="0">
+                    <div class="tab-pane fade" id="nav-routines" role="tabpanel" aria-labelledby="nav-routines-tab"
+                        tabindex="0">
                         <div class="col-6 mt-4 mb-4">
                             <h5>Programa de Entrenamiento</h5>
                         </div>
@@ -486,605 +556,24 @@
                     <!-- Contenido de plan alimenticio -->
                     <div class="tab-pane fade" id="nav-plans" role="tabpanel" aria-labelledby="nav-plans-tab"
                         tabindex="0">
-
-                        <!-- Comidas -->
-                        <div class="col-12 mt-4 mb-4">
-                            <h5>
-                                <button class="btn" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseComidas" aria-expanded="true"
-                                    aria-controls="collapseComidas">
-                                    Comidas
-                                </button>
-                            </h5>
-                            <div id="collapseComidas" class="collapse show">
-                                <!-- Tabla Editable -->
-                                <div class="table-responsive animate__animated" id="table-container">
-                                    <table class="table table-striped table-hover">
-                                        <thead class="table-dark">
-                                            <tr>
-                                                <th scope="col" class="text-center align-top">Tiempos de comida</th>
-                                                <th scope="col" class="text-center align-top">Menu 1 (Lunes y Viernes)
-                                                </th>
-                                                <th scope="col" class="text-center align-top">Menu 2 (Martes y Jueves)
-                                                </th>
-                                                <th scope="col" class="text-center align-top">Menu 3 (Miércoles y
-                                                    Sábado)</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="table-group-divider">
-                                            <tr>
-                                                <td>Desayuno</td>
-                                                <td contenteditable="true"></td>
-                                                <td contenteditable="true"></td>
-                                                <td contenteditable="true"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Almuerzo</td>
-                                                <td contenteditable="true"></td>
-                                                <td contenteditable="true"></td>
-                                                <td contenteditable="true"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Durante el entrenamiento</td>
-                                                <td contenteditable="true"></td>
-                                                <td contenteditable="true"></td>
-                                                <td contenteditable="true"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Terminar de entrenar</td>
-                                                <td contenteditable="true"></td>
-                                                <td contenteditable="true"></td>
-                                                <td contenteditable="true"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cena</td>
-                                                <td contenteditable="true"></td>
-                                                <td contenteditable="true"></td>
-                                                <td contenteditable="true"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr class="my-4"> <!-- Separador horizontal -->
-
-                        <!-- Alimentos Permitidos con Pocas Calorías -->
-                        <div class="col-12 mt-4 mb-4">
-                            <h5>
-                                <button class="btn text-start" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseAlimentos" aria-expanded="false"
-                                    aria-controls="collapseAlimentos">
-                                    Alimentos Permitidos con Pocas Calorías
-                                </button>
-                            </h5>
-                            <div id="collapseAlimentos" class="collapse">
-                                <div class="row ms-1">
-                                    <div class="col-12 col-md-6">
-                                        <label for="low-calorie-foods" class="form-label">Escriba los alimentos
-                                            permitidos con pocas calorías para el paciente:</label>
-                                        <textarea class="form-control" id="low-calorie-foods" rows="1"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr class="my-4"> <!-- Separador horizontal -->
-
-                        <!-- Comidas a Evitar -->
-                        <div class="col-12 mt-4 mb-4">
-                            <h5>
-                                <button class="btn" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseComidasEvitar" aria-expanded="false"
-                                    aria-controls="collapseComidasEvitar">
-                                    Comidas a Evitar
-                                </button>
-                            </h5>
-                            <div id="collapseComidasEvitar" class="collapse">
-                                <div class="row ms-1">
-                                    <div class="col-12 col-md-6">
-                                        <label for="avoid-foods" class="form-label">Escriba las comidas a evitar del
-                                            paciente:</label>
-                                        <textarea class="form-control" id="avoid-foods" rows="1"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr class="my-4"> <!-- Separador horizontal -->
-
-                        <!-- Bebidas Permitidas -->
-                        <div class="col-12 mt-4 mb-4">
-                            <h5>
-                                <button class="btn" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseBebidasPermitidas" aria-expanded="false"
-                                    aria-controls="collapseBebidasPermitidas">
-                                    Bebidas Permitidas
-                                </button>
-                            </h5>
-                            <div id="collapseBebidasPermitidas" class="collapse">
-                                <div class="row ms-1">
-                                    <div class="col-12 col-md-6">
-                                        <label for="allowed-drinks" class="form-label">Escriba las bebidas permitidas
-                                            del paciente:</label>
-                                        <textarea class="form-control" id="allowed-drinks" rows="1"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr class="my-4"> <!-- Separador horizontal -->
-
-                        <!-- Tips de Alimentación -->
-                        <div class="col-12 mt-4 mb-4">
-                            <h5>
-                                <button class="btn" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseTipsAlimentacion" aria-expanded="false"
-                                    aria-controls="collapseTipsAlimentacion">
-                                    Tips de Alimentación
-                                </button>
-                            </h5>
-                            <div id="collapseTipsAlimentacion" class="collapse">
-                                <div class="row ms-1">
-                                    <div class="col-12 col-md-6">
-                                        <label for="nutrition-tips" class="form-label">Escriba los tips de alimentación
-                                            para el paciente:</label>
-                                        <textarea class="form-control" id="nutrition-tips" rows="1"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr class="my-4"> <!-- Separador horizontal -->
-
-                        <!-- Suplementos -->
-                        <div class="col-12 mt-4 mb-4">
-                            <h5>
-                                <button class="btn" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseSuplementos" aria-expanded="false"
-                                    aria-controls="collapseSuplementos">
-                                    Suplementos
-                                </button>
-                            </h5>
-                            <div id="collapseSuplementos" class="collapse">
-                                <div class="container mt-4 bg-transparent">
-                                    <div class="form-group">
-                                        <label class="form-label">¿El paciente desea ingerir suplementos?</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="supplementRadio"
-                                                id="supplementYes" value="yes" onchange="toggleSupplementTextarea()">
-                                            <label class="form-check-label" for="supplementYes">
-                                                Sí, si desea consumir suplementos
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="supplementRadio"
-                                                id="supplementNo" value="no" onchange="toggleSupplementTextarea()"
-                                                checked>
-                                            <label class="form-check-label" for="supplementNo">
-                                                No, no desea consumir suplementos
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <!-- Textarea para suplementos -->
-                                    <div id="supplementTextarea" class="row mt-3" style="display: none;">
-                                        <div class="col-12 col-md-6">
-                                            <label for="supplement-input" class="form-label">Ingrese los suplementos que
-                                                consumirá el paciente:</label>
-                                            <textarea class="form-control" id="supplement-input" rows="1"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr class="my-4"> <!-- Separador horizontal -->
-
+                        {% include 'ingresar_info_cliente_alimentos.html' %}
                     </div>
 
                     <!-- Contenido de progresos -->
-                    <div class="tab-pane fade" id="nav-progress" role="tabpanel" aria-labelledby="nav-progress-tab"
-                        tabindex="0">
+                    <!-- Modificar el active con el tiempo -->
+                    <div class="tab-pane fade show active" id="nav-progress" role="tabpanel"
+                        aria-labelledby="nav-progress-tab" tabindex="0">
                         <div class="col-6 mt-4 mb-4">
                             <h5>Progresos</h5>
                         </div>
 
                         <div class="container-progress mb-5">
-                            <div class="card-group mx-3 mb-4 mt-4"> <!-- Primer grupo de cartas -->
-                                <!-- Peso -->
-                                <div class="card">
-                                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Peso">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Peso</h5>
-                                        <p class="card-text">El peso corporal es una medida importante que se utiliza
-                                            para evaluar la salud general y el estado nutricional. Mantener un peso
-                                            saludable es fundamental para prevenir enfermedades y promover el bienestar.
-                                        </p>
-                                        <p class="card-text"><strong>Tu progreso actual:</strong> 13 kg</p>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                id="pesoDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Opciones
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="pesoDropdown">
-                                                <li><a class="dropdown-item" href="#">Ver historial</a></li>
-                                                <li><a class="dropdown-item" href="#">Editar</a></li>
-                                            </ul>
-                                        </div>
-                                        <small class="text-body-secondary">Última actualización: 16/10/2024</small>
-                                    </div>
-                                </div>
-
-                                <!-- Abdomen -->
-                                <div class="card">
-                                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Abdomen">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Abdomen</h5>
-                                        <p class="card-text">La medida del abdomen es crucial para evaluar el riesgo de
-                                            enfermedades metabólicas. Un abdomen más grande puede indicar un mayor
-                                            riesgo de problemas de salud.</p>
-                                        <p class="card-text"><strong>Tu progreso actual:</strong> 10 cm</p>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                id="abdomenDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Opciones
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="abdomenDropdown">
-                                                <li><a class="dropdown-item" href="#">Ver historial</a></li>
-                                                <li><a class="dropdown-item" href="#">Editar</a></li>
-                                            </ul>
-                                        </div>
-                                        <small class="text-body-secondary">Última actualización: 16/10/2024</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mx-3 row-cols-1 row-cols-md-3 g-4">
-                                <!-- Brazo Derecho Relajado -->
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="https://via.placeholder.com/150" class="card-img-top"
-                                            alt="Brazo Derecho Relajado">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Brazo Der. Relajado</h5>
-                                            <p class="card-text">Medir los brazos permite evaluar el estado muscular y
-                                                la grasa corporal. Un tamaño adecuado indica una buena salud y estado
-                                                físico.</p>
-                                            <p class="card-text"><strong>Tu progreso actual:</strong> 20 cm</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                    id="brazoDerechoDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">Opciones</button>
-                                                <ul class="dropdown-menu" aria-labelledby="brazoDerechoDropdown">
-                                                    <li><a class="dropdown-item" href="#">Ver historial</a></li>
-                                                    <li><a class="dropdown-item" href="#">Editar</a></li>
-                                                </ul>
-                                            </div>
-                                            <small class="text-body-secondary">Última actualización: 16/10/2024</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Brazo Derecho Contraído -->
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="https://via.placeholder.com/150" class="card-img-top"
-                                            alt="Brazo Derecho Contraído">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Brazo Der. Contraído</h5>
-                                            <p class="card-text">Las medidas de los brazos son un indicativo del
-                                                desarrollo muscular y el estado nutricional. Mantener un equilibrio en
-                                                el tamaño de los brazos es importante.</p>
-                                            <p class="card-text"><strong>Tu progreso actual:</strong> 20 cm</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                    id="brazoDerechoContraidoDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">Opciones</button>
-                                                <ul class="dropdown-menu"
-                                                    aria-labelledby="brazoDerechoContraidoDropdown">
-                                                    <li><a class="dropdown-item" href="#">Ver historial</a></li>
-                                                    <li><a class="dropdown-item" href="#">Editar</a></li>
-                                                </ul>
-                                            </div>
-                                            <small class="text-body-secondary">Última actualización: 16/10/2024</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Brazo Izquierdo Relajado -->
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="https://via.placeholder.com/150" class="card-img-top"
-                                            alt="Brazo Izquierdo Relajado">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Brazo Izq. Relajado</h5>
-                                            <p class="card-text">Las medidas de los brazos son un indicativo del
-                                                desarrollo muscular y el estado nutricional. Mantener un equilibrio en
-                                                el tamaño de los brazos es importante.</p>
-                                            <p class="card-text"><strong>Tu progreso actual:</strong> 20 cm</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                    id="brazoIzquierdoDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">Opciones</button>
-                                                <ul class="dropdown-menu" aria-labelledby="brazoIzquierdoDropdown">
-                                                    <li><a class="dropdown-item" href="#">Ver historial</a></li>
-                                                    <li><a class="dropdown-item" href="#">Editar</a></li>
-                                                </ul>
-                                            </div>
-                                            <small class="text-body-secondary">Última actualización: 16/10/2024</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Brazo Izquierdo Contraído -->
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="https://via.placeholder.com/150" class="card-img-top"
-                                            alt="Brazo Izquierdo Contraído">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Brazo Izq. Contraído</h5>
-                                            <p class="card-text">Las medidas de los brazos son un indicativo del
-                                                desarrollo muscular y el estado nutricional. Mantener un equilibrio en
-                                                el tamaño de los brazos es importante.</p>
-                                            <p class="card-text"><strong>Tu progreso actual:</strong> 20 cm</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                    id="brazoIzquierdoContraidoDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">Opciones</button>
-                                                <ul class="dropdown-menu"
-                                                    aria-labelledby="brazoIzquierdoContraidoDropdown">
-                                                    <li><a class="dropdown-item" href="#">Ver historial</a></li>
-                                                    <li><a class="dropdown-item" href="#">Editar</a></li>
-                                                </ul>
-                                            </div>
-                                            <small class="text-body-secondary">Última actualización: 16/10/2024</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mt-1 mx-3 row-cols-1 row-cols-md-3 g-4">
-                                <!-- Pierna Derecha Relajado -->
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="https://via.placeholder.com/150" class="card-img-top"
-                                            alt="Pierna Derecha Relajado">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Pierna Der. Relajado</h5>
-                                            <p class="card-text">La medición de las piernas es crucial para evaluar el
-                                                desarrollo muscular y la salud en general. Un tamaño adecuado indica un
-                                                buen nivel de actividad física.</p>
-                                            <p class="card-text"><strong>Tu progreso actual:</strong> 20 cm</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                    id="piernaDerechaDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">Opciones</button>
-                                                <ul class="dropdown-menu" aria-labelledby="piernaDerechaDropdown">
-                                                    <li><a class="dropdown-item" href="#">Ver historial</a></li>
-                                                    <li><a class="dropdown-item" href="#">Editar</a></li>
-                                                </ul>
-                                            </div>
-                                            <small class="text-body-secondary">Última actualización: 16/10/2024</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Pierna Derecha Contraído -->
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="https://via.placeholder.com/150" class="card-img-top"
-                                            alt="Pierna Derecha Contraído">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Pierna Der. Contraído</h5>
-                                            <p class="card-text">Las medidas de las piernas son un indicativo del
-                                                desarrollo muscular y el estado físico. Mantener un tamaño adecuado es
-                                                importante.</p>
-                                            <p class="card-text"><strong>Tu progreso actual:</strong> 20 cm</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                    id="piernaDerechaContraidoDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">Opciones</button>
-                                                <ul class="dropdown-menu"
-                                                    aria-labelledby="piernaDerechaContraidoDropdown">
-                                                    <li><a class="dropdown-item" href="#">Ver historial</a></li>
-                                                    <li><a class="dropdown-item" href="#">Editar</a></li>
-                                                </ul>
-                                            </div>
-                                            <small class="text-body-secondary">Última actualización: 16/10/2024</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Pierna Izquierda Relajado -->
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="https://via.placeholder.com/150" class="card-img-top"
-                                            alt="Pierna Izquierda Relajado">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Pierna Izq. Relajado</h5>
-                                            <p class="card-text">La medición de las piernas es crucial para evaluar el
-                                                desarrollo muscular y la salud en general. Un tamaño adecuado indica un
-                                                buen nivel de actividad física.</p>
-                                            <p class="card-text"><strong>Tu progreso actual:</strong> 20 cm</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                    id="piernaIzquierdaDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">Opciones</button>
-                                                <ul class="dropdown-menu" aria-labelledby="piernaIzquierdaDropdown">
-                                                    <li><a class="dropdown-item" href="#">Ver historial</a></li>
-                                                    <li><a class="dropdown-item" href="#">Editar</a></li>
-                                                </ul>
-                                            </div>
-                                            <small class="text-body-secondary">Última actualización: 16/10/2024</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Pierna Izquierda Contraído -->
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="https://via.placeholder.com/150" class="card-img-top"
-                                            alt="Pierna Izquierda Contraído">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Pierna Izq. Contraído</h5>
-                                            <p class="card-text">Las medidas de las piernas son un indicativo del
-                                                desarrollo muscular y el estado físico. Mantener un tamaño adecuado es
-                                                importante.</p>
-                                            <p class="card-text"><strong>Tu progreso actual:</strong> 20 cm</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                    id="piernaIzquierdaContraidoDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">Opciones</button>
-                                                <ul class="dropdown-menu"
-                                                    aria-labelledby="piernaIzquierdaContraidoDropdown">
-                                                    <li><a class="dropdown-item" href="#">Ver historial</a></li>
-                                                    <li><a class="dropdown-item" href="#">Editar</a></li>
-                                                </ul>
-                                            </div>
-                                            <small class="text-body-secondary">Última actualización: 16/10/2024</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Muslo Derecho -->
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="https://via.placeholder.com/150" class="card-img-top"
-                                            alt="Muslo Derecho">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Muslo Der.</h5>
-                                            <p class="card-text">La medición del muslo es crucial para evaluar el
-                                                desarrollo muscular y la salud. Un muslo bien desarrollado es un signo
-                                                de actividad física.</p>
-                                            <p class="card-text"><strong>Tu progreso actual:</strong> 20 cm</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                    id="musloDerechoDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    Opciones
-                                                </button>
-                                                <ul class="dropdown-menu" aria-labelledby="musloDerechoDropdown">
-                                                    <li><a class="dropdown-item" href="#">Ver historial</a></li>
-                                                    <li><a class="dropdown-item" href="#">Editar</a></li>
-                                                </ul>
-                                            </div>
-                                            <small class="text-body-secondary">Última actualización: 16/10/2024</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mt-1 mx-3 mb-4 row-cols-1 row-cols-md-3 g-4">
-                                <!-- Torso -->
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Torso">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Torso</h5>
-                                            <p class="card-text">La medición del torso es fundamental para evaluar el
-                                                desarrollo muscular y la salud en general. Mantener un equilibrio es
-                                                clave para el bienestar.</p>
-                                            <p class="card-text"><strong>Tu progreso actual:</strong> 20 cm</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                    id="torsoDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    Opciones
-                                                </button>
-                                                <ul class="dropdown-menu" aria-labelledby="torsoDropdown">
-                                                    <li><a class="dropdown-item" href="#">Ver historial</a></li>
-                                                    <li><a class="dropdown-item" href="#">Editar</a></li>
-                                                </ul>
-                                            </div>
-                                            <small class="text-body-secondary">Última actualización: 16/10/2024</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Muslo Izquierdo -->
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="https://via.placeholder.com/150" class="card-img-top"
-                                            alt="Muslo Izquierdo">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Muslo Izq.</h5>
-                                            <p class="card-text">La medición del muslo es crucial para evaluar el
-                                                desarrollo muscular y la salud. Un muslo bien desarrollado es un signo
-                                                de actividad física.</p>
-                                            <p class="card-text"><strong>Tu progreso actual:</strong> 20 cm</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                    id="musloIzquierdoDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    Opciones
-                                                </button>
-                                                <ul class="dropdown-menu" aria-labelledby="musloIzquierdoDropdown">
-                                                    <li><a class="dropdown-item" href="#">Ver historial</a></li>
-                                                    <li><a class="dropdown-item" href="#">Editar</a></li>
-                                                </ul>
-                                            </div>
-                                            <small class="text-body-secondary">Última actualización: 16/10/2024</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {% include 'cards.html' %}
                         </div>
 
                     </div>
 
                 </div>
-
-
-                <!-- Offcanvas para ver el historial (un ejemplo) -->
-                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasHistorialPeso"
-                    aria-labelledby="offcanvasHistorialPesoLabel">
-                    <div class="offcanvas-header">
-                        <h5 id="offcanvasHistorialPesoLabel">Historial de Peso</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                        <p>Aquí iría el historial de peso.</p>
-                        <!-- Más detalles del historial aquí -->
-                    </div>
-                </div>
-
-                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasHistorialAbdomen"
-                    aria-labelledby="offcanvasHistorialAbdomenLabel">
-                    <div class="offcanvas-header">
-                        <h5 id="offcanvasHistorialAbdomenLabel">Historial de Abdomen</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                        <p>Aquí iría el historial de abdomen.</p>
-                    </div>
-                </div>
-
             </div>
 
         </div>
@@ -1202,6 +691,61 @@
     </div>
 
 
+    <!-- Modal para ingresar los datos del usuario -->
+    <div class="modal fade" id="userModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="userModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="userModalLabel">Ingrese los datos del paciente</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="userForm">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="username" placeholder="Nombre" required>
+                            <label for="username">Nombre</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" placeholder="Correo electrónico"
+                                required>
+                            <label for="email">Correo electrónico</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Offcanvas para ver el historial (un ejemplo) -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasHistorialPeso"
+        aria-labelledby="offcanvasHistorialPesoLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasHistorialPesoLabel">Historial de Peso</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <p>Aquí iría el historial de peso.</p>
+            <!-- Más detalles del historial aquí -->
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasHistorialAbdomen"
+        aria-labelledby="offcanvasHistorialAbdomenLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasHistorialAbdomenLabel">Historial de Abdomen</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <p>Aquí iría el historial de abdomen.</p>
+        </div>
+    </div>
+
     <!-- Enlace a Bootstrap JS y dependencias -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
@@ -1257,6 +801,9 @@
 
 
     </script>
+
+
+
 
 </body>
 

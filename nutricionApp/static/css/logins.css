@@ -156,7 +156,7 @@ body {
 /*Seccion del registro ajustes*/
 .form__container--registro {
     width: 50%;
-    height: auto;
+    height: 100vh;
     border-radius: 30px 0 0 30px;
 }
 

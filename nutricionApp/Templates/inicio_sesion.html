@@ -37,7 +37,8 @@
             <h2 class="form__desc">Accede fácilmente a tu información, planes y mucho más en un solo lugar
             </h2>
 
-            <form method="post" action="#"> <!--Se pasa la funcion-->
+            <form method="post" action="{{ url_for('auth.inicio_sesion') }}">
+                <!--Se pasa la funcion-->
                 <!-- Pedir Correo -->
                 <div class="input-container">
                     <i class="fas fa-at icon"></i>

@@ -12,7 +12,7 @@ from flask import (
 )
 
 import hashlib
-import Config, locale, re  # Importar config.py en donde se hacen las consultas de la base de datos
+import Config as Config, locale, re  # Importar config.py en donde se hacen las consultas de la base de datos
 
 class MyException(Exception):
     def __init__(self, Tipo, mensaje):
@@ -44,12 +44,14 @@ def create_app():
         
     from . import nutriologo_paciente
     app.register_blueprint(nutriologo_paciente.bp)
-
+    
     from . import cliente
     app.register_blueprint(cliente.bp)
 
     from . import nutriologo
     app.register_blueprint(nutriologo.bp)
+    from . import auth
+    app.register_blueprint(auth.bp)
 
     # Ruta dinámica para archivos estáticos
     @app.route("/static/<path:path>")
