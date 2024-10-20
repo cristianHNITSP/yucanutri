@@ -1,5 +1,5 @@
-from flask import Blueprint, request, session, flash, redirect, url_for, render_template, session
-from werkzeug.security import check_password_hash, generate_password_hash  # Importar para verificar hash
+from flask import Blueprint, request, session, flash, redirect, url_for, render_template
+from werkzeug.security import check_password_hash
 import Config  # Asegúrate de que esta importación sea correcta
 
 
@@ -23,10 +23,10 @@ def inicio_sesion():
         params = (str(session['correo']),)
 
         try:
-            # Verificar como superusuario
+            # Verificar como superusuario y recuperar el rol
             seleccionar_superusuario = Config.Read(
                 """
-                SELECT * 
+                SELECT rol, contrasena 
                 FROM public.superusuario 
                 WHERE correo_electronico = %s AND contrasena = %s
                 """, 
@@ -34,14 +34,22 @@ def inicio_sesion():
             )
 
             if seleccionar_superusuario:
-                print("Conexión a la base de datos exitosa como superusuario")
+                session['rol'] = seleccionar_superusuario[0][0]  # Guardar el rol en la sesión
+                print(f"Conexión a la base de datos exitosa como superusuario. Rol: {session['rol']}")
+
+                # Depurar sesión antes del redireccionamiento
+                print("Depuración de sesión:")
+                print(f"Correo: {session.get('correo')}")
+                print(f"Contraseña: {session.get('contraseña')}")
+                print(f"Rol: {session.get('rol')}")
+
                 flash('Inicio de sesión exitoso como superusuario', 'success')
                 return redirect(url_for('nutriologo.salaNutriologo'))
 
-            # Verificar como nutriologo
+            # Verificar como nutriologo y recuperar el rol
             seleccionar_nutriologo = Config.Read(
                 """
-                SELECT * 
+                SELECT rol, contrasena 
                 FROM public.nutriologo 
                 WHERE correo_electronico = %s AND contrasena = %s
                 """, 
@@ -49,14 +57,22 @@ def inicio_sesion():
             )
 
             if seleccionar_nutriologo:
-                print("Conexión a la base de datos exitosa como nutriologo")
+                session['rol'] = seleccionar_nutriologo[0][0]  # Guardar el rol en la sesión
+                print(f"Conexión a la base de datos exitosa como nutriologo. Rol: {session['rol']}")
+
+                # Depurar sesión antes del redireccionamiento
+                print("Depuración de sesión:")
+                print(f"Correo: {session.get('correo')}")
+                print(f"Contraseña: {session.get('contraseña')}")
+                print(f"Rol: {session.get('rol')}")
+
                 flash('Inicio de sesión exitoso como nutriologo', 'success')
                 return redirect(url_for('nutriologo.salaNutriologo'))
 
-            # Verificar como paciente (con hash)
+            # Verificar como paciente (con hash) y recuperar el rol
             seleccionar_paciente = Config.Read(
                 """
-                SELECT contrasena 
+                SELECT rol, contrasena 
                 FROM public.paciente 
                 WHERE correo_electronico = %s
                 """, 
@@ -64,12 +80,17 @@ def inicio_sesion():
             )
 
             if seleccionar_paciente:
-                # Suponiendo que seleccionas solo un paciente
-                hash_contrasena = seleccionar_paciente[0][0]  # Obtener solo el hash de la contraseña
-
-                # Verificar el hash de la contraseña
+                hash_contrasena = seleccionar_paciente[0][1]  # Obtener el hash de la contraseña
                 if check_password_hash(hash_contrasena, contraseña):
-                    print("Conexión a la base de datos exitosa como paciente")
+                    session['rol'] = seleccionar_paciente[0][0]  # Guardar el rol en la sesión
+                    print(f"Conexión a la base de datos exitosa como paciente. Rol: {session['rol']}")
+
+                    # Depurar sesión antes del redireccionamiento
+                    print("Depuración de sesión:")
+                    print(f"Correo: {session.get('correo')}")
+                    print(f"Contraseña: {session.get('contraseña')}")
+                    print(f"Rol: {session.get('rol')}")
+
                     flash('Inicio de sesión exitoso como paciente', 'success')
                     return redirect(url_for('nutriologo_paciente.index_informacion'))
                 else:
