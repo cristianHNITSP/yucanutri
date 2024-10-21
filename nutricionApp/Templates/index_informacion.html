@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Datos</title>
+    <!-- Enlace a Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}" type="image/x-icon">
+
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='img/plan_alimentacion.jpg') }}");
+            background-size: cover;
+            /* Hace que la imagen cubra todo el fondo */
+            background-position: center;
+            /* Centra la imagen de fondo */
+            background-repeat: no-repeat;
+            /* Evita que la imagen se repita */
+        }
+
+        .container {
+            /* Añadir un color de fondo semitransparente para que el contenido se destaque */
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+        }
+    </style>
+
+    <style>
+        /* Estilos aplicados únicamente a la tabla dentro del #table-container */
+        #table-container .table {
+            border-radius: 15px;
+            /* Bordes redondeados */
+            overflow: hidden;
+            /* Evita que los bordes redondeados sean cortados */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            /* Sombra suave */
+        }
+
+        #table-container .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.03);
+            /* Fondo suave para filas alternas */
+        }
+
+        #table-container .table-hover tbody tr:hover {
+            background-color: rgba(184, 180, 180, 0.05);
+            /* Efecto al pasar el ratón */
+        }
+
+        /* Estilo para encabezados */
+        #table-container .table-dark {
+            background-color: #343a40;
+            /* Color de fondo oscuro */
+            color: white;
+            /* Color de texto blanco */
+        }
+
+        /* Estilo para las celdas editables */
+        @keyframes subtleGrow {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.02);
+            }
+        }
+
+        #table-container [contenteditable="true"].animate {
+            animation: subtleGrow 0.2s ease-in-out forwards;
+            /* Aplicar animación */
+        }
+
+        #table-container [contenteditable="true"] {
+            width: 200px;
+            /* Ancho fijo */
+            height: 60px;
+            /* Altura fija */
+            overflow-y: auto;
+            /* Permite el desplazamiento vertical */
+            overflow-wrap: break-word;
+            /* Rompe las palabras largas para ajustarse */
+            white-space: pre-wrap;
+            /* Permite que el texto se ajuste en varias líneas */
+            max-width: 200px;
+            /* Ancho máximo de las celdas */
+            border: 1px solid #dee2e6;
+            /* Borde para las celdas editables */
+            padding: 5px;
+            /* Espaciado interno */
+            box-sizing: border-box;
+            /* Asegura que el padding esté dentro del ancho definido */
+        }
+    </style>
+
+    <!-- Estilos aplicados únicamente a la tabla dentro del modal con id="routineTable" -->
+    <style>
+        /* Estilos aplicados únicamente a la tabla dentro del modal con id="routineTable" */
+        #routineTable {
+            border-radius: 15px;
+            /* Bordes redondeados */
+            overflow: hidden;
+            /* Evita que los bordes redondeados sean cortados */
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Fondo blanco con transparencia */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            /* Sombra más prominente */
+        }
+
+        #routineTable.table-striped tbody tr:nth-of-type(odd) {
+            background-color: transparent;
+            /* Fondo transparente para filas alternas */
+        }
+
+        #routineTable.table-hover tbody tr:hover {
+            background-color: rgba(184, 180, 180, 0.05);
+            /* Efecto al pasar el ratón, con fondo ligero */
+        }
+
+        /* Estilo para encabezados */
+        #routineTable .table-dark {
+            background-color: #343a40;
+            /* Color de fondo oscuro */
+            color: white;
+            /* Color de texto blanco */
+        }
+
+        /* Estilo para las celdas editables */
+        @keyframes subtleGrowRoutine {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.02);
+            }
+        }
+
+        #routineTable [contenteditable="true"].animate {
+            animation: subtleGrowRoutine 0.2s ease-in-out forwards;
+            /* Aplicar animación */
+        }
+
+        #routineTable [contenteditable="true"] {
+            width: 200px;
+            /* Ancho fijo */
+            height: 50px;
+            /* Altura fija */
+            overflow-y: auto;
+            /* Permite el desplazamiento vertical */
+            overflow-wrap: break-word;
+            /* Rompe las palabras largas para ajustarse */
+            white-space: pre-wrap;
+            /* Permite que el texto se ajuste en varias líneas */
+            max-width: 200px;
+            /* Ancho máximo de las celdas */
+            border: 1px solid #dee2e6;
+            /* Borde para las celdas editables */
+            padding: 5px;
+            /* Espaciado interno */
+            box-sizing: border-box;
+            /* Asegura que el padding esté dentro del ancho definido */
+        }
+    </style>
+
+    <style>
+        /* Estilo para el textarea */
+        #avoid-foods,
+        #supplement-input,
+        #allowed-drinks,
+        #nutrition-tips,
+        #low-calorie-foods {
+            resize: none;
+            padding: 5px;
+            overflow-y: hidden;
+            /* Permitir desplazamiento si es necesario */
+            max-height: 100px;
+            /* Ajuste de altura */
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: initial;
+        }
+    </style>
+
+    <style>
+        .scroll-container {
+            max-height: 82vh;
+            /* El contenedor ocupará como máximo el 80% de la altura de la ventana */
+
+            /* Puedes ajustar este valor según lo necesites */
+            overflow-y: auto;
+            /* Habilita la barra de desplazamiento vertical */
+
+            /* Ajusta el espacio interno si es necesario */
+            box-sizing: border-box;
+            /* Asegura que el padding esté dentro del contenedor */
+        }
+
+        /* Opcionalmente, puedes personalizar el aspecto de la scrollbar */
+        .scroll-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scroll-container::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 10px;
+        }
+
+        .scroll-container::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
+    </style>
+
+    <style>
+        .nav-link {
+            padding: 0.5rem 1rem;
+            color: black;
+            /* Letra negra cuando no está activo */
+            background-color: white;
+            /* Fondo blanco cuando no está activo */
+            font-size: inherit;
+            font-weight: inherit;
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+        }
+
+        .nav-link:hover {
+            color: black;
+            /* Letra negra al pasar el mouse */
+            background-color: white;
+            /* Fondo blanco al pasar el mouse */
+        }
+
+        .nav-link:disabled {
+            color: gray;
+            /* Color cuando el enlace está deshabilitado */
+        }
+
+        .nav-tabs {
+            border-color: gray;
+            border-width: 1px;
+            border-radius: 0.25rem;
+        }
+
+        .nav-tabs .nav-link:hover {
+            border-color: gray;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: white;
+            /* Letra blanca cuando está activo */
+            background-color: black;
+            /* Fondo negro cuando está activo */
+            border-color: gray gray black;
+            /* Bordes cuando está activo */
+        }
+
+        .nav-pills .nav-link.active {
+            color: white;
+            /* Letra blanca cuando está activo */
+            background-color: black;
+            /* Fondo negro cuando está activo */
+            border-radius: 0.25rem;
+        }
+
+        .nav-underline {
+            gap: 1rem;
+            border-width: 0.125rem;
+        }
+
+        .nav-underline .nav-link.active {
+            color: white;
+            /* Letra blanca cuando está activo */
+        }
+
+        /* Estilos adicionales para los botones que no están activos */
+        .nav-link:not(.active) {
+            color: black;
+            /* Letra negra cuando no está activo */
+            background-color: white;
+            /* Fondo blanco cuando no está activo */
+        }
+    </style>
+
+    <style>
+        .container-custom {
+            position: relative;
+            height: 300px;
+            /* Ajusta la altura según lo necesites */
+            border: 1px dashed #636161;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .add-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            border: 1px dashed #636161;
+            /* Borde en color gris oscuro y estilo dashed */
+            border-radius: 10px;
+            /* Esquinas redondeadas */
+            background-color: transparent;
+            /* Fondo transparente */
+            color: #636161;
+            /* Color del símbolo más */
+            font-size: 28px;
+            /* Tamaño del signo más */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            /* Transiciones suaves */
+        }
+
+        .add-button:hover {
+            background-color: rgba(99, 97, 97, 0.1);
+            /* Fondo suave al pasar el mouse */
+            transform: scale(1.05);
+            /* Efecto de aumento al pasar el mouse */
+        }
+
+        .add-button:focus {
+            outline: none;
+            /* Sin contorno en el foco */
+        }
+    </style>
+
+    <style>
+        /* Estilo para hacer el modal semi-transparente */
+        .modal-content {
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Fondo blanco con 80% de opacidad */
+            border: none;
+            /* Sin bordes */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Sombra ligera para darle profundidad */
+        }
+
+        /* Estilo para la ventana modal, con un fondo translúcido */
+        .modal-backdrop.show {
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Fondo oscuro con 50% de opacidad */
+        }
+
+        /* Estilo para el botón de agregar */
+        .btn-primary {
+            background-color: rgba(0, 123, 255, 0.8);
+            /* Azul semi-transparente */
+            border-color: rgba(0, 123, 255, 0.8);
+            /* Bordes del mismo color */
+        }
+
+        .btn-primary:hover {
+            background-color: rgba(0, 123, 255, 1);
+            /* Al pasar el cursor, se vuelve opaco */
+        }
+
+        /* Estilo para el botón de cerrar */
+        .btn-secondary {
+            background-color: rgba(108, 117, 125, 0.8);
+            /* Gris semi-transparente */
+            border-color: rgba(108, 117, 125, 0.8);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(108, 117, 125, 1);
+        }
+    </style>
+
+    <style>
+        .container-progress {
+            /* Ajusta la altura según lo necesites */
+            border: 1px dashed #636161;
+            border-radius: 10px;
+        }
+
+        /* a partir de aqui es codgio basura */
+        .progress-button {
+            width: 110px;
+            height: 110px;
+            font-size: 16px;
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 10px;
+            text-align: center;
+            margin-top: 5px;
+            background-color: #f9f9f9;
+            /* Color blanco "apple" */
+            border: none;
+            /* Quita el borde del botón si lo hay */
+            border-radius: 10px;
+            /* Esquinas redondeadas */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            /* Transiciones suaves */
+        }
+
+        .progress-button:hover {
+            transform: translateY(-5px);
+            /* Mueve el botón hacia arriba */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            /* Añade sombra para el efecto de profundidad */
+        }
+
+
+        .text-top {
+            margin-top: 0;
+            /* Sin margen superior */
+            padding-top: 5px;
+            /* Ajusta según lo necesites */
+        }
+
+        /* Ocultar flecha del dropdown */
+        /* Ocultar flecha del dropdown */
+        .btn-group .dropdown-toggle::after {
+            display: none;
+            /* Ocultar la flecha */
+        }
+    </style>
+
+    <!-- Estilos para las cartas-->
+    <style>
+        body {
+            background-color: #f9f9f9;
+            /* Color de fondo suave */
+  
+        }
+
+        .card {
+            border: none;
+            /* Sin bordes */
+            border-radius: 12px;
+            /* Bordes redondeados */
+            background-color: #f9f9f9;
+            /* Fondo blanco */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            /* Sombra sutil */
+            padding: 20px;
+            /* Espaciado interno */
+          
+
+            display: flex;
+            flex-direction: column;
+            /* Disposición en columna */
+            justify-content: space-between;
+            /* Espaciado entre elementos */
+        }
+
+        .card-img-top {
+            border-radius: 10px;
+            /* Bordes redondeados en la imagen */
+            width: 100%;
+            /* Imagen ocupa el ancho completo */
+            height: 150px;
+            /* Altura de la imagen */
+            object-fit: cover;
+            /* Ajusta la imagen sin distorsionar */
+        }
+
+        .card-title {
+            font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            /* Fuente similar a la de Apple */
+            font-size: 1.5em;
+            /* Tamaño de fuente para el título */
+            color: #333;
+            /* Color de texto más oscuro */
+            margin: 10px 0;
+            /* Espaciado vertical */
+        }
+
+        .card-text {
+            color: #666;
+            /* Color de texto secundario */
+            line-height: 1.4;
+            /* Mayor espaciado entre líneas */
+            flex-grow: 1;
+            /* Ocupa el espacio restante en la tarjeta */
+        }
+
+        .card-footer {
+            background-color: #f9f9f9;
+            /* Fondo ligeramente más claro para el pie de la carta */
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container col-10 mt-5">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6 text-center mt-4 mb-4">
+                <h1>Registro de datos</h1>
+            </div>
+            <div class="col-3"></div>
+        </div>
+
+
+        <!-- Componente de pestañas -->
+        <div class="row scroll-container">
+            <div class="col-1"></div>
+
+            <div class="col-10">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="nav-progress-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-progress" type="button" role="tab" aria-controls="nav-progress"
+                            aria-selected="true">Progresos</button>
+
+                        <button class="nav-link" id="nav-routines-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-routines" type="button" role="tab" aria-controls="nav-routines"
+                            aria-selected="false" onclick="openModal('nav-routines-tab')">Rutinas de
+                            Entrenamiento</button>
+
+                        <button class="nav-link" id="nav-plans-tab" data-bs-toggle="tab" data-bs-target="#nav-plans"
+                            type="button" role="tab" aria-controls="nav-plans" aria-selected="false"
+                            onclick="openModal('nav-plans-tab')">Plan Alimenticio</button>
+                    </div>
+                </nav>
+
+                <div class="tab-content" id="nav-tabContent">
+
+
+                    <!-- Contenido de rutinas de entrenamiento -->
+                    <div class="tab-pane fade" id="nav-routines" role="tabpanel" aria-labelledby="nav-routines-tab"
+                        tabindex="0">
+                        <div class="col-6 mt-4 mb-4">
+                            <h5>Programa de Entrenamiento</h5>
+                        </div>
+
+                        <div class="container-custom mb-5">
+                            <div class="add-button" data-bs-toggle="modal" data-bs-target="#addRoutineModal">
+                                +
+                            </div>
+                            <h5>Rutinas de entrenamiento vacías</h5>
+                        </div>
+
+                    </div>
+
+                    <!-- Contenido de plan alimenticio -->
+                    <div class="tab-pane fade" id="nav-plans" role="tabpanel" aria-labelledby="nav-plans-tab"
+                        tabindex="0">
+                        {% include 'ingresar_info_cliente_alimentos.html' %}
+                    </div>
+
+                    <!-- Contenido de progresos -->
+                    <!-- Modificar el active con el tiempo -->
+                    <div class="tab-pane fade show active" id="nav-progress" role="tabpanel"
+                        aria-labelledby="nav-progress-tab" tabindex="0">
+                        <div class="col-6 mt-4 mb-4">
+                            <h5>Progresos</h5>
+                        </div>
+
+                        <div class="container-progress mb-5">
+                            {% include 'cards.html' %}
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-1"></div>
+    </div>
+
+    <!-- Puedes añadir más filas y componentes como desees -->
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade modal-lg" id="addRoutineModal" tabindex="-1" data-bs-backdrop="static"
+        aria-labelledby="addRoutineModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addRoutineModalLabel">Agregar Rutina de Ejercicio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body d-flex justify-content-center">
+                    <!-- Contenido del modal para agregar la rutina -->
+                    <div class="col-11">
+                        <!-- Inputs de "Semanas", "Día" y "Músculo a entrenar" con floating labels -->
+                        <form>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="floatingWeeks"
+                                            placeholder="Semanas">
+                                        <label for="floatingWeeks">Semanas</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="floatingDay" placeholder="Día">
+                                        <label for="floatingDay">Día</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="floatingMuscle"
+                                            placeholder="Músculo a entrenar">
+                                        <label for="floatingMuscle">Músculo a entrenar</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- Tabla Editable con 7 filas -->
+                        <div class="table-responsive">
+                            <table id="routineTable" class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col" class="text-center align-top">Ejercicio</th>
+                                        <th scope="col" class="text-center align-top">Series</th>
+                                        <th scope="col" class="text-center align-top">Repeticiones</th>
+                                        <th scope="col" class="text-center align-top">Descansos</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    <tr>
+                                        <td contenteditable="true" style="width: 60%;"></td>
+                                        <td contenteditable="true"></td>
+                                        <td contenteditable="true"></td>
+                                        <td contenteditable="true"></td>
+                                    </tr>
+                                    <tr>
+                                        <td contenteditable="true" style="width: 60%;"></td>
+                                        <td contenteditable="true"></td>
+                                        <td contenteditable="true"></td>
+                                        <td contenteditable="true"></td>
+                                    </tr>
+                                    <tr>
+                                        <td contenteditable="true" style="width: 60%;"></td>
+                                        <td contenteditable="true"></td>
+                                        <td contenteditable="true"></td>
+                                        <td contenteditable="true"></td>
+                                    </tr>
+                                    <tr>
+                                        <td contenteditable="true" style="width: 60%;"></td>
+                                        <td contenteditable="true"></td>
+                                        <td contenteditable="true"></td>
+                                        <td contenteditable="true"></td>
+                                    </tr>
+                                    <tr>
+                                        <td contenteditable="true" style="width: 60%;"></td>
+                                        <td contenteditable="true"></td>
+                                        <td contenteditable="true"></td>
+                                        <td contenteditable="true"></td>
+                                    </tr>
+                                    <tr>
+                                        <td contenteditable="true" style="width: 60%;"></td>
+                                        <td contenteditable="true"></td>
+                                        <td contenteditable="true"></td>
+                                        <td contenteditable="true"></td>
+                                    </tr>
+                                    <tr>
+                                        <td contenteditable="true" style="width: 60%;"></td>
+                                        <td contenteditable="true"></td>
+                                        <td contenteditable="true"></td>
+                                        <td contenteditable="true"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Agregar Rutina</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal para ingresar los datos del usuario -->
+    <div class="modal fade" id="userModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="userModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="userModalLabel">Ingrese los datos del paciente</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="userForm">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="username" placeholder="Nombre" required>
+                            <label for="username">Nombre</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" placeholder="Correo electrónico"
+                                required>
+                            <label for="email">Correo electrónico</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Offcanvas para ver el historial (un ejemplo) -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasHistorialPeso"
+        aria-labelledby="offcanvasHistorialPesoLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasHistorialPesoLabel">Historial de Peso</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <p>Aquí iría el historial de peso.</p>
+            <!-- Más detalles del historial aquí -->
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasHistorialAbdomen"
+        aria-labelledby="offcanvasHistorialAbdomenLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasHistorialAbdomenLabel">Historial de Abdomen</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <p>Aquí iría el historial de abdomen.</p>
+        </div>
+    </div>
+
+    <!-- Enlace a Bootstrap JS y dependencias -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+        </script>
+
+    <script>
+        const textareas = ['avoid-foods', 'supplement-input', 'allowed-drinks', 'nutrition-tips', 'low-calorie-foods'];
+
+        textareas.forEach(id => {
+            const textarea = document.getElementById(id);
+            textarea.addEventListener('input', function () {
+                this.style.height = 'auto'; // Restablecer la altura
+                this.style.height = (this.scrollHeight) + 'px'; // Ajustar la altura según el contenido
+            });
+            textarea.dispatchEvent(new Event('input')); // Llamar a la función para ajustar la altura inicial
+        });
+
+    </script>
+
+    <script>
+        function toggleSupplementTextarea() {
+            const supplementYes = document.getElementById('supplementYes');
+            const supplementTextarea = document.getElementById('supplementTextarea');
+
+            // Muestra el textarea si se selecciona "Sí", oculta si se selecciona "No"
+            if (supplementYes.checked) {
+                supplementTextarea.style.display = 'block';
+            } else {
+                supplementTextarea.style.display = 'none';
+            }
+        }
+    </script>
+
+    <script>
+        document.querySelectorAll('[contenteditable="true"]').forEach(cell => {
+            const observer = new ResizeObserver(entries => {
+                for (let entry of entries) {
+                    // Si se ha detectado un cambio en el tamaño del contenido
+                    if (entry.contentRect.height > 60) { // Compara con la altura definida
+                        entry.target.classList.add('animate'); // Agregar clase de animación
+
+                        // Remover la clase de animación después de un breve momento
+                        setTimeout(() => {
+                            entry.target.classList.remove('animate');
+                        }, 200); // Duración de la animación
+                    }
+                }
+            });
+
+            // Observar cambios en el tamaño de la celda
+            observer.observe(cell);
+        });
+
+
+    </script>
+
+
+
+
+</body>
+
+</html>
