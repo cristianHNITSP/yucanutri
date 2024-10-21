@@ -50,8 +50,12 @@ def create_app():
 
     from . import nutriologo
     app.register_blueprint(nutriologo.bp)
+
     from . import auth
     app.register_blueprint(auth.bp)
+
+    from . import superusuario
+    app.register_blueprint(superusuario.bp)
 
     # Ruta dinámica para archivos estáticos
     @app.route("/static/<path:path>")
