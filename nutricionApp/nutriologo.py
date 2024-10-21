@@ -53,6 +53,9 @@ def registrarPaciente():
                     flash('ID de nutriologo no válido.', 'error')
                     return redirect(url_for('nutriologo.registrarPaciente'))
 
+                # Agregar el valor para status
+                status = True  # Se puede cambiar a False si necesitas que el paciente esté inactivo al principio
+
                 params = (
                     nombres,
                     ap_paterno,
@@ -63,6 +66,7 @@ def registrarPaciente():
                     contrasena_encriptada,
                     rol,
                     telefono,
+                    status,  # Agregar el estado aquí
                     id_nutriologo_id_nutriologo
                 )
 
@@ -72,17 +76,14 @@ def registrarPaciente():
                 Config.CUD(
                     """
                     INSERT INTO public.paciente 
-                    (nombres, ap_paterno, ap_materno, fecha_nacimiento, sexo, correo_electronico, contrasena, rol, telefono, id_nutriologo_id_nutriologo)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    (nombres, ap_paterno, ap_materno, fecha_nacimiento, sexo, correo_electronico, contrasena, rol, telefono, status, id_nutriologo_id_nutriologo)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """, 
                     params
                 )
 
                 # Crear el rol en PostgreSQL utilizando el correo sin modificaciones
-                crear_rol_query = f"""
-                CREATE ROLE "{correo_electronico}" WITH LOGIN PASSWORD '{contrasena}';
-                """
-                Config.CUD(crear_rol_query)  # Usar el correo tal cual
+                Config.CUD("""CREATE ROLE "{}" WITH LOGIN PASSWORD '{}';""".format(correo_electronico, contrasena))  # Usar el correo tal cual
 
                 # Otorgar permisos al nuevo rol
                 grant_queries = [
@@ -116,6 +117,7 @@ def registrarPaciente():
             flash('Ha ocurrido un error al registrar el paciente. Por favor, inténtalo de nuevo.', 'error')
 
     return render_template("registrar_cliente.html")
+
 
 
 @bp.route('/sala_nutriologo', methods=['GET', 'POST'])
