@@ -19,7 +19,7 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-image: url(/fondo_logins.jpg);
+    background-image: url(../img/fondo_logins.jpg);
     background-size: cover;
     background-repeat: no-repeat;
 }
