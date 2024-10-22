@@ -2,110 +2,114 @@ from flask import Blueprint, request, session, flash, redirect, url_for, render_
 from werkzeug.security import check_password_hash
 import Config  # Asegúrate de que esta importación sea correcta
 
-
 bp = Blueprint('auth', __name__)
 
 @bp.route('/iniciar_sesion', methods=['GET', 'POST'])
 def inicio_sesion():
     if request.method == 'POST':
-        correo = request.form['correo']
-        contraseña = request.form['contraseña']
+        correo = str(request.form['correo'])
+        contraseña = str(request.form['contraseña'])
 
-        # Guardar en la sesión
-        session['correo'] = correo
-        session['contraseña'] = contraseña
-
+        # Inicializar rol por defecto como visitante
+        session['rol'] = 'visitante'
+        
         # Imprimir en la consola de Python
-        print(f"Correo almacenado en sesión: {session['correo']}")
-        print(f"Contraseña almacenada en sesión: {session['contraseña']}")
-
-        # Convertir a string y preparar los parámetros
-        params = (str(session['correo']),)
+        print(f"Correo almacenado en sesión: {correo}")
 
         try:
-            # Verificar como superusuario y recuperar el rol
-            seleccionar_superusuario = Config.Read(
+            # Realizar la consulta para recuperar el rol, correo y contraseña del usuario
+            usuario_info = Config.Read(
                 """
-                SELECT rol, contrasena 
-                FROM public.superusuario 
-                WHERE correo_electronico = %s AND contrasena = %s
+                SELECT 
+                    r.rol,
+                    s.correo_electronico AS correo,
+                    s.contrasena 
+                FROM 
+                    public.superusuario s
+                INNER JOIN 
+                    public.rol r ON s.id_rol_id_rol = r.id_rol
+                WHERE 
+                    s.correo_electronico = %s
+
+                UNION ALL
+
+                SELECT 
+                    r.rol,
+                    n.correo_electronico AS correo,
+                    n.contrasena 
+                FROM 
+                    public.nutriologo n
+                INNER JOIN 
+                    public.rol r ON n.id_rol_id_rol = r.id_rol
+                WHERE 
+                    n.correo_electronico = %s
+
+                UNION ALL
+
+                SELECT 
+                    r.rol,
+                    p.correo_electronico[1] AS correo,  -- Si `correo_electronico` es un array
+                    p.contrasena 
+                FROM 
+                    public.paciente p
+                INNER JOIN 
+                    public.rol r ON p.id_rol_id_rol = r.id_rol
+                WHERE 
+                    p.correo_electronico[1] = %s;  -- Asumiendo que estamos usando el primer correo
                 """, 
-                (params[0], str(session['contraseña']))  # Pasar contraseña en claro
+                (correo, correo, correo)  # Pasar el correo tres veces para las condiciones
             )
 
-            if seleccionar_superusuario:
-                session['rol'] = seleccionar_superusuario[0][0]  # Guardar el rol en la sesión
-                print(f"Conexión a la base de datos exitosa como superusuario. Rol: {session['rol']}")
+            # Depurar el resultado de la consulta
+            print("Resultado de la consulta usuario_info:", usuario_info)
 
-                # Depurar sesión antes del redireccionamiento
-                print("Depuración de sesión:")
-                print(f"Correo: {session.get('correo')}")
-                print(f"Contraseña: {session.get('contraseña')}")
-                print(f"Rol: {session.get('rol')}")
+            if usuario_info:
+                # Verificar la contraseña de acuerdo al rol
+                for user in usuario_info:
+                    rol_usuario = user[0]
+                    correo_usuario = user[1]
+                    contrasena_usuario = user[2]
 
-                flash('Inicio de sesión exitoso como superusuario', 'success')
-                return redirect(url_for('nutriologo.salaNutriologo'))
+                    # Imprimir información del usuario
+                    print(f"Rol: {rol_usuario}, Correo: {correo_usuario}, Contraseña: {contrasena_usuario}")
 
-            # Verificar como nutriologo y recuperar el rol
-            seleccionar_nutriologo = Config.Read(
-                """
-                SELECT rol, contrasena 
-                FROM public.nutriologo 
-                WHERE correo_electronico = %s AND contrasena = %s
-                """, 
-                (params[0], str(session['contraseña']))  # Pasar contraseña en claro
-            )
+                    # Si el rol es 'paciente', comparamos la contraseña usando check_password_hash
+                    if rol_usuario == 'paciente':
+                        if check_password_hash(contrasena_usuario, contraseña):
+                            session['rol'] = rol_usuario
+                            session['correo'] = correo_usuario  # Guardar correo en sesión
+                            print(f"Inicio de sesión exitoso como {rol_usuario}. Rol: {session['rol']}")
+                            flash(f'Inicio de sesión exitoso como {rol_usuario}', 'success')
+                            return redirect(url_for('nutriologo_paciente.index_informacion'))
+                        else:
+                            print("Contraseña incorrecta (hash) para el paciente:", correo_usuario)
+                            flash('Correo o contraseña incorrectos', 'error')
 
-            if seleccionar_nutriologo:
-                session['rol'] = seleccionar_nutriologo[0][0]  # Guardar el rol en la sesión
-                print(f"Conexión a la base de datos exitosa como nutriologo. Rol: {session['rol']}")
+                    # Para 'nutriologo' y 'superusuario', compararemos la contraseña directamente (texto plano)
+                    elif rol_usuario in ['nutriologo', 'superusuario']:
+                        if contrasena_usuario == contraseña:
+                            session['rol'] = rol_usuario
+                            session['correo'] = correo_usuario  # Guardar correo en sesión
+                            print(f"Inicio de sesión exitoso como {rol_usuario}. Rol: {session['rol']}")
+                            flash(f'Inicio de sesión exitoso como {rol_usuario}', 'success')
 
-                # Depurar sesión antes del redireccionamiento
-                print("Depuración de sesión:")
-                print(f"Correo: {session.get('correo')}")
-                print(f"Contraseña: {session.get('contraseña')}")
-                print(f"Rol: {session.get('rol')}")
+                            # Redirigir según el rol
+                            if rol_usuario == 'superusuario':
+                                return redirect(url_for('superusuario.sala_superusuario'))
+                            elif rol_usuario == 'nutriologo':
+                                return redirect(url_for('nutriologo.salaNutriologo'))
+                        else:
+                            print("Contraseña incorrecta para el usuario:", correo_usuario)
+                            flash('Correo o contraseña incorrectos', 'error')
+                
+                # Si no se ha encontrado un match en los roles o contraseñas
+                flash('Correo o contraseña incorrectos', 'error')
+                print("Credenciales incorrectas")
+            else:
+                flash('Usuario no encontrado', 'error')
+                print("Usuario no encontrado en los roles")
 
-                flash('Inicio de sesión exitoso como nutriologo', 'success')
-                return redirect(url_for('nutriologo.salaNutriologo'))
-
-            # Verificar como paciente (con hash) y recuperar el rol
-            seleccionar_paciente = Config.Read(
-                """
-                SELECT rol, contrasena 
-                FROM public.paciente 
-                WHERE correo_electronico = %s
-                """, 
-                params
-            )
-
-            if seleccionar_paciente:
-                hash_contrasena = seleccionar_paciente[0][1]  # Obtener el hash de la contraseña
-                if check_password_hash(hash_contrasena, contraseña):
-                    session['rol'] = seleccionar_paciente[0][0]  # Guardar el rol en la sesión
-                    print(f"Conexión a la base de datos exitosa como paciente. Rol: {session['rol']}")
-
-                    # Depurar sesión antes del redireccionamiento
-                    print("Depuración de sesión:")
-                    print(f"Correo: {session.get('correo')}")
-                    print(f"Contraseña: {session.get('contraseña')}")
-                    print(f"Rol: {session.get('rol')}")
-
-                    flash('Inicio de sesión exitoso como paciente', 'success')
-                    return redirect(url_for('nutriologo_paciente.index_informacion'))
-                else:
-                    flash('Correo o contraseña incorrectos', 'error')
-                    print("Credenciales incorrectas")
-
-            # Si no se encuentra ninguna credencial
-            flash('Correo o contraseña incorrectos', 'error')
-            print("Credenciales incorrectas")
-
-        except UnicodeDecodeError as ude:
-            print(f"<-------------------- Error de codificación: {ude} -------------------->")
-            flash('Error de codificación en los datos ingresados. Por favor, inténtalo de nuevo.', 'error')
         except Exception as e:
-            # Manejo de errores inesperados
             print(f"Error al conectar a la base de datos: {e}")
             flash('Ha ocurrido un error al iniciar sesión. Por favor, inténtalo de nuevo.', 'error')
 

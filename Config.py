@@ -4,23 +4,53 @@ from flask import session
 # Clave de seguridad (aunque no se utiliza en este código, la dejé aquí por si la necesitas)
 HEX_SEC_KEY = "d5fb8c4fa8bd46638dadc4e751e0d68d"
 
+# Contraseñas por defecto para cada rol
+ROLE_CREDENTIALS = {
+    'nutriologo': {
+        'user': 'nutriologo',
+        'password': 'T!6ry@9g#@c1t2b&z#@k'  # Contraseña segura
+    },
+    'paciente': {
+        'user': 'paciente',
+        'password': 'Y#8fL*5nV!q0G3z&xT9e'  # Contraseña segura
+    },
+    'superusuario': {
+        'user': 'superusuario',
+        'password': 'T6645697#5x1@#b@z48k'  # Contraseña segura
+    },
+    'visitante': {
+        'user': 'visitante',
+        'password': 'T!6rF@9gQ#x1V2b&zP8k'  # Contraseña segura
+    }
+}
+
+# Método para obtener las credenciales según el rol
+def get_credentials(role):
+    return ROLE_CREDENTIALS.get(role, ROLE_CREDENTIALS['visitante'])  # Devuelve visitante si el rol no existe
+
 # Método para realizar CUD: CREATE, UPDATE y DELETE
 def CUD(query, params=None):
     print("<-------------------- Conectando... --------------------")
     connection = None
     try:
-        # Imprimir los valores de la sesión
-        print(f"Correo en sesión: {session.get('correo')}")
-        print(f"Contraseña en sesión: {session.get('contraseña')}")
+        # Obtener el rol de la sesión, o usar 'visitante' si no hay rol
+        role = session.get('rol', 'visitante')  # Asignar 'visitante' si no hay rol
+        print(f"Rol en sesión: {role}")
 
-        # Conectar a la base de datos usando las credenciales de la sesión
+        # Obtener credenciales según el rol
+        credentials = get_credentials(role)
+        print(f"Usuario en conexion: {credentials['user']}")
+        print(f"Contraseña en conexion: {credentials['password']}")
+
+        # Conectar a la base de datos usando las credenciales obtenidas
         connection = psycopg2.connect(
-            dbname="nutritionist_db",  # Nombre de la base de datos
-            user=str(session['correo']),  # Convertir a string
-            password=str(session['contraseña']),  # Convertir a string
+            dbname="nutriologo_db",  # Nombre de la base de datos
+            user = str(credentials['user']),  # Convertir a string  # Usuario según el rol
+            password = str(credentials['password']),  # Convertir a string  # Contraseña según el rol
             host="localhost",  # Cambia esto si tu servidor está en otra dirección
             port="5432"  # Puerto por defecto de PostgreSQL
         )
+        print(f"conexion a la debe desde: {connection}")
         cursor = connection.cursor()
         if params:
             cursor.execute(query, params)
@@ -47,17 +77,24 @@ def Read(query, params=None):
     print("<-------------------- Conectando... --------------------")
     connection = None
     try:
-        # Imprimir los valores de la sesión
-        print(f"Correo en sesión: {session.get('correo')}")
-        print(f"Contraseña en sesión: {session.get('contraseña')}")
+        # Obtener el rol de la sesión, o usar 'visitante' si no hay rol
+        role = session.get('rol', 'visitante')  # Asignar 'visitante' si no hay rol
+        print(f"Rol en sesión: {role}")
 
+        # Obtener credenciales según el rol
+        credentials = get_credentials(role)
+        print(f"Usuario en conexion: {credentials['user']}")
+        print(f"Contraseña en conexion: {credentials['password']}")
+
+        # Conectar a la base de datos usando las credenciales obtenidas
         connection = psycopg2.connect(
-            dbname="nutritionist_db",  # Nombre de la base de datos
-            user=str(session['correo']),  # Convertir a string
-            password=str(session['contraseña']),  # Convertir a string
+            dbname="nutriologo_db",  # Nombre de la base de datos
+            user = str(credentials['user']),  # Convertir a string  # Usuario según el rol
+            password = str(credentials['password']),  # Convertir a string  # Contraseña según el rol
             host="localhost",  # Cambia esto si tu servidor está en otra dirección
             port="5432"  # Puerto por defecto de PostgreSQL
         )
+        print(f"conexion a la debe desde: {connection}")
         cursor = connection.cursor()
         if params:
             cursor.execute(query, params)
