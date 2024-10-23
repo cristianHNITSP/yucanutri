@@ -1,5 +1,6 @@
 from flask import Blueprint, request, session, flash, redirect, url_for, render_template
 from werkzeug.security import check_password_hash
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import Config  # Asegúrate de que esta importación sea correcta
 
 bp = Blueprint('auth', __name__)
@@ -103,7 +104,6 @@ def inicio_sesion():
                             flash('Correo o contraseña incorrectos', 'error')
                 
                 # Si no se ha encontrado un match en los roles o contraseñas
-                flash('Correo o contraseña incorrectos', 'error')
                 print("Credenciales incorrectas")
             else:
                 flash('Usuario no encontrado', 'error')

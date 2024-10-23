@@ -13,6 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+        
     <!-- Boostrap y fontawesome icons-->
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -36,13 +37,27 @@
             <h1 class="form__titulo">Ingresa con tu correo</h1>
             <h2 class="form__desc">Accede fácilmente a tu información, planes y mucho más en un solo lugar
             </h2>
+            <div class="container mt-4">
+                <!-- Mostrar mensajes flash si existen -->
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                                <strong>{{ message }}</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
 
             <form method="post" action="{{ url_for('auth.inicio_sesion') }}">
                 <!--Se pasa la funcion-->
                 <!-- Pedir Correo -->
+                <!-- onpaste="return false; "-->
                 <div class="input-container">
                     <i class="fas fa-at icon"></i>
-                    <input type="email" onpaste="return false;"
+                    <input type="email" 
                         class="form__inputs {% if correo_no_encontrado %}is-invalid{% endif %} custom-placeholder"
                         id="correo_no_encontrado" name="correo" maxlength="30" required
                         placeholder="Correo Electronico">
@@ -92,6 +107,8 @@
         </div>
 
     </section>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
