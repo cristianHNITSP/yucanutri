@@ -1,5 +1,5 @@
 import psycopg2
-from flask import session
+from flask import redirect, session, flash, url_for
 
 # Clave de seguridad (aunque no se utiliza en este código, la dejé aquí por si la necesitas)
 HEX_SEC_KEY = "d5fb8c4fa8bd46638dadc4e751e0d68d"
@@ -62,6 +62,8 @@ def CUD(query, params=None):
         print(f"<-------------------- Error de operación: {op_err} -------------------->")
     except psycopg2.ProgrammingError as prog_err:
         print(f"<-------------------- Error de programación: {prog_err} -------------------->")
+        flash(f"Error: {prog_err}", 'permiso_denegado')
+
     except psycopg2.DataError as data_err:
         print(f"<-------------------- Error de datos: {data_err} -------------------->")
     except UnicodeDecodeError as decode_err:
@@ -103,7 +105,7 @@ def Read(query, params=None):
         rows = cursor.fetchall()
         results = [list(row) for row in rows]  # Convertir cada fila a una lista
         print("<-------------------- Conexión exitosa --------------------")
-        for result in results:
+        for result in results: # mostrar los resultados
             print(result)
         print("---------------------------------------->")
         return results
