@@ -112,15 +112,12 @@ def registrarPaciente():
 @bp.route('/sala_nutriologo', methods=['GET', 'POST'])
 def salaNutriologo():
     if request.method == 'POST':
-        # Capturar los valores del formulario
-        patient_name = request.form.get('patientName')
-        father_surname = request.form.get('fatherSurname')
-        mother_surname = request.form.get('motherSurname')
+        # Capturar el correo electrónico del formulario
         patient_email = request.form.get('patientEmail')
 
-        # Validar que todos los campos estén llenos
-        if not patient_name or not father_surname or not mother_surname or not patient_email:
-            flash("Todos los campos son obligatorios.", "error")
+        # Validar que el campo del correo esté lleno
+        if not patient_email:
+            flash("El campo de correo electrónico es obligatorio.", "error")
             return redirect(url_for('nutriologo.salaNutriologo'))  # Redirigir a la misma página
 
         # Realizar la consulta para buscar el paciente y su rol
@@ -155,10 +152,11 @@ def salaNutriologo():
             flash("No se encontró un paciente con el correo proporcionado o está inactivo.", "error")
             return redirect(url_for('nutriologo.salaNutriologo'))  # Redirigir a la misma página
 
-        # Si se encontró al paciente, redirigir con los datos a 'nutriologo_paciente.index_informacion'
-        session['paciente_info'] = paciente_info[0]  # Guardar en la sesión (opcional)
+        # Si se encontró al paciente, guardar los datos en la sesión (opcional)
+        session['paciente_info'] = paciente_info[0]  # Guardar en la sesión
         print(f"Datos guardados en la sesión: {session['paciente_info']}")
 
+        # Redirigir a 'nutriologo_paciente.index_informacion' con los datos del paciente
         return redirect(url_for('nutriologo_paciente.index_informacion'))
 
     # Si el método es GET, simplemente renderiza la plantilla

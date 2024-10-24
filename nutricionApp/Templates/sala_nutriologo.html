@@ -19,6 +19,18 @@
     <!-- Icono de la pagina -->
     <link rel="icon" href="/logo.png" type="image/x-icon">
     <title>Inicio</title>
+
+    <style>
+        /* Estilo para hacer el modal semi-transparente */
+        .modal-content {
+            background-color: rgba(255, 255, 255, 0.9);
+            /* Fondo blanco con 80% de opacidad */
+            border: none;
+            /* Sin bordes */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Sombra ligera para darle profundidad */
+        }
+    </style>
 </head>
 
 <body>
@@ -45,44 +57,23 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Ingrese los datos del paciente</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Ingrese el correo electrónico del
+                                paciente</h1>
+                            <button type="button" class="btn-close d-inline-flex focus-ring focus-ring-danger py-1 px-2 text-decoration-none border rounded-2" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form method="post" action="{{ url_for('nutriologo.salaNutriologo') }}">
                                 <div class="input-group mb-3">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control form-control-sm" id="patientName"
-                                            name="patientName" placeholder="Nombre" required>
-                                        <label for="patientName">Nombre</label>
-                                    </div>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control form-control-sm" id="fatherSurname"
-                                            name="fatherSurname" placeholder="Apellido Paterno" required>
-                                        <label for="fatherSurname">Apellido Paterno</label>
-                                    </div>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control form-control-sm" id="motherSurname"
-                                            name="motherSurname" placeholder="Apellido Materno" required>
-                                        <label for="motherSurname">Apellido Materno</label>
-                                    </div>
-                                </div>
-                                <div class="input-group mb-3">
                                     <span class="input-group-text">@</span>
                                     <div class="form-floating">
-                                        <input type="email" class="form-control form-control-sm" id="patientEmail"
+                                        <input type="email" class="form-control d-inline-flex focus-ring focus-ring-secondary border rounded-2" id="patientEmail"
                                             name="patientEmail" placeholder="Correo electrónico" required>
                                         <label for="patientEmail">Correo electrónico</label>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="submit" class="btn btn-primary">Aceptar</button>
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-outline-success">Aceptar</button>
                                 </div>
                             </form>
                         </div>

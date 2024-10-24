@@ -1,0 +1,429 @@
+{% if progreso %}
+<div class="card-group custom-card mx-4 mb-4 mt-4"> <!-- Primer grupo de cartas -->
+    <!-- Peso -->
+    <div class="card">
+        <div class="card-header card-header-group">
+            <h5 class="card-title ">Peso</h5>
+        </div>
+
+        <div class="card-body card-body-group">
+            <div class="insert-img mt-1 mb-3">
+                <img src="https://via.placeholder.com/150" class="card-img-top img-fluid img-rescale-group" alt="Peso">
+            </div>
+
+            <p class="card-text">El peso corporal es una medida importante que se utiliza
+                para evaluar la salud general y el estado nutricional. Mantener un peso
+                saludable es fundamental para prevenir enfermedades y promover el bienestar.
+            </p>
+            <p class="card-text"><strong>Tu progreso actual:</strong> {{ progreso[1] }} kg</p>
+        </div>
+        <div class="card-footer card-footer-group">
+            <div class="dropdown">
+                <button class="btn btn-outline-dark btn-sm mt-2 mb-2 dropdown-toggle" type="button" id="pesoDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Opciones
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="pesoDropdown">
+                    <li><a class="dropdown-item" href="#">Ver historial</a></li>
+                    <li><a class="dropdown-item" href="#">Editar</a></li>
+                </ul>
+            </div>
+            <small class="text-body-secondary">Última actualización: {{ progreso[14] }}/{{ progreso[15] }}/{{ progreso[16] }}</small>
+        </div>
+    </div>
+
+    <!-- Abdomen -->
+    <div class="card">
+        <div class="card-header card-header-group">
+            <h5 class="card-title ">Abdomen</h5>
+        </div>
+        <div class="card-body card-body-group">
+            <div class="insert-img mt-1 mb-3">
+                <img src="https://via.placeholder.com/150" class="card-img-top img-fluid img-rescale-group"
+                    alt="Abdomen">
+            </div>
+            <p class="card-text">La medida del abdomen es crucial para evaluar el riesgo de
+                enfermedades metabólicas. Un abdomen más grande puede indicar un mayor
+                riesgo de problemas de salud.</p>
+            <p class="card-text"><strong>Tu progreso actual:</strong> {{ progreso[2] }} cm</p>
+        </div>
+        <div class="card-footer card-footer-group">
+            <div class="dropdown">
+                <button class="btn btn-outline-dark btn-sm mt-2 mb-2 dropdown-toggle" type="button" id="abdomenDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Opciones
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="abdomenDropdown">
+                    <li><a class="dropdown-item" href="#">Ver historial</a></li>
+                    <li><a class="dropdown-item" href="#">Editar</a></li>
+                </ul>
+            </div>
+            <small class="text-body-secondary">Última actualización: {{ progreso[14] }}/{{ progreso[15] }}/{{ progreso[16] }}</small>
+        </div>
+    </div>
+</div>
+
+<div class="row mx-3 row-cols-1 row-cols-md-3 g-4">
+
+    <!-- Mediciones del Brazo Derecho Relajado -->
+    <div class="col">
+        <div class="card custom-card">
+            <div class="card-header card-header-individual">
+                <h6 class="card-title">Mediciones del Brazo Derecho Relajado</h6>
+            </div>
+            <div class="card-body card-body-individual">
+                <div class="insert-img mt-1 mb-3">
+                    <img src="https://via.placeholder.com/150" class="card-img-top img-fluid img-rescale-individual"
+                        alt="Brazo Derecho Relajado">
+                </div>
+                <p class="card-text">Medir los brazos permite evaluar el estado muscular y la grasa corporal. Un tamaño
+                    adecuado indica una buena salud y estado físico.</p>
+                <p class="card-text"><strong>Tu progreso actual:</strong> {{ progreso[3] }} cm</p>
+            </div>
+            <div class="card-footer card-footer-individual">
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark btn-sm mt-2 mb-2 dropdown-toggle" type="button"
+                        id="brazoDerechoDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Opciones
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="brazoDerechoDropdown">
+                        <li><a class="dropdown-item" href="#">Ver historial</a></li>
+                        <li><a class="dropdown-item" href="#">Editar</a></li>
+                    </ul>
+                </div>
+                <small class="text-body-secondary">Última actualización: {{ progreso[14] }}/{{ progreso[15] }}/{{ progreso[16] }}</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mediciones del Brazo Derecho Contraído -->
+    <div class="col">
+        <div class="card custom-card">
+            <div class="card-header card-header-individual">
+                <h6 class="card-title">Mediciones del Brazo Derecho Contraído</h6>
+            </div>
+            <div class="card-body card-body-individual">
+                <div class="insert-img mt-1 mb-3">
+                    <img src="https://via.placeholder.com/150" class="card-img-top img-fluid img-rescale-individual"
+                        alt="Brazo Derecho Contraído">
+                </div>
+                <p class="card-text">Las medidas de los brazos son un indicativo del desarrollo muscular y el estado
+                    nutricional. Mantener un equilibrio en el tamaño de los brazos es importante.</p>
+                <p class="card-text"><strong>Tu progreso actual:</strong> {{ progreso[4] }} cm</p>
+            </div>
+            <div class="card-footer card-footer-individual">
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark btn-sm mt-2 mb-2 dropdown-toggle" type="button"
+                        id="brazoDerechoContraidoDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Opciones
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="brazoDerechoContraidoDropdown">
+                        <li><a class="dropdown-item" href="#">Ver historial</a></li>
+                        <li><a class="dropdown-item" href="#">Editar</a></li>
+                    </ul>
+                </div>
+                <small class="text-body-secondary">Última actualización: {{ progreso[14] }}/{{ progreso[15] }}/{{ progreso[16] }}</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mediciones del Brazo Izquierdo Relajado -->
+    <div class="col">
+        <div class="card custom-card">
+            <div class="card-header card-header-individual">
+                <h6 class="card-title">Mediciones del Brazo Izquierdo Relajado</h6>
+            </div>
+            <div class="card-body card-body-individual">
+                <div class="insert-img mt-1 mb-3">
+                    <img src="https://via.placeholder.com/150" class="card-img-top img-fluid img-rescale-individual"
+                        alt="Brazo Izquierdo Relajado">
+                </div>
+                <p class="card-text">Las medidas de los brazos son un indicativo del desarrollo muscular y el estado
+                    nutricional. Mantener un equilibrio en el tamaño de los brazos es importante.</p>
+                <p class="card-text"><strong>Tu progreso actual:</strong> {{ progreso[5] }} cm</p>
+            </div>
+            <div class="card-footer card-footer-individual">
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark btn-sm mt-2 mb-2 dropdown-toggle" type="button"
+                        id="brazoIzquierdoDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Opciones
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="brazoIzquierdoDropdown">
+                        <li><a class="dropdown-item" href="#">Ver historial</a></li>
+                        <li><a class="dropdown-item" href="#">Editar</a></li>
+                    </ul>
+                </div>
+                <small class="text-body-secondary">Última actualización: {{ progreso[14] }}/{{ progreso[15] }}/{{ progreso[16] }}</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mediciones del Brazo Izquierdo Contraído -->
+    <div class="col">
+        <div class="card custom-card">
+            <div class="card-header card-header-individual">
+                <h6 class="card-title">Mediciones del Brazo Izquierdo Contraído</h6>
+            </div>
+            <div class="card-body card-body-individual">
+                <div class="insert-img mt-1 mb-3">
+                    <img src="https://via.placeholder.com/150" class="card-img-top img-fluid img-rescale-individual"
+                        alt="Brazo Izquierdo Contraído">
+                </div>
+                <p class="card-text">Las medidas de los brazos son un indicativo del desarrollo muscular y el estado
+                    nutricional. Mantener un equilibrio en el tamaño de los brazos es importante.</p>
+                <p class="card-text"><strong>Tu progreso actual:</strong> {{ progreso[6] }} cm</p>
+            </div>
+            <div class="card-footer card-footer-individual">
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark btn-sm mt-2 mb-2 dropdown-toggle" type="button"
+                        id="brazoIzquierdoContraidoDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Opciones
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="brazoIzquierdoContraidoDropdown">
+                        <li><a class="dropdown-item" href="#">Ver historial</a></li>
+                        <li><a class="dropdown-item" href="#">Editar</a></li>
+                    </ul>
+                </div>
+                <small class="text-body-secondary">Última actualización: {{ progreso[14] }}/{{ progreso[15] }}/{{ progreso[16] }}</small>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row mt-1 mx-3 row-cols-1 row-cols-md-3 g-4">
+
+    <!-- Mediciones de la Pierna Derecha Relajada -->
+    <div class="col">
+        <div class="card custom-card">
+            <div class="card-header card-header-individual">
+                <h6 class="card-title">Mediciones de la Pierna Derecha Relajada</h6>
+            </div>
+            <div class="card-body card-body-individual">
+                <div class="insert-img mt-1 mb-3">
+                    <img src="https://via.placeholder.com/150" class="card-img-top img-fluid img-rescale-individual"
+                        alt="Pierna Derecha Relajada">
+                </div>
+                <p class="card-text">Las mediciones de la pierna derecha relajada son importantes para evaluar el estado
+                    físico y la composición muscular. Un tamaño adecuado es clave para el bienestar general y la salud
+                    física.</p>
+                <p class="card-text"><strong>Tu progreso actual:</strong> {{ progreso[7] }} cm</p>
+            </div>
+            <div class="card-footer card-footer-individual">
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark btn-sm mt-2 mb-2 dropdown-toggle" type="button"
+                        id="piernaDerechaRelajadaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Opciones
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="piernaDerechaRelajadaDropdown">
+                        <li><a class="dropdown-item" href="#">Ver historial</a></li>
+                        <li><a class="dropdown-item" href="#">Editar</a></li>
+                    </ul>
+                </div>
+                <small class="text-body-secondary">Última actualización: {{ progreso[14] }}/{{ progreso[15] }}/{{ progreso[16] }}</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mediciones de la Pierna Derecha Contraída -->
+    <div class="col">
+        <div class="card custom-card">
+            <div class="card-header card-header-individual">
+                <h6 class="card-title">Mediciones de la Pierna Derecha Contraída</h6>
+            </div>
+            <div class="card-body card-body-individual">
+                <div class="insert-img mt-1 mb-3">
+                    <img src="https://via.placeholder.com/150" class="card-img-top img-fluid img-rescale-individual"
+                        alt="Pierna Derecha Contraída">
+                </div>
+                <p class="card-text">Las mediciones de la pierna derecha contraída son un indicativo del estado físico y
+                    el desarrollo muscular. Mantener un tamaño adecuado es fundamental para la salud y el rendimiento
+                    físico.</p>
+                <p class="card-text"><strong>Tu progreso actual:</strong> {{ progreso[8] }} cm</p>
+            </div>
+            <div class="card-footer card-footer-individual">
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark btn-sm mt-2 mb-2 dropdown-toggle" type="button"
+                        id="piernaDerechaContraidoDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Opciones
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="piernaDerechaContraidoDropdown">
+                        <li><a class="dropdown-item" href="#">Ver historial</a></li>
+                        <li><a class="dropdown-item" href="#">Editar</a></li>
+                    </ul>
+                </div>
+                <small class="text-body-secondary">Última actualización: {{ progreso[14] }}/{{ progreso[15] }}/{{ progreso[16] }}</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mediciones de la Pierna Izquierda Relajada -->
+    <div class="col">
+        <div class="card custom-card">
+            <div class="card-header card-header-individual">
+                <h6 class="card-title">Mediciones de la Pierna Izquierda Relajada</h6>
+            </div>
+            <div class="card-body card-body-individual">
+                <div class="insert-img mt-1 mb-3">
+                    <img src="https://via.placeholder.com/150" class="card-img-top img-fluid img-rescale-individual"
+                        alt="Pierna Izquierda Relajada">
+                </div>
+                <p class="card-text">La medición de las piernas es crucial para evaluar el desarrollo muscular y la
+                    salud en general. Un tamaño adecuado indica un buen nivel de actividad física.</p>
+                <p class="card-text"><strong>Tu progreso actual:</strong> {{ progreso[9] }} cm</p>
+            </div>
+            <div class="card-footer card-footer-individual">
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark btn-sm mt-2 mb-2 dropdown-toggle" type="button"
+                        id="piernaIzquierdaRelajadoDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Opciones
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="piernaIzquierdaRelajadoDropdown">
+                        <li><a class="dropdown-item" href="#">Ver historial</a></li>
+                        <li><a class="dropdown-item" href="#">Editar</a></li>
+                    </ul>
+                </div>
+                <small class="text-body-secondary">Última actualización: {{ progreso[14] }}/{{ progreso[15] }}/{{ progreso[16] }}</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mediciones de la Pierna Izquierda Contraída -->
+    <div class="col">
+        <div class="card custom-card">
+            <div class="card-header card-header-individual">
+                <h6 class="card-title">Mediciones de la Pierna Izquierda Contraída</h6>
+            </div>
+            <div class="card-body card-body-individual">
+                <div class="insert-img mt-1 mb-3">
+                    <img src="https://via.placeholder.com/150" class="card-img-top img-fluid img-rescale-individual"
+                        alt="Pierna Izquierda Contraída">
+                </div>
+                <p class="card-text">La medición de las piernas es crucial para evaluar el desarrollo muscular y la
+                    salud en general. Un tamaño adecuado indica un buen nivel de actividad física.</p>
+                <p class="card-text"><strong>Tu progreso actual:</strong> {{ progreso[10] }} cm</p>
+            </div>
+            <div class="card-footer card-footer-individual">
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark btn-sm mt-2 mb-2 dropdown-toggle" type="button"
+                        id="piernaIzquierdaContraidoDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Opciones
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="piernaIzquierdaContraidoDropdown">
+                        <li><a class="dropdown-item" href="#">Ver historial</a></li>
+                        <li><a class="dropdown-item" href="#">Editar</a></li>
+                    </ul>
+                </div>
+                <small class="text-body-secondary">Última actualización: {{ progreso[14] }}/{{ progreso[15] }}/{{ progreso[16] }}</small>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row mt-1 mx-3 mb-4 row-cols-1 row-cols-md-3 g-4">
+
+    <!-- Porcentaje de Musculatura en la Pantorrilla -->
+    <div class="col">
+        <div class="card custom-card">
+            <div class="card-header card-header-individual">
+                <h6 class="card-title">Pantorrilla</h6>
+            </div>
+            <div class="card-body card-body-individual">
+                <div class="insert-img mt-1 mb-3">
+                    <img src="https://via.placeholder.com/150" class="card-img-top img-fluid img-rescale-individual"
+                        alt="Pantorrilla">
+                </div>
+                <p class="card-text">La medición del porcentaje de musculatura en la pantorrilla es esencial para
+                    evaluar el desarrollo muscular y la salud en general. Un porcentaje adecuado de músculo en la
+                    pantorrilla indica un desarrollo muscular saludable y es un reflejo de la actividad física regular.
+                </p>
+                <p class="card-text"><strong>Tu progreso actual:</strong> {{ progreso[11] }} cm</p>
+            </div>
+            <div class="card-footer card-footer-individual">
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark btn-sm mt-2 mb-2 dropdown-toggle" type="button"
+                        id="pantorrillaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Opciones
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="pantorrillaDropdown">
+                        <li><a class="dropdown-item" href="#">Ver historial</a></li>
+                        <li><a class="dropdown-item" href="#">Editar</a></li>
+                    </ul>
+                </div>
+                <small class="text-body-secondary">Última actualización: {{ progreso[14] }}/{{ progreso[15] }}/{{ progreso[16] }}</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Porcentaje de Grasa -->
+    <div class="col">
+        <div class="card custom-card">
+            <div class="card-header card-header-individual">
+                <h6 class="card-title">Porcentaje de Grasa</h6>
+            </div>
+            <div class="card-body card-body-individual">
+                <div class="insert-img mt-1 mb-3">
+                    <img src="https://via.placeholder.com/150" class="card-img-top img-fluid img-rescale-individual"
+                        alt="Porcentaje de Grasa">
+                </div>
+                <p class="card-text">La medición del porcentaje de grasa es fundamental para evaluar la salud general y
+                    el desarrollo físico. Mantener un porcentaje adecuado de grasa corporal es clave para el bienestar y
+                    puede ser un reflejo de la actividad física regular y la alimentación balanceada.</p>
+                <p class="card-text"><strong>Tu progreso actual:</strong> {{ progreso[12] }}%</p>
+            </div>
+            <div class="card-footer card-footer-individual">
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark btn-sm mt-2 mb-2 dropdown-toggle" type="button"
+                        id="grasaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Opciones
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="grasaDropdown">
+                        <li><a class="dropdown-item" href="#">Ver historial</a></li>
+                        <li><a class="dropdown-item" href="#">Editar</a></li>
+                    </ul>
+                </div>
+                <small class="text-body-secondary">Última actualización: {{ progreso[14] }}/{{ progreso[15] }}/{{ progreso[16] }}</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Porcentaje de Musculo -->
+    <div class="col">
+        <div class="card custom-card">
+            <div class="card-header card-header-individual">
+                <h6 class="card-title ">Porcentaje de Musculo</h6>
+            </div>
+            <div class="card-body card-body-individual">
+                <div class="insert-img mt-1 mb-3">
+                    <img src="https://via.placeholder.com/150" class="card-img-top img-fluid img-rescale-individual"
+                        alt="Muslo Izquierdo">
+                </div>
+                <p class="card-text">La medición del muslo es fundamental para evaluar el porcentaje de masa muscular y
+                    la salud en general. Un porcentaje adecuado de músculo en el muslo indica un desarrollo muscular
+                    saludable y es un reflejo de la actividad física regular. </p>
+                <p class="card-text"><strong>Tu progreso actual:</strong> {{ progreso[13] }}%</p>
+            </div>
+            <div class="card-footer card-footer-individual">
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark btn-sm mt-2 mb-2 dropdown-toggle" type="button"
+                        id="musloIzquierdoDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Opciones
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="musloIzquierdoDropdown">
+                        <li><a class="dropdown-item" href="#">Ver historial</a></li>
+                        <li><a class="dropdown-item" href="#">Editar</a></li>
+                    </ul>
+                </div>
+                <small class="text-body-secondary">Última actualización: {{ progreso[14] }}/{{ progreso[15] }}/{{ progreso[16] }}</small>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% else %}
+<div class=" text-center mt-4 mb-4">
+    <h5>El paciente no tiene nigun progreso registrado.</h5>
+</div>
+
+{% endif %}
