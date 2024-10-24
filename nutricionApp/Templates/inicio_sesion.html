@@ -38,11 +38,11 @@
             <h2 class="form__desc">Accede fácilmente a tu información, planes y mucho más en un solo lugar
             </h2>
             <div class="container mt-4">
-                <!-- Mostrar mensajes flash si existen -->
-                {% with messages = get_flashed_messages() %}
+                {% with messages = get_flashed_messages(with_categories=True) %}
                     {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                        {% for category, message in messages %}
+                            {% set alert_class = category if category in ['success', 'danger', 'warning', 'info'] else 'primary' %}
+                            <div class="alert alert-{{ alert_class }} alert-dismissible fade show" role="alert">
                                 <strong>{{ message }}</strong>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
@@ -50,6 +50,7 @@
                     {% endif %}
                 {% endwith %}
             </div>
+            
 
             <form method="post" action="{{ url_for('auth.inicio_sesion') }}">
                 <!--Se pasa la funcion-->

@@ -6,8 +6,6 @@ from werkzeug.security import generate_password_hash
 bp = Blueprint('nutriologo_paciente', __name__, url_prefix='/nutriologo_paciente')
 
 
-from flask import redirect, url_for, flash
-
 @bp.route('/index_informacion')
 def index_informacion():
     # Verificar si el rol está en la sesión
@@ -100,13 +98,13 @@ def index_informacion():
 
         # Depurar el resultado de la consulta
         print("Resultado de la consulta registro_progreso:", registro_progreso)
+        print(f"Contenido de session:", dict(session))
 
         if registro_progreso:
             # Paso 4: Obtener el primer registro de progreso
             datos_progreso = registro_progreso[0]
             print("Registro más reciente de progreso del paciente:")
             print(datos_progreso)  # Imprimir datos de progreso en la consola
-
             # Paso 5: Pasar los datos a la plantilla
             return render_template("index_informacion.html", paciente_info=paciente_info, progreso=datos_progreso)
         else:
@@ -118,7 +116,6 @@ def index_informacion():
         print(f"Error al conectar a la base de datos: {e}")
         flash('Ha ocurrido un error al recuperar la información del progreso. Por favor, inténtalo de nuevo.', 'error')
         return render_template("index_informacion.html", paciente_info=paciente_info)
-
 
 @bp.route('/crear_nuevo_progreso')
 def crear_nuevo_progreso():

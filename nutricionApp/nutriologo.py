@@ -161,3 +161,12 @@ def salaNutriologo():
 
     # Si el método es GET, simplemente renderiza la plantilla
     return render_template("sala_nutriologo.html")
+
+@bp.route('/cerrar_sesion_paciente')
+def cerrar_sesion_paciente():
+    # Limpiar solo la clave 'paciente_info' de la sesión
+    session.pop('paciente_info', None)
+    
+    # Puedes redirigir a otra página después de limpiar la sesión
+    flash('Has cerrado la sesión del paciente correctamente.', 'success')
+    return redirect(url_for('nutriologo.salaNutriologo'))

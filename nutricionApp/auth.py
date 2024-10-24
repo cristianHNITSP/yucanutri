@@ -84,7 +84,7 @@ def inicio_sesion():
                             return redirect(url_for('nutriologo_paciente.index_informacion'))
                         else:
                             print("Contraseña incorrecta (hash) para el paciente:", correo_usuario)
-                            flash('Correo o contraseña incorrectos', 'error')
+                            flash('Correo o contraseña incorrectos', 'danger')
 
                     # Para 'nutriologo' y 'superusuario', compararemos la contraseña directamente (texto plano)
                     elif rol_usuario in ['nutriologo', 'superusuario']:
@@ -101,16 +101,16 @@ def inicio_sesion():
                                 return redirect(url_for('nutriologo.salaNutriologo'))
                         else:
                             print("Contraseña incorrecta para el usuario:", correo_usuario)
-                            flash('Correo o contraseña incorrectos', 'error')
+                            flash('Correo o contraseña incorrectos', 'danger')
                 
                 # Si no se ha encontrado un match en los roles o contraseñas
                 print("Credenciales incorrectas")
             else:
-                flash('Usuario no encontrado', 'error')
+                flash('Usuario no encontrado', 'warning')
                 print("Usuario no encontrado en los roles")
 
         except Exception as e:
             print(f"Error al conectar a la base de datos: {e}")
-            flash('Ha ocurrido un error al iniciar sesión. Por favor, inténtalo de nuevo.', 'error')
+            flash('Ha ocurrido un error al iniciar sesión. Por favor, inténtalo de nuevo.', 'danger')
 
     return render_template("inicio_sesion.html")
