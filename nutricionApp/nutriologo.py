@@ -5,35 +5,57 @@ from datetime import datetime
 
 bp = Blueprint('nutriologo', __name__, url_prefix='/nutriologo')
 
+
 @bp.route('/registrar_cliente', methods=['GET', 'POST'])
 def registrarPaciente():
+
+    # Verificar si el usuario ha iniciado sesión y tiene permisos
+    if 'rol' not in session or (session.get('rol') != 'nutriologo' and session.get('rol') != 'superusuario'):
+        flash('Acceso denegado: Registrar clientes es solo para nutriologo.',
+              'acceso_denegado_registro_usuario')
+        # Redirigir al login si no está autorizado
+        return redirect(url_for('auth.inicio_sesion'))
+
     if request.method == 'POST':
+
         # Obtener los datos del formulario y convertir a string
-        nombres = str(request.form['nombres']).strip()
-        ap_paterno = str(request.form['apellido_paterno']).strip()
-        ap_materno = str(request.form['apellido_materno']).strip()
-        
+        nombres = str(request.form['nombres']).strip().lower()  # Minusculas
+        ap_paterno = str(request.form['apellido_paterno']).strip().lower()
+        ap_materno = str(request.form['apellido_materno']).strip().lower()
+
         # Convertir la fecha a tipo de dato fecha de PostgreSQL
         fecha_nacimiento_str = str(request.form['fecha_nacimiento']).strip()
         try:
-            fecha_nacimiento = datetime.strptime(fecha_nacimiento_str, '%Y-%m-%d').date()
+            fecha_nacimiento = datetime.strptime(
+                fecha_nacimiento_str, '%Y-%m-%d').date()
         except ValueError:
             flash('Formato de fecha incorrecto. Usa YYYY-MM-DD.', 'error')
             return redirect(url_for('nutriologo.registrarPaciente'))
-        
+
+        # Los demas datos
         sexo = str(request.form['sexo']).strip()
         correo_electronico = str(request.form['correo_electronico']).strip()
         contrasena = str(request.form['contrasena']).strip()
-        
+
+        # Obtener el número de teléfono del formulario y quitar espacios
+        telefono_str = request.form['telefono'].strip()
+
+        # Validar que el teléfono tenga exactamente 10 dígitos numéricos
+        if not telefono_str.isdigit() or len(telefono_str) != 10:
+            flash(
+                'El número de teléfono debe ser exactamente 10 dígitos numéricos.', 'error')
+            return redirect(url_for('nutriologo.registrarPaciente'))
+
         # Convertir el teléfono a entero
         try:
-            telefono = int(request.form['telefono'].strip())
+            telefono = int(telefono_str)
             if telefono < 0:
                 raise ValueError("El teléfono no puede ser negativo.")
         except ValueError:
             flash('Número de teléfono debe ser un entero positivo.', 'error')
             return redirect(url_for('nutriologo.registrarPaciente'))
-        
+
+        # generar contraseña hasheada
         contrasena_encriptada = generate_password_hash(contrasena)
 
         try:
@@ -45,7 +67,7 @@ def registrarPaciente():
                 LIMIT 1
                 """
             )
-            
+
             if nutriologo_result:
                 id_nutriologo_id_nutriologo = int(nutriologo_result[0][0])
                 if id_nutriologo_id_nutriologo <= 0:
@@ -82,7 +104,8 @@ def registrarPaciente():
                         id_nutriologo_id_nutriologo
                     )
 
-                    print(f"Datos a insertar: {params}")  # Añadir esto para depuración
+                    # Añadir esto para depuración
+                    print(f"Datos a insertar: {params}")
 
                     # Insertar el paciente en la base de datos
                     Config.CUD(
@@ -90,25 +113,30 @@ def registrarPaciente():
                         INSERT INTO public.paciente 
                         (nombres, ap_paterno, ap_materno, fecha_nacimiento, sexo, correo_electronico, contrasena, telefono, status, id_rol_id_rol, id_nutriologo_id_nutriologo)
                         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                        """, 
+                        """,
                         params
                     )
 
                     flash('Paciente registrado exitosamente', 'success')
+
                     return redirect(url_for('nutriologo.salaNutriologo'))
 
                 else:
                     flash('El rol "paciente" no existe en la base de datos.', 'error')
 
             else:
-                flash('No se encontró ningún nutriologo. Por favor, verifica la base de datos.', 'error')
+                flash(
+                    'No se encontró ningún nutriologo. Por favor, verifica la base de datos.', 'error')
 
         except Exception as e:
             print(f"Error al registrar el paciente: {e}")
-            flash('Ha ocurrido un error al registrar el paciente. Por favor, inténtalo de nuevo.', 'error')
+            flash(
+                'Ha ocurrido un error al registrar el paciente. Por favor, inténtalo de nuevo.', 'error')
 
     return render_template("registrar_cliente.html")
 
+
+# buscador por correo
 @bp.route('/sala_nutriologo', methods=['GET', 'POST'])
 def salaNutriologo():
     if request.method == 'POST':
@@ -145,12 +173,15 @@ def salaNutriologo():
             )
         except Exception as e:
             flash(f"Error al consultar la base de datos: {e}", "error")
-            return redirect(url_for('nutriologo.salaNutriologo'))  # Redirigir a la misma página
+            # Redirigir a la misma página
+            return redirect(url_for('nutriologo.salaNutriologo'))
 
         # Comprobar si se encontró al paciente
         if not paciente_info:
-            flash("No se encontró un paciente con el correo proporcionado o está inactivo.", "error")
-            return redirect(url_for('nutriologo.salaNutriologo'))  # Redirigir a la misma página
+            flash(
+                "No se encontró un paciente con el correo proporcionado o está inactivo.", "error")
+            # Redirigir a la misma página
+            return redirect(url_for('nutriologo.salaNutriologo'))
 
         # Si se encontró al paciente, guardar los datos en la sesión (opcional)
         session['paciente_info'] = paciente_info[0]  # Guardar en la sesión

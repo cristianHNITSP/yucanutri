@@ -30,7 +30,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 10px;
+    gap: 15px;
     padding: 35px;
     background: rgba(255, 255, 255, 0.85);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.206);
@@ -64,17 +64,6 @@ body {
     color: #909090;
 }
 
-/*Por emergencia*/
-.input__doble {
-    display: flex;
-    /* background-color: red; */
-    gap: 7px;
-}
-
-
-
-
-
 /*Iconos del form*/
 .input-container {
     position: relative;
@@ -105,33 +94,12 @@ body {
     height: 44px;
     border-radius: 15px;
     border: 1.85px solid #f0f2f6;
-    margin: 9.5px 0;
+    margin: 11px 0;
     background-color: #f0f2f6;
     text-indent: 8px;
     /* Ajusta el indentado para el texto ingresado */
 
 }
-
-
-[name="nombres"],
-[name="apellido_paterno"],
-[name="apellido_materno"] {
-    text-transform: capitalize;
-    /*Capitaliza al escribir*/
-}
-
-/*Para los placeholder de sexo y date*/
-[name="sexo"] {
-    padding-left: 40px;
-    color: #787474;
-    text-transform: none;
-}
-
-[type="date"] {
-    color: #787474;
-    text-transform: none;
-}
-
 
 .form__inputs--enviar {
     background-color: #23232b;
@@ -179,10 +147,9 @@ body {
 .form-link {
     text-decoration: none;
     text-align: center;
-    margin: -5px auto;
+    margin: 0 auto;
     color: #6c66669f;
-    background-color: #e9ebef;
-    border: none;
+
 }
 
 

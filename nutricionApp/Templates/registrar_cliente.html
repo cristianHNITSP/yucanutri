@@ -24,9 +24,24 @@
     <script src="https://kit.fontawesome.com/c04f55e6fc.js" crossorigin="anonymous"></script>
 </head>
 
+
+
+
+{% with permiso_denegado = get_flashed_messages(category_filter=["permiso_denegado"]) %}
+{% if permiso_denegado %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="bi bi-check"></i> {{permiso_denegado}} xd
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+<script src="../static/Js/eliminar_alertas.js"></script>
+{% endif %}
+{% endwith %}
+
+
 <body>
     <!--Pagina principal-->
     <section class="form-section">
+
 
         <div class="form__double"> <!--Para la imagen del lateral-->
 
@@ -39,43 +54,63 @@
                 <form method="post" action="{{ url_for('nutriologo.registrarPaciente') }}">
                     <div class="input-container">
                         <i class="bi bi-person-fill-add icon"></i>
-                        <input type="text" onpaste="return false;" class="form__inputs" name="nombres" maxlength="30"
-                            required placeholder="Nombres">
+                        <input type="text" onpaste="return false;" class="form__inputs" name="nombres" minlength="2"
+                            maxlength="30" required placeholder="Nombres"
+                            pattern="(?=.{2,})([A-Za-zÀ-ÿ]+(\s[A-Za-zÀ-ÿ]+)*)"
+                            title="Solo se permiten letras y espacios">
                     </div>
-                    <div class="input-container">
-                        <i class="bi bi-person-fill-add icon"></i>
-                        <input type="text" onpaste="return false;" class="form__inputs" name="apellido_paterno"
-                            maxlength="30" required placeholder="Apellido Paterno">
+
+                    <div class="input__doble">
+                        <!--Apellido paterno-->
+                        <div class="input-container">
+                            <i class="bi bi-person-fill-add icon"></i>
+                            <input type="text" onpaste="return false;" class="form__inputs" name="apellido_paterno"
+                                pattern="(?=.{2,})([A-Za-zÀ-ÿ]+(\s[A-Za-zÀ-ÿ]+)*)"
+                                title="Solo se permiten letras y espacios" minlength="2" maxlength="14"
+                                placeholder="Apellido Paterno" required>
+                        </div>
+                        <!--Apellido Materno-->
+                        <div class="input-container">
+                            <i class="bi bi-person-fill-add icon"></i>
+                            <input type="text" onpaste="return false;" class="form__inputs" name="apellido_materno"
+                                pattern="(?=.{2,})([A-Za-zÀ-ÿ]+(\s[A-Za-zÀ-ÿ]+)*)"
+                                title="Solo se permiten letras y espacios" minlength="2" maxlength="14"
+                                placeholder="Apellido Materno" required>
+                        </div>
                     </div>
-                    <div class="input-container">
-                        <i class="bi bi-person-fill-add icon"></i>
-                        <input type="text" onpaste="return false;" class="form__inputs" name="apellido_materno"
-                            maxlength="30" placeholder="Apellido Materno">
-                    </div>
-                    <div class="input-container">
+
+                    <!--Fecha de nacimiento-->
+                    <div class="input-container ">
                         <i class="bi bi-calendar-event icon"></i>
-                        <input type="date" onpaste="return false;" class="form__inputs" name="fecha_nacimiento"
-                            required>
+                        <input type="date" min="1970-10-23" onpaste="return false;" class="form__inputs"
+                            name="fecha_nacimiento" required>
                     </div>
+                    <!--Correo-->
                     <div class="input-container">
                         <i class="bi bi-envelope-at-fill icon"></i>
-                        <input type="email" onpaste="return false;" class="form__inputs" name="correo_electronico"
-                            maxlength="30" required placeholder="Correo Electrónico">
+                        <input type="email" class="form__inputs" name="correo_electronico"
+                            pattern="^(?!\s)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?<!\s)$" minlength="2"
+                            maxlength="32" required placeholder="Correo Electrónico">
                     </div>
-                    <!-- Campo para la contraseña -->
+                    <!-- Contraseña -->
                     <div class="input-container">
-                        <i class="bi bi-lock icon"></i>
-                        <input type="password" onpaste="return false;" class="form__inputs" name="contrasena"
-                            maxlength="50" required placeholder="Contraseña">
-                    </div>
-                    <div class="input-container">
-                        <i class="bi bi-telephone icon"></i>
-                        <input type="tel" onpaste="return false;" class="form__inputs" name="telefono" maxlength="30"
-                            required placeholder="Teléfono" pattern="[0-9]{10}">
+                        <i class="bi bi-lock-fill icon"></i>
+                        <input type="text" onpaste="return false;" class="form__inputs" name="contrasena"
+                            pattern="^(?=.*\S)(?=^\S)([^\s]{4,20})$"
+                            title="Ingresa un mínimo de 4 caracteres; no se permiten espacios." minlength="4"
+                            maxlength="20" placeholder="Contraseña" required>
                     </div>
                     <div class="input-container">
-                        <select class="form__inputs custom-placeholder" name="sexo" required>
-                            <option value="" disabled selected>Selecciona el género</option>
+                        <i class="bi bi-telephone-fill icon"></i>
+                        <!-- <i class="bi bi-telephone icon"></i> -->
+                        <input type="tel" onpaste="return false;" class="form__inputs" name="telefono" minlength="2"
+                            maxlength="10" placeholder="Teléfono" pattern="[0-9]{10}"
+                            title="Ingresa exactamente 10 dígitos numéricos." required>
+                    </div>
+                    <div class="input-container">
+                        <i class="bi bi-gender-ambiguous icon"></i>
+                        <select class="form__inputs custom-placeholder " name="sexo" required>
+                            <option value="" disabled selected class="genero">Selecciona el género</option>
                             <option value="hombre">Hombre</option>
                             <option value="mujer">Mujer</option>
                         </select>
@@ -86,10 +121,9 @@
                     </button>
                 </form>
 
+                <!--Salir-->
+                <!-- <a class="form-link form__inputs " href="{{url_for('index')}}">Salir</a> -->
 
-
-                <!--Extras-->
-                <!-- <a class="form-link form__inputs " href="/inicio_sesion.html">Salir</a> -->
             </div>
 
             <!--Imagen del registro-->

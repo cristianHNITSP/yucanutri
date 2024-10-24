@@ -1,0 +1,9 @@
+{% with acceso_denegado_registro_usuario = get_flashed_messages(category_filter=["acceso_denegado_registro_usuario"]) %}
+{% if acceso_denegado_registro_usuario %}
+<div class="alert alert-danger alert-dismissible fade show position-absolute top-0 mt-4" role="alert">
+    <p>{{acceso_denegado_registro_usuario[0]}}</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+<script src="../static/Js/eliminar_alertas.js"></script>
+{% endif %}
+{% endwith %}

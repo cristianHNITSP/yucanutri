@@ -56,6 +56,9 @@ def create_app():
 
     from . import superusuario
     app.register_blueprint(superusuario.bp)
+    
+    from . import cerrar_sesion
+    app.register_blueprint(cerrar_sesion.bp)
 
     # Ruta dinámica para archivos estáticos
     @app.route("/static/<path:path>")
