@@ -1,0 +1,442 @@
+body {
+    background-image: url("../img/plan_alimentacion.jpg");
+    background-size: cover;
+    /* Hace que la imagen cubra todo el fondo */
+    background-position: center;
+    /* Centra la imagen de fondo */
+    background-repeat: no-repeat;
+    /* Evita que la imagen se repita */
+}
+
+.container {
+    /* Añadir un color de fondo semitransparente para que el contenido se destaque */
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+}
+
+
+/* Estilos aplicados únicamente a la tabla dentro del #table-container */
+#table-container .table {
+    border-radius: 15px;
+    /* Bordes redondeados */
+    overflow: hidden;
+    /* Evita que los bordes redondeados sean cortados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Sombra suave */
+}
+
+#table-container .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.03);
+    /* Fondo suave para filas alternas */
+}
+
+#table-container .table-hover tbody tr:hover {
+    background-color: rgba(184, 180, 180, 0.05);
+    /* Efecto al pasar el ratón */
+}
+
+/* Estilo para encabezados */
+#table-container .table-dark {
+    background-color: #343a40;
+    /* Color de fondo oscuro */
+    color: white;
+    /* Color de texto blanco */
+}
+
+/* Estilo para las celdas editables */
+@keyframes subtleGrow {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.02);
+    }
+}
+
+#table-container [contenteditable="true"].animate {
+    animation: subtleGrow 0.2s ease-in-out forwards;
+    /* Aplicar animación */
+}
+
+#table-container [contenteditable="true"] {
+    width: 200px;
+    /* Ancho fijo */
+    height: 60px;
+    /* Altura fija */
+    overflow-y: auto;
+    /* Permite el desplazamiento vertical */
+    overflow-wrap: break-word;
+    /* Rompe las palabras largas para ajustarse */
+    white-space: pre-wrap;
+    /* Permite que el texto se ajuste en varias líneas */
+    max-width: 200px;
+    /* Ancho máximo de las celdas */
+    border: 1px solid #dee2e6;
+    /* Borde para las celdas editables */
+    padding: 5px;
+    /* Espaciado interno */
+    box-sizing: border-box;
+    /* Asegura que el padding esté dentro del ancho definido */
+}
+
+
+
+/**/
+
+/* Estilos aplicados únicamente a la tabla dentro del modal con id="routineTable" */
+#routineTable {
+    border-radius: 15px;
+    /* Bordes redondeados */
+    overflow: hidden;
+    /* Evita que los bordes redondeados sean cortados */
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Fondo blanco con transparencia */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    /* Sombra más prominente */
+}
+
+#routineTable.table-striped tbody tr:nth-of-type(odd) {
+    background-color: transparent;
+    /* Fondo transparente para filas alternas */
+}
+
+#routineTable.table-hover tbody tr:hover {
+    background-color: rgba(184, 180, 180, 0.05);
+    /* Efecto al pasar el ratón, con fondo ligero */
+}
+
+/* Estilo para encabezados */
+#routineTable .table-dark {
+    background-color: #343a40;
+    /* Color de fondo oscuro */
+    color: white;
+    /* Color de texto blanco */
+}
+
+/* Estilo para las celdas editables */
+@keyframes subtleGrowRoutine {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.02);
+    }
+}
+
+#routineTable [contenteditable="true"].animate {
+    animation: subtleGrowRoutine 0.2s ease-in-out forwards;
+    /* Aplicar animación */
+}
+
+#routineTable [contenteditable="true"] {
+    width: 200px;
+    /* Ancho fijo */
+    height: 50px;
+    /* Altura fija */
+    overflow-y: auto;
+    /* Permite el desplazamiento vertical */
+    overflow-wrap: break-word;
+    /* Rompe las palabras largas para ajustarse */
+    white-space: pre-wrap;
+    /* Permite que el texto se ajuste en varias líneas */
+    max-width: 200px;
+    /* Ancho máximo de las celdas */
+    border: 1px solid #dee2e6;
+    /* Borde para las celdas editables */
+    padding: 5px;
+    /* Espaciado interno */
+    box-sizing: border-box;
+    /* Asegura que el padding esté dentro del ancho definido */
+}
+
+
+/* Estilo para el textarea */
+#avoid-foods,
+#supplement-input,
+#allowed-drinks,
+#nutrition-tips,
+#low-calorie-foods {
+    resize: none;
+    padding: 5px;
+    overflow-y: hidden;
+    /* Permitir desplazamiento si es necesario */
+    max-height: 100px;
+    /* Ajuste de altura */
+}
+
+
+.scroll-container {
+    max-height: 82vh;
+    /* El contenedor ocupará como máximo el 80% de la altura de la ventana */
+
+    /* Puedes ajustar este valor según lo necesites */
+    overflow-y: auto;
+    /* Habilita la barra de desplazamiento vertical */
+
+    /* Ajusta el espacio interno si es necesario */
+    box-sizing: border-box;
+    /* Asegura que el padding esté dentro del contenedor */
+}
+
+/* Opcionalmente, puedes personalizar el aspecto de la scrollbar */
+.scroll-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+
+.nav-link {
+    padding: 0.5rem 1rem;
+    color: black;
+    /* Letra negra cuando no está activo */
+    background-color: white;
+    /* Fondo blanco cuando no está activo */
+    font-size: inherit;
+    font-weight: inherit;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.nav-link:hover {
+    color: black;
+    /* Letra negra al pasar el mouse */
+    background-color: white;
+    /* Fondo blanco al pasar el mouse */
+}
+
+.nav-link:disabled {
+    color: gray;
+    /* Color cuando el enlace está deshabilitado */
+}
+
+.nav-tabs {
+    border-color: gray;
+    border-width: 1px;
+    border-radius: 0.25rem;
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: gray;
+}
+
+.nav-tabs .nav-link.active {
+    color: white;
+    /* Letra blanca cuando está activo */
+    background-color: black;
+    /* Fondo negro cuando está activo */
+    border-color: gray gray black;
+    /* Bordes cuando está activo */
+}
+
+.nav-pills .nav-link.active {
+    color: white;
+    /* Letra blanca cuando está activo */
+    background-color: black;
+    /* Fondo negro cuando está activo */
+    border-radius: 0.25rem;
+}
+
+.nav-underline {
+    gap: 1rem;
+    border-width: 0.125rem;
+}
+
+.nav-underline .nav-link.active {
+    color: white;
+    /* Letra blanca cuando está activo */
+}
+
+/* Estilos adicionales para los botones que no están activos */
+.nav-link:not(.active) {
+    color: black;
+    /* Letra negra cuando no está activo */
+    background-color: white;
+    /* Fondo blanco cuando no está activo */
+}
+
+
+.container-custom {
+    position: relative;
+    height: 300px;
+    /* Ajusta la altura según lo necesites */
+    border: 1px dashed #636161;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 20px;
+}
+
+.add-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    border: 1px dashed #636161;
+    /* Borde en color gris oscuro y estilo dashed */
+    border-radius: 10px;
+    /* Esquinas redondeadas */
+    background-color: transparent;
+    /* Fondo transparente */
+    color: #636161;
+    /* Color del símbolo más */
+    font-size: 28px;
+    /* Tamaño del signo más */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    /* Transiciones suaves */
+}
+
+.add-button:hover {
+    background-color: rgba(99, 97, 97, 0.1);
+    /* Fondo suave al pasar el mouse */
+    transform: scale(1.05);
+    /* Efecto de aumento al pasar el mouse */
+}
+
+.add-button:focus {
+    outline: none;
+    /* Sin contorno en el foco */
+}
+
+/* Estilo para hacer el modal semi-transparente */
+.modal-content {
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Fondo blanco con 80% de opacidad */
+    border: none;
+    /* Sin bordes */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra ligera para darle profundidad */
+}
+
+/* Estilo para la ventana modal, con un fondo translúcido */
+.modal-backdrop.show {
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Fondo oscuro con 50% de opacidad */
+}
+
+.container-progress {
+    /* Ajusta la altura según lo necesites */
+    border: 1px dashed #636161;
+    border-radius: 10px;
+}
+
+
+.custom-card {
+    border: 1px solid #ccc;
+    /* Borde suave */
+    border-radius: 15px;
+    /* Bordes redondeados */
+    overflow: hidden;
+    /* Para evitar que los bordes redondeados se vean afectados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Sombra suave para dar profundidad */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Transición suave para el efecto */
+}
+
+.custom-card:hover {
+    transform: scale(1.03);
+    /* Escalado suave al pasar el mouse */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    /* Aumentar sombra para efecto 3D */
+}
+
+.card-header-individual {
+    background: linear-gradient(135deg, #0f0f0f, #111111);
+    /* Degradado negro metálico */
+    color: #fff;
+    /* Texto blanco */
+    border-bottom: 1px solid #ccc;
+    /* Borde inferior */
+    text-align: left;
+    /* Centrar el título */
+    box-shadow: inset 0 -2px 5px rgba(255, 255, 255, 0.1),
+        /* Brillo sutil */
+        0 2px 5px rgba(0, 0, 0, 0.3);
+    /* Sombra suave para efecto 3D */
+}
+
+.card-body-individual {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+    /* Degradado blanco metálico */
+    color: #333;
+    /* Color del texto */
+    padding: 20px;
+    /* Espaciado interno */
+}
+
+.card-footer-individual {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+    /* Igual que el cuerpo */
+    border-top: 1px solid #ccc;
+    /* Borde superior */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Brillo sutil */
+}
+
+.img-rescale-individual {
+    width: 230px;
+    /* Ancho fijo */
+    height: 90px;
+    /* Alto fijo */
+    object-fit: cover;
+    /* Mantiene la proporción de la imagen */
+}
+
+
+.card-header-group {
+    background: linear-gradient(135deg, #0f0f0f, #111111);
+    /* Degradado negro metálico */
+    color: #fff;
+    /* Texto blanco */
+    border-bottom: 1px solid #ccc;
+    /* Borde inferior */
+    text-align: left;
+    /* Centrar el título */
+    box-shadow: inset 0 -2px 5px rgba(255, 255, 255, 0.1),
+        /* Brillo sutil */
+        0 2px 5px rgba(0, 0, 0, 0.3);
+    /* Sombra suave para efecto 3D */
+}
+
+.card-body-group {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+    /* Degradado blanco metálico */
+    color: #333;
+    /* Color del texto */
+    padding: 20px;
+    /* Espaciado interno */
+}
+
+.card-footer-group {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+    /* Igual que el cuerpo */
+    border-top: 1px solid #ccc;
+    /* Borde superior */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Brillo sutil */
+}
+
+.img-rescale-group {
+    width: 600px;
+    /* Ancho fijo */
+    height: 200px;
+    /* Alto fijo */
+    object-fit: cover;
+    /* Mantiene la proporción de la imagen */
+}

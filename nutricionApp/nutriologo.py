@@ -12,7 +12,7 @@ def registrarPaciente():
     # Verificar si el usuario ha iniciado sesión y tiene permisos
     if 'rol' not in session or (session.get('rol') != 'nutriologo' and session.get('rol') != 'superusuario'):
         flash('Acceso denegado: Registrar clientes es solo para nutriologo.',
-              'acceso_denegado_registro_usuario')
+            'danger')
         # Redirigir al login si no está autorizado
         return redirect(url_for('auth.inicio_sesion'))
 
@@ -146,7 +146,8 @@ def salaNutriologo():
         # Validar que el campo del correo esté lleno
         if not patient_email:
             flash("El campo de correo electrónico es obligatorio.", "error")
-            return redirect(url_for('nutriologo.salaNutriologo'))  # Redirigir a la misma página
+            # Redirigir a la misma página
+            return redirect(url_for('nutriologo.salaNutriologo'))
 
         # Realizar la consulta para buscar el paciente y su rol
         try:
@@ -193,11 +194,12 @@ def salaNutriologo():
     # Si el método es GET, simplemente renderiza la plantilla
     return render_template("sala_nutriologo.html")
 
+
 @bp.route('/cerrar_sesion_paciente')
 def cerrar_sesion_paciente():
     # Limpiar solo la clave 'paciente_info' de la sesión
     session.pop('paciente_info', None)
-    
+
     # Puedes redirigir a otra página después de limpiar la sesión
     flash('Has cerrado la sesión del paciente correctamente.', 'success')
     return redirect(url_for('nutriologo.salaNutriologo'))
