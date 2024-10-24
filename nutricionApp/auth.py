@@ -3,7 +3,7 @@ from werkzeug.security import check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import Config  # Asegúrate de que esta importación sea correcta
 
-bp = Blueprint('auth', __name__)
+bp = Blueprint('auth', __name__,url_prefix='/auth')
 
 @bp.route('/iniciar_sesion', methods=['GET', 'POST'])
 def inicio_sesion():
