@@ -1,7 +1,8 @@
+import re
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 import Config as Config
 from werkzeug.security import generate_password_hash
-from datetime import datetime
+from datetime import date, datetime
 
 bp = Blueprint('nutriologo', __name__, url_prefix='/nutriologo')
 
@@ -11,8 +12,8 @@ def registrarPaciente():
 
     # Verificar si el usuario ha iniciado sesión y tiene permisos
     if 'rol' not in session or (session.get('rol') != 'nutriologo' and session.get('rol') != 'superusuario'):
-        flash('Acceso denegado: Registrar clientes es solo para nutriologo.',
-            'danger')
+        flash('Acceso denegado: Registrar clientes es solo para nutriologo, inicia sesión.',
+              'danger')
         # Redirigir al login si no está autorizado
         return redirect(url_for('auth.inicio_sesion'))
 
@@ -28,6 +29,13 @@ def registrarPaciente():
         try:
             fecha_nacimiento = datetime.strptime(
                 fecha_nacimiento_str, '%Y-%m-%d').date()
+
+            # Verificar que la persona haya nacido en 2015 o antes
+            if fecha_nacimiento.year > 2015:
+                flash(
+                    'Edad mínima de registro: 9 años.', 'danger')
+                return redirect(url_for('nutriologo.registrarPaciente'))
+
         except ValueError:
             flash('Formato de fecha incorrecto. Usa YYYY-MM-DD.', 'error')
             return redirect(url_for('nutriologo.registrarPaciente'))
@@ -62,8 +70,8 @@ def registrarPaciente():
             # Consulta para obtener el ID del nutriologo
             nutriologo_result = Config.Read(
                 """
-                SELECT id_nutriologo 
-                FROM public.nutriologo 
+                SELECT id_nutriologo
+                FROM public.nutriologo
                 LIMIT 1
                 """
             )
@@ -77,8 +85,8 @@ def registrarPaciente():
                 # Verificar que el rol "paciente" existe y obtener su ID
                 rol_result = Config.Read(
                     """
-                    SELECT id_rol 
-                    FROM public.rol 
+                    SELECT id_rol
+                    FROM public.rol
                     WHERE rol = 'paciente'
                     LIMIT 1
                     """
@@ -110,8 +118,9 @@ def registrarPaciente():
                     # Insertar el paciente en la base de datos
                     Config.CUD(
                         """
-                        INSERT INTO public.paciente 
-                        (nombres, ap_paterno, ap_materno, fecha_nacimiento, sexo, correo_electronico, contrasena, telefono, status, id_rol_id_rol, id_nutriologo_id_nutriologo)
+                        INSERT INTO public.paciente
+                        (nombres, ap_paterno, ap_materno, fecha_nacimiento, sexo, correo_electronico,
+                         contrasena, telefono, status, id_rol_id_rol, id_nutriologo_id_nutriologo)
                         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                         """,
                         params
@@ -139,6 +148,12 @@ def registrarPaciente():
 # buscador por correo
 @bp.route('/sala_nutriologo', methods=['GET', 'POST'])
 def salaNutriologo():
+
+    # Verificar si el usuario ha iniciado sesión y tiene permisos
+    if 'rol' not in session or (session.get('rol') != 'nutriologo' and session.get('rol') != 'superusuario'):
+        flash('Acceso denegado: La sala es solo para nutriologo, inicia sesión.', 'danger')
+        return redirect(url_for('auth.inicio_sesion'))
+
     if request.method == 'POST':
         # Capturar el correo electrónico del formulario
         patient_email = request.form.get('patientEmail')
@@ -153,7 +168,7 @@ def salaNutriologo():
         try:
             paciente_info = Config.Read(
                 """
-                SELECT 
+                SELECT
                     p.id_paciente,
                     p.nombres,
                     p.ap_paterno,
@@ -162,12 +177,12 @@ def salaNutriologo():
                     p.sexo,
                     p.correo_electronico[1] AS correo,
                     r.rol
-                FROM 
+                FROM
                     public.paciente p
-                INNER JOIN 
+                INNER JOIN
                     public.rol r ON p.id_rol_id_rol = r.id_rol
-                WHERE 
-                    p.correo_electronico[1] = %s AND 
+                WHERE
+                    p.correo_electronico[1] = %s AND
                     p.status = true;  -- Solo buscar pacientes activos
                 """,
                 (patient_email,)  # Usar el correo como parámetro
@@ -203,3 +218,148 @@ def cerrar_sesion_paciente():
     # Puedes redirigir a otra página después de limpiar la sesión
     flash('Has cerrado la sesión del paciente correctamente.', 'success')
     return redirect(url_for('nutriologo.salaNutriologo'))
+
+
+@bp.route('/editar_datos_nutriologo')
+def editar_datos_nutriologo():
+    correo_nutriologo = session.get('correo', None)
+    print("El correo en sesión es:", correo_nutriologo)
+
+    # Verificar si el correo está en la sesión
+    if correo_nutriologo is None:
+        flash("No se ha encontrado el correo en la sesión.", "error")
+        return redirect(url_for('nutriologo.salaNutriologo'))
+
+    # Obtener los datos del nutriologo para mostrar
+    try:
+        nutriologo_info = Config.Read(
+            """
+            SELECT
+                id_nutriologo,
+                nombres,
+                ap_paterno,
+                ap_materno,
+                telefono,
+                correo_electronico,
+                contrasena
+            FROM
+                nutriologo
+            WHERE
+                correo_electronico = %s;  -- Traer datos del nutriologo por correo
+            """,
+            (correo_nutriologo,)  # Usar el correo como parámetro
+        )
+    except Exception as e:
+        flash(f"Error al consultar la base de datos: {e}", "error")
+        return redirect(url_for('nutriologo.salaNutriologo'))
+
+    print("Información del nutriólogo:", nutriologo_info)
+
+    # Comprobar si se encontró al nutriólogo
+    if not nutriologo_info:
+        flash("No se encontró el nutriólogo.", "error")
+        return redirect(url_for('nutriologo.salaNutriologo'))
+
+    # Pasar la información correctamente a la plantilla
+    return render_template("editar_nutriologo.html", dato=nutriologo_info[0])
+
+
+@bp.route('/actualizar_nutriologo', methods=['POST'])
+def actualizar_nutriologo():
+
+    if request.method == 'POST':
+        nombres = str(request.form['nombres']).strip().lower()  # Minusculas
+        ap_paterno = str(request.form['apellido_p']).strip().lower()
+        ap_materno = str(request.form['apellido_m']).strip().lower()
+        telefono = str(request.form['telefono']).strip().lower()
+        correo = str(request.form['correo']).strip().lower()
+        contraseña = str(request.form['contraseña']).strip().lower()
+        indice_id = str(request.form['indice_id']).strip().lower()
+
+        # Validar que el correo electrónico termine en ".com"
+        if not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[cC][oO][mM]$", correo):
+            flash("El correo electrónico debe terminar en '.com'", "error_email")
+            return redirect(url_for('editar_perfil'))
+
+        # Comprobar si el correo ya está registrado
+        # cur.execute(
+        #     "SELECT * FROM login WHERE Correo = %s AND ID_Login != %s", (correo, id))
+        # existing_email = cur.fetchone()
+
+        # Comprobar si el correo ya está registrado
+        try:
+            correo_ya_existe = Config.Read(
+                """
+                SELECT
+                    *
+                FROM
+                    nutriologo
+                WHERE
+                    correo_electronico = %s;
+                    AND id_nutriologo != %s;
+                """,
+                (correo, indice_id)  # Usar el correo como parámetro
+            )
+            telefono_ya_existe = Config.Read(
+                """
+                SELECT
+                    *
+                FROM
+                    nutriologo
+                WHERE
+                    telefono = %s;
+                    AND id_nutriologo != %s;
+                """,
+                (telefono, indice_id)  # Usar el correo como parámetro
+            )
+        except Exception as e:
+            flash(f"Error al consultar la base de datos: {e}", "error")
+            return redirect(url_for('nutriologo.editar_datos_nutriologo'))
+
+        # Comprobar si el usuario ya existe
+        # cur.execute(
+        #     "SELECT * FROM login WHERE Nombre = %s AND ID_Login != %s", (user, id))
+        # existing_user = cur.fetchone()
+
+        if correo_ya_existe:
+            flash("El correo electrónico ya está registrado", "error_email")
+            return redirect(url_for('nutriologo.editar_datos_nutriologo'))
+
+        elif telefono_ya_existe:
+            flash("El telefono ya existe. Por favor, elija otro", "error_cel")
+            return redirect(url_for('nutriologo.editar_datos_nutriologo'))
+
+        else:
+            # Actualizar los datos del usuario
+            # cur.execute(
+            #     "UPDATE login SET Nombre = %s, Correo = %s, Contraseña = %s WHERE ID_Login = %s",
+            #     (user, correo, contraseña, id)
+            # )
+
+            try:
+                Config.CUD(
+                    """
+                    UPDATE
+                        nutriologo
+                    SET
+                        nombres = %s,
+                        ap_paterno = %s,
+                        ap_materno = %s,
+                        telefono = %s,
+                        correo_electronico = %s,
+                        contrasena = %s
+                    WHERE
+                        id_nutriologo = %s
+                    """,
+                    (nombres, ap_paterno, ap_materno, telefono, correo,
+                     contraseña, indice_id)  # Usar el correo como parámetro
+                )
+            except Exception as e:
+                flash(f"Error al consultar la base de datos: {e}", "error")
+                return redirect(url_for('nutriologo.editar_datos_nutriologo'))
+            # Actualizar la sesión
+            session["email"] = correo
+            flash("Perfil editado correctamente", "perfil_editado")
+            return redirect(url_for('nutriologo.editar_datos_nutriologo'))
+
+    return redirect(url_for('nutriologo.editar_datos_nutriologo'))

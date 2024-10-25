@@ -8,6 +8,6 @@ function cerrarAlertas() {
                 alerta.remove(); // Eliminar la alerta del DOM después de la animación
             }, 240); // Esperar 1 segundo después de la animación de desvanecimiento antes de eliminar el elemento
         });
-    }, 4500); // Esperar 3 segundos antes de ejecutar la función
+    }, 5500); // Esperar 3 segundos antes de ejecutar la función
 }
 cerrarAlertas();

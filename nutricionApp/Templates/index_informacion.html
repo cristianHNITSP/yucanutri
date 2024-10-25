@@ -18,7 +18,7 @@
 
     <style>
         body {
-            background-image: url("{{ url_for('static', filename='img/plan_alimentacion.jpg') }}");
+            background-image: url("{{ url_for('static', filename='img/plan_alimentacion.webp') }}");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -479,8 +479,12 @@
 </head>
 
 <body>
+
     <div class="container col-10 mt-5 animate__animated animate__fadeIn">
+        {% include 'avisos.html' %}
+
         <div class="row">
+
             {% if paciente_info %}
             <div class="col-1"></div>
             <div class="col-7 text-start mt-4 mb-4">
