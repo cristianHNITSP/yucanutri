@@ -11,25 +11,32 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_box" />
-    
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_box" />
+
     <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}" type="image/x-icon">
 
     <style>
         body {
-            background-image: url("{{ url_for('static', filename='img/plan_alimentacion.jpg') }}");
+            background-image: url("{{ url_for('static', filename='img/plan_alimentacion.webp') }}");
             background-size: cover;
-            /* Hace que la imagen cubra todo el fondo */
             background-position: center;
-            /* Centra la imagen de fondo */
             background-repeat: no-repeat;
-            /* Evita que la imagen se repita */
         }
 
         .container {
             /* Añadir un color de fondo semitransparente para que el contenido se destaque */
             background-color: rgba(255, 255, 255, 0.8);
             border-radius: 10px;
+        }
+
+        @media screen and (max-width: 426px) {
+
+            html {
+
+                height: 100vh;
+            }
+
         }
     </style>
 
@@ -472,8 +479,12 @@
 </head>
 
 <body>
+
     <div class="container col-10 mt-5 animate__animated animate__fadeIn">
+        {% include 'avisos.html' %}
+
         <div class="row">
+
             {% if paciente_info %}
             <div class="col-1"></div>
             <div class="col-7 text-start mt-4 mb-4">
@@ -548,13 +559,14 @@
                         <div class="col-6 mt-3 mb-3 d-flex">
                             <h5 class="mt-1">Progresos</h5>
                             <!-- Botón de signo más recibira cambios a furuo -->
-                            <button type="button" class="btn btn-outline-dark ms-2" data-bs-toggle="modal" data-bs-target="#modalNuevoProgreso">
+                            <button type="button" class="btn btn-outline-dark ms-2" data-bs-toggle="modal"
+                                data-bs-target="#modalNuevoProgreso">
                                 <span class="material-symbols-outlined" style="vertical-align: middle;">
                                     add_box
                                 </span>
                             </button>
                         </div>
-                        
+
 
                         <div class="container-progress mb-5">
                             {% include 'cards_progresos_cliente.html' %}
@@ -716,8 +728,8 @@
     </div>
 
     <!-- Modal para agregar un nuevo progreso-->
-    <div class="modal fade" id="modalNuevoProgreso" data-bs-backdrop="static" tabindex="-1" aria-labelledby="modalNuevoProgresoLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="modalNuevoProgreso" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="modalNuevoProgresoLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
@@ -736,35 +748,43 @@
                             <label for="abdomenInput">Circunferencia del abdomen (cm)</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="brazoDerRelajadoInput" placeholder="Brazo derecho relajado">
+                            <input type="text" class="form-control" id="brazoDerRelajadoInput"
+                                placeholder="Brazo derecho relajado">
                             <label for="brazoDerRelajadoInput">Brazo derecho relajado (cm)</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="brazoDerContraidoInput" placeholder="Brazo derecho contraído">
+                            <input type="text" class="form-control" id="brazoDerContraidoInput"
+                                placeholder="Brazo derecho contraído">
                             <label for="brazoDerContraidoInput">Brazo derecho contraído (cm)</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="brazoIzqRelajadoInput" placeholder="Brazo izquierdo relajado">
+                            <input type="text" class="form-control" id="brazoIzqRelajadoInput"
+                                placeholder="Brazo izquierdo relajado">
                             <label for="brazoIzqRelajadoInput">Brazo izquierdo relajado (cm)</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="brazoIzqContraidoInput" placeholder="Brazo izquierdo contraído">
+                            <input type="text" class="form-control" id="brazoIzqContraidoInput"
+                                placeholder="Brazo izquierdo contraído">
                             <label for="brazoIzqContraidoInput">Brazo izquierdo contraído (cm)</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="piernaDerRelajadaInput" placeholder="Pierna derecha relajada">
+                            <input type="text" class="form-control" id="piernaDerRelajadaInput"
+                                placeholder="Pierna derecha relajada">
                             <label for="piernaDerRelajadaInput">Pierna derecha relajada (cm)</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="piernaDerContraidaInput" placeholder="Pierna derecha contraída">
+                            <input type="text" class="form-control" id="piernaDerContraidaInput"
+                                placeholder="Pierna derecha contraída">
                             <label for="piernaDerContraidaInput">Pierna derecha contraída (cm)</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="piernaIzqRelajadaInput" placeholder="Pierna izquierda relajada">
+                            <input type="text" class="form-control" id="piernaIzqRelajadaInput"
+                                placeholder="Pierna izquierda relajada">
                             <label for="piernaIzqRelajadaInput">Pierna izquierda relajada (cm)</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="piernaIzqContraidaInput" placeholder="Pierna izquierda contraída">
+                            <input type="text" class="form-control" id="piernaIzqContraidaInput"
+                                placeholder="Pierna izquierda contraída">
                             <label for="piernaIzqContraidaInput">Pierna izquierda contraída (cm)</label>
                         </div>
                         <div class="form-floating mb-3">
@@ -772,11 +792,13 @@
                             <label for="pantorrillaInput">Circunferencia de pantorrilla (cm)</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="porcentajeGrasaInput" placeholder="Porcentaje de grasa">
+                            <input type="text" class="form-control" id="porcentajeGrasaInput"
+                                placeholder="Porcentaje de grasa">
                             <label for="porcentajeGrasaInput">Porcentaje de grasa (%)</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="porcentajeMusculoInput" placeholder="Porcentaje de músculo">
+                            <input type="text" class="form-control" id="porcentajeMusculoInput"
+                                placeholder="Porcentaje de músculo">
                             <label for="porcentajeMusculoInput">Porcentaje de músculo (%)</label>
                         </div>
                     </form>

@@ -15,13 +15,10 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <!-- Boostrap y fontawesome icons-->
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <script src="https://kit.fontawesome.com/c04f55e6fc.js" crossorigin="anonymous"></script>
     <!-- Icono de la pagina -->
     <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}" type="image/x-icon">
     <title>Inicio</title>
-    <script src="https://kit.fontawesome.com/c04f55e6fc.js" crossorigin="anonymous"></script>
 </head>
 
 
@@ -41,7 +38,7 @@
 <body>
     <!--Pagina principal-->
     <section class="form-section">
-
+        {% include 'avisos.html' %}
 
         <div class="form__double"> <!--Para la imagen del lateral-->
 
@@ -82,8 +79,8 @@
                     <!--Fecha de nacimiento-->
                     <div class="input-container ">
                         <i class="bi bi-calendar-event icon"></i>
-                        <input type="date" min="1970-10-23" onpaste="return false;" class="form__inputs"
-                            name="fecha_nacimiento" required>
+                        <input type="date" min="1904-10-23"  max="2015-12-31" onpaste="return false;" class="form__inputs"
+                            name="fecha_nacimiento" required><!--124 años, minimo 1-->
                     </div>
                     <!--Correo-->
                     <div class="input-container">
@@ -129,7 +126,7 @@
             <!--Imagen del registro-->
             <div class="form__imagen__container">
                 <figure class="form__imagen">
-                    <img src="" class="form__imagen--img">
+                    <img src="" class="form__imagen--img" loading="lazy">
                 </figure>
             </div>
 
