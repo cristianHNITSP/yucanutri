@@ -424,7 +424,7 @@
         }
 
         .img-rescale-individual {
-            width: 230px;
+            width: 90vh;
             /* Ancho fijo */
             height: 90px;
             /* Alto fijo */
@@ -468,7 +468,7 @@
         }
 
         .img-rescale-group {
-            width: 600px;
+            width: 90vh;
             /* Ancho fijo */
             height: 200px;
             /* Alto fijo */
@@ -879,105 +879,93 @@
         </div>
     </div>
 
-
-
+    {% if progreso %}
     <!-- Offcanvas para Editar Progreso -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-edit" aria-labelledby="offcanvas-editLabel"
-        style="width: 500px;">
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-edit" aria-labelledby="offcanvas-editLabel" style="width: 500px;">
         <div class="offcanvas-header">
             <h5 id="offcanvas-editLabel" class="offcanvas-title">Editar Progreso</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
         </div>
         <div class="offcanvas-body">
-            <form id="editProgressForm">
+            <form id="editProgressForm" action="{{ url_for('nutriologo_paciente.editar_progreso') }}" method="POST">
+                <!-- Campo oculto para el identificador del registro -->
+                <input type="hidden" name="id_progreso" value="{{ progreso[0] }}">
+                
                 <div class="mb-3">
                     <label for="peso_edit" class="form-label">Peso (kg)</label>
-                    <input type="number" class="form-control" id="peso_edit" placeholder="Ingrese el peso" required
-                        step="0.1">
+                    <input type="number" class="form-control" id="peso_edit" name="peso_edit" placeholder="Ingrese el peso" required step="0.1" value="{{ progreso[1] }}">
                 </div>
                 <div class="mb-3">
                     <label for="abdomen_edit" class="form-label">Medida de Abdomen (cm)</label>
-                    <input type="number" class="form-control" id="abdomen_edit"
-                        placeholder="Ingrese la medida de abdomen" required step="0.1">
+                    <input type="number" class="form-control" id="abdomen_edit" name="abdomen_edit" placeholder="Ingrese la medida de abdomen" required step="0.1" value="{{ progreso[2] }}">
                 </div>
                 <div class="row mb-3">
                     <div class="col">
                         <label for="brazo_der_relajado_edit" class="form-label">Brazo Derecho Relajado (cm)</label>
-                        <input type="number" class="form-control" id="brazo_der_relajado_edit"
-                            placeholder="Ingrese medida" required step="0.1">
+                        <input type="number" class="form-control" id="brazo_der_relajado_edit" name="brazo_der_relajado_edit" placeholder="Ingrese medida" required step="0.1" value="{{ progreso[3] }}">
                     </div>
                     <div class="col">
                         <label for="brazo_der_contraido_edit" class="form-label">Brazo Derecho Contraído (cm)</label>
-                        <input type="number" class="form-control" id="brazo_der_contraido_edit"
-                            placeholder="Ingrese medida" required step="0.1">
+                        <input type="number" class="form-control" id="brazo_der_contraido_edit" name="brazo_der_contraido_edit" placeholder="Ingrese medida" required step="0.1" value="{{ progreso[4] }}">
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col">
                         <label for="brazo_izq_relajado_edit" class="form-label">Brazo Izquierdo Relajado (cm)</label>
-                        <input type="number" class="form-control" id="brazo_izq_relajado_edit"
-                            placeholder="Ingrese medida" required step="0.1">
+                        <input type="number" class="form-control" id="brazo_izq_relajado_edit" name="brazo_izq_relajado_edit" placeholder="Ingrese medida" required step="0.1" value="{{ progreso[5] }}">
                     </div>
                     <div class="col">
                         <label for="brazo_izq_contraido_edit" class="form-label">Brazo Izquierdo Contraído (cm)</label>
-                        <input type="number" class="form-control" id="brazo_izq_contraido_edit"
-                            placeholder="Ingrese medida" required step="0.1">
+                        <input type="number" class="form-control" id="brazo_izq_contraido_edit" name="brazo_izq_contraido_edit" placeholder="Ingrese medida" required step="0.1" value="{{ progreso[6] }}">
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col">
                         <label for="pierna_der_relajada_edit" class="form-label">Pierna Derecha Relajada (cm)</label>
-                        <input type="number" class="form-control" id="pierna_der_relajada_edit"
-                            placeholder="Ingrese medida" required step="0.1">
+                        <input type="number" class="form-control" id="pierna_der_relajada_edit" name="pierna_der_relajada_edit" placeholder="Ingrese medida" required step="0.1" value="{{ progreso[7] }}">
                     </div>
                     <div class="col">
                         <label for="pierna_der_contraida_edit" class="form-label">Pierna Derecha Contraída (cm)</label>
-                        <input type="number" class="form-control" id="pierna_der_contraida_edit"
-                            placeholder="Ingrese medida" required step="0.1">
+                        <input type="number" class="form-control" id="pierna_der_contraida_edit" name="pierna_der_contraida_edit" placeholder="Ingrese medida" required step="0.1" value="{{ progreso[8] }}">
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col">
                         <label for="pierna_izq_relajada_edit" class="form-label">Pierna Izquierda Relajada (cm)</label>
-                        <input type="number" class="form-control" id="pierna_izq_relajada_edit"
-                            placeholder="Ingrese medida" required step="0.1">
+                        <input type="number" class="form-control" id="pierna_izq_relajada_edit" name="pierna_izq_relajada_edit" placeholder="Ingrese medida" required step="0.1" value="{{ progreso[9] }}">
                     </div>
                     <div class="col">
-                        <label for="pierna_izq_contraida_edit" class="form-label">Pierna Izquierda Contraída
-                            (cm)</label>
-                        <input type="number" class="form-control" id="pierna_izq_contraida_edit"
-                            placeholder="Ingrese medida" required step="0.1">
+                        <label for="pierna_izq_contraida_edit" class="form-label">Pierna Izquierda Contraída (cm)</label>
+                        <input type="number" class="form-control" id="pierna_izq_contraida_edit" name="pierna_izq_contraida_edit" placeholder="Ingrese medida" required step="0.1" value="{{ progreso[10] }}">
                     </div>
                 </div>
                 <div class="mb-3">
                     <label for="pantorrilla_edit" class="form-label">Medida de Pantorrilla (cm)</label>
-                    <input type="number" class="form-control" id="pantorrilla_edit" placeholder="Ingrese medida"
-                        required step="0.1">
+                    <input type="number" class="form-control" id="pantorrilla_edit" name="pantorrilla_edit" placeholder="Ingrese medida" required step="0.1" value="{{ progreso[11] }}">
                 </div>
                 <div class="row mb-3">
                     <div class="col">
                         <label for="porcentaje_grasa_edit" class="form-label">Porcentaje de Grasa (%)</label>
-                        <input type="number" class="form-control" id="porcentaje_grasa_edit"
-                            placeholder="Ingrese porcentaje" required step="0.1">
+                        <input type="number" class="form-control" id="porcentaje_grasa_edit" name="porcentaje_grasa_edit" placeholder="Ingrese porcentaje" required step="0.1" value="{{ progreso[12] }}">
                     </div>
                     <div class="col">
                         <label for="porcentaje_musculo_edit" class="form-label">Porcentaje de Músculo (%)</label>
-                        <input type="number" class="form-control" id="porcentaje_musculo_edit"
-                            placeholder="Ingrese porcentaje" required step="0.1">
+                        <input type="number" class="form-control" id="porcentaje_musculo_edit" name="porcentaje_musculo_edit" placeholder="Ingrese porcentaje" required step="0.1" value="{{ progreso[13] }}">
                     </div>
                 </div>
                 <!-- Botones para guardar o cancelar -->
                 <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-outline-danger me-2"
-                        data-bs-dismiss="offcanvas">Cancelar</button>
+                    <button type="button" class="btn btn-outline-danger me-2" data-bs-dismiss="offcanvas">Cancelar</button>
                     <button type="submit" class="btn btn-outline-dark">Guardar Cambios</button>
                 </div>
             </form>
         </div>
     </div>
-
-
-
+    {% endif %}
+    
+    
+    
+    
 
     <!-- Enlace a Bootstrap JS y dependencias -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
