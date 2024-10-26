@@ -10,8 +10,6 @@ bp = Blueprint('nutriologo_paciente', __name__, url_prefix='/nutriologo_paciente
 
 @bp.route('/index_informacion')
 def index_informacion():
-  
-
     # Verificar si el rol está en la sesión
     rol = session.get('rol')
     if not rol:
@@ -150,12 +148,12 @@ def crear_nuevo_progreso():
         porcentaje_musculo = float(request.form.get('porcentaje_musculo', 0))
 
         # Validación de valores positivos
-        if any(value < 0 for value in [peso, abdomen, brazo_der_relajado, brazo_der_contraido,
+        if any(value <= 0 for value in [peso, abdomen, brazo_der_relajado, brazo_der_contraido,
                                         brazo_izq_relajado, brazo_izq_contraido,
                                         pierna_der_relajada, pierna_der_contraida,
                                         pierna_izq_relajada, pierna_izq_contraida,
                                         pantorrilla, porcentaje_grasa, porcentaje_musculo]):
-            flash('Todos los valores deben ser positivos.', 'error')
+            flash('Ha ingresado un valor invalido, intentelo nuevamente.', 'error')
             return redirect(url_for('nutriologo_paciente.index_informacion'))
 
         # Verificación de información del paciente
@@ -292,6 +290,97 @@ def crear_nuevo_progreso():
     # Redirigir a la página de información del paciente
     flash('Progreso registrado exitosamente.', 'success')
     return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+@bp.route('/editar_progreso', methods=['POST'])
+def editar_progreso():
+    try:
+        # Capturando el ID del progreso
+        id_progreso = int(request.form.get('id_progreso', 0))
+
+        # Capturando los datos del formulario
+        peso = float(request.form.get('peso_edit', 0))
+        abdomen = float(request.form.get('abdomen_edit', 0))
+        brazo_der_relajado = float(request.form.get('brazo_der_relajado_edit', 0))
+        brazo_der_contraido = float(request.form.get('brazo_der_contraido_edit', 0))
+        brazo_izq_relajado = float(request.form.get('brazo_izq_relajado_edit', 0))
+        brazo_izq_contraido = float(request.form.get('brazo_izq_contraido_edit', 0))
+        pierna_der_relajada = float(request.form.get('pierna_der_relajada_edit', 0))
+        pierna_der_contraida = float(request.form.get('pierna_der_contraida_edit', 0))
+        pierna_izq_relajada = float(request.form.get('pierna_izq_relajada_edit', 0))
+        pierna_izq_contraida = float(request.form.get('pierna_izq_contraida_edit', 0))
+        pantorrilla = float(request.form.get('pantorrilla_edit', 0))
+        porcentaje_grasa = float(request.form.get('porcentaje_grasa_edit', 0))
+        porcentaje_musculo = float(request.form.get('porcentaje_musculo_edit', 0))
+
+        print('el peso actual a editar es de: ', peso)
+
+        # Validación de valores positivos
+        if any(value <= 0 for value in [peso, abdomen, brazo_der_relajado, brazo_der_contraido,
+                                         brazo_izq_relajado, brazo_izq_contraido,
+                                         pierna_der_relajada, pierna_der_contraida,
+                                         pierna_izq_relajada, pierna_izq_contraida,
+                                         pantorrilla, porcentaje_grasa, porcentaje_musculo]):
+            flash('Ha ingresado un valor invalido, intentelo nuevamente.', 'error')
+            return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+        # Verificación de información del paciente
+        paciente_info = session.get('paciente_info')
+        if not paciente_info or len(paciente_info) == 0:
+            flash('No se encontró información del paciente.', 'error')
+            return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+        # Guardando los datos en un diccionario
+        datos_editar_progresos = {
+            'id_progreso': id_progreso,
+            'peso': peso,
+            'abdomen': abdomen,
+            'brazo_der_relajado': brazo_der_relajado,
+            'brazo_der_contraido': brazo_der_contraido,
+            'brazo_izq_relajado': brazo_izq_relajado,
+            'brazo_izq_contraido': brazo_izq_contraido,
+            'pierna_der_relajada': pierna_der_relajada,
+            'pierna_der_contraida': pierna_der_contraida,
+            'pierna_izq_relajada': pierna_izq_relajada,
+            'pierna_izq_contraida': pierna_izq_contraida,
+            'pantorrilla': pantorrilla,
+            'porcentaje_grasa': porcentaje_grasa,
+            'porcentaje_musculo': porcentaje_musculo    
+        }
+
+        print("Los datos a actualiza son:", datos_editar_progresos)
+
+        actualizar_datos_progresos = """
+            UPDATE public.progreso
+            SET 
+                peso = %(peso)s,
+                abdomen = %(abdomen)s,
+                brazo_der_relajado = %(brazo_der_relajado)s,
+                brazo_der_contraido = %(brazo_der_contraido)s,
+                brazo_izq_relajado = %(brazo_izq_relajado)s,
+                brazo_izq_contraido = %(brazo_izq_contraido)s,
+                pierna_der_relajada = %(pierna_der_relajada)s,
+                pierna_der_contraida = %(pierna_der_contraida)s,
+                pierna_izq_relajada = %(pierna_izq_relajada)s,
+                pierna_izq_contraida = %(pierna_izq_contraida)s,
+                pantorrilla = %(pantorrilla)s,
+                porcentaje_grasa = %(porcentaje_grasa)s,
+                porcentaje_musculo = %(porcentaje_musculo)s
+            WHERE id_progreso = %(id_progreso)s
+        """
+        
+        # Actualizar los datos en la base de datos
+        Config.CUD(actualizar_datos_progresos, datos_editar_progresos)
+        print('Actualización completada exitosamente.')  # Debug: confirmación de actualización
+
+    except Exception as e:
+        flash(f'Ocurrió un error: {str(e)}', 'error')
+        print(f'Error: {str(e)}')  # Debug: imprimir el error en la consola
+
+    return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+
+
+
 
 
 
