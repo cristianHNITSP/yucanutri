@@ -536,21 +536,26 @@
             {% if paciente_info %}
             <div class="col-1"></div>
             <div class="col-7 text-start mt-4 mb-4">
-                <h2>Informacion del paciente</h2>
-                <h6 class="text-capitalize">Paciente: {{ paciente_info[1] }} {{ paciente_info[2] }} {{ paciente_info[3]
-                    }}</h6>
+                <h2>Información del paciente</h2>
+                <h6 class="text-capitalize">Paciente: {{ paciente_info[1] }} {{ paciente_info[2] }} {{ paciente_info[3] }}</h6>
                 <h6>Correo electrónico: {{ paciente_info[6] }}</h6>
                 <h6>Sexo: <span class="text-capitalize">{{ paciente_info[5] }}</span></h6>
                 <h6>Año de Nacimiento: {{ paciente_info[4] }}</h6>
             </div>
             <div class="col-3 text-end">
-                <!-- Botón con flecha curvada para regresar -->
-                <a href="{{ url_for('nutriologo.cerrar_sesion_paciente') }}" class="btn btn-outline-dark mt-4">
-                    <i class="fas fa-arrow-left"></i> Volver
-                </a>
+                {% if rol == 'nutriologo' %}
+                    <a href="{{ url_for('nutriologo.cambiar_paciente') }}" class="btn btn-outline-dark mt-4">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </a>
+                {% elif rol == 'paciente' %}
+                    <a href="{{ url_for('cerrar_sesion.cerrar_sesion_paciente') }}" class="btn btn-outline-dark mt-4">
+                        <i class="fas fa-arrow-left"></i> Cerrar Sesión
+                    </a>
+                {% endif %}
             </div>
             {% endif %}
         </div>
+        
 
 
         <!-- Componente de pestañas -->

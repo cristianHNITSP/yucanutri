@@ -253,8 +253,8 @@ def salaNutriologo():
     return render_template("sala_nutriologo.html")
 
 
-@bp.route('/cerrar_sesion_paciente')
-def cerrar_sesion_paciente():
+@bp.route('/cambiar_paciente')
+def cambiar_paciente():
     # Limpiar solo la clave 'paciente_info' de la sesión
     session.pop('paciente_info', None)
 
