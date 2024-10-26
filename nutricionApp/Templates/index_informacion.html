@@ -545,7 +545,7 @@
             <div class="col-3 text-end">
                 {% if rol == 'nutriologo' %}
                     <a href="{{ url_for('nutriologo.cambiar_paciente') }}" class="btn btn-outline-dark mt-4">
-                        <i class="fas fa-arrow-left"></i> Volver
+                        <i class="fas fa-arrow-left"></i> Regresar a la sala
                     </a>
                 {% elif rol == 'paciente' %}
                     <a href="{{ url_for('cerrar_sesion.cerrar_sesion_paciente') }}" class="btn btn-outline-dark mt-4">
@@ -778,7 +778,7 @@
             </div>
         </div>
     </div>
-
+    {% if rol == 'nutriologo' %}
     <!-- Menú dropdown oculto -->
     <div class="dropdown" id="context-menu" style="display: none; position: absolute;">
         <ul class="dropdown-menu show" aria-labelledby="dropdownMenuButton">
@@ -786,6 +786,7 @@
             <li><a class="dropdown-item" href="#" onclick="showOffcanvas('editProgress')">Editar progresos</a></li>
         </ul>
     </div>
+    {% endif %}
 
     <!-- Offcanvas para Agregar Progreso -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-add" aria-labelledby="offcanvas-addLabel"
