@@ -406,6 +406,7 @@ def editar_progreso():
         
         # Actualizar los datos en la base de datos
         Config.CUD(actualizar_datos_progresos, datos_editar_progresos)
+        flash('Actualización completada exitosamente.', 'success')  #  
         print('Actualización completada exitosamente.')  # Debug: confirmación de actualización
 
     except Exception as e:

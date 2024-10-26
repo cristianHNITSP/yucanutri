@@ -62,7 +62,7 @@ def registrarPaciente():
         except ValueError:
             flash('Número de teléfono debe ser un entero positivo.', 'error')
             return redirect(url_for('nutriologo.registrarPaciente'))
-        
+
           # generar contraseña hasheada
         contrasena_encriptada = generate_password_hash(contrasena)
 
@@ -106,8 +106,6 @@ def registrarPaciente():
             print("telefono_ya_existe")
             flash("El telefono ya existe. Por favor, elija otro", "error_cel")
             return redirect(url_for('nutriologo.registrarPaciente'))
-        
-      
 
         try:
             # Consulta para obtener el ID del nutriologo
@@ -157,7 +155,7 @@ def registrarPaciente():
 
                     # Añadir esto para depuración
                     print(f"Datos a insertar: {params}")
-                  
+
                     # Insertar el paciente en la base de datos
                     Config.CUD(
                         """
@@ -245,8 +243,9 @@ def salaNutriologo():
         # Si se encontró al paciente, guardar los datos en la sesión (opcional)
         session['paciente_info'] = paciente_info[0]  # Guardar en la sesión
         print(f"Datos guardados en la sesión: {session['paciente_info']}")
+        flash(f"Ver datos del paciente con el correo: {patient_email}", "success")
 
-        # Redirigir a 'nutriologo_paciente.index_informacion' con los datos del paciente
+# Redirigir a 'nutriologo_paciente.index_informacion' con los datos del paciente
         return redirect(url_for('nutriologo_paciente.index_informacion'))
 
     # Si el método es GET, simplemente renderiza la plantilla
