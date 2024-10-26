@@ -6,6 +6,16 @@ bp = Blueprint('auth', __name__,url_prefix='/auth')
 
 @bp.route('/iniciar_sesion', methods=['GET', 'POST'])
 def inicio_sesion():
+    if 'estado' in session and session['estado'] is True :
+        if session.get('rol')=='nutriologo':
+            return redirect(url_for('nutriologo.salaNutriologo')) 
+        if session.get('rol')=='superusuario':
+            return redirect(url_for('superusuario.sala_superusuario')) 
+        if session.get('rol')=='paciente':
+            return redirect(url_for('nutriologo_paciente.index_informacion')) 
+        else: 
+            return render_template("inicio_sesion.html")
+    
     if request.method == 'POST':
         correo = str(request.form['correo'])
         contraseña = str(request.form['contraseña'])
@@ -23,7 +33,8 @@ def inicio_sesion():
                 SELECT 
                     r.rol,
                     s.correo_electronico AS correo,
-                    s.contrasena 
+                    s.contrasena, 
+                    s.estado_sesion
                 FROM 
                     public.superusuario s
                 INNER JOIN 
@@ -36,7 +47,8 @@ def inicio_sesion():
                 SELECT 
                     r.rol,
                     n.correo_electronico AS correo,
-                    n.contrasena 
+                    n.contrasena, 
+                    n.estado_sesion
                 FROM 
                     public.nutriologo n
                 INNER JOIN 
@@ -49,7 +61,8 @@ def inicio_sesion():
                 SELECT 
                     r.rol,
                     p.correo_electronico[1] AS correo,  -- Si `correo_electronico` es un array
-                    p.contrasena 
+                    p.contrasena,
+                    p.estado_sesion 
                 FROM 
                     public.paciente p
                 INNER JOIN 
@@ -62,13 +75,13 @@ def inicio_sesion():
 
             # Depurar el resultado de la consulta
             print("Resultado de la consulta usuario_info:", usuario_info)
-
             if usuario_info:
                 # Verificar la contraseña de acuerdo al rol
                 for user in usuario_info:
                     rol_usuario = user[0]
                     correo_usuario = user[1]
                     contrasena_usuario = user[2]
+                    estado=user[3]
 
                     # Imprimir información del usuario
                     print(f"Rol: {rol_usuario}, Correo: {correo_usuario}, Contraseña: {contrasena_usuario}")
@@ -78,7 +91,25 @@ def inicio_sesion():
                         if check_password_hash(contrasena_usuario, contraseña):
                             session['rol'] = rol_usuario
                             session['correo'] = correo_usuario  # Guardar correo en sesión
-                            print(f"Inicio de sesión exitoso como {rol_usuario}. Rol: {session['rol']}")
+                            
+                            # if estado == False: verificaon consulta por el campo correo que está en array
+                            #     session['estado']=True
+                            #     Config.CUD(
+                            #         """
+                            #         UPDATE public.paciente
+                            #         SET 
+                            #         estado_sesion = True
+                            #         WHERE 
+                            #             correo_electronico = %s
+                            #         """,
+                            #         (correo_usuario,)
+                            #     )
+                            #     print("sesion activa")
+                            # else:
+                            #     session['estado']=estado
+                            #     print("estado en false")
+
+                            print(f"Inicio de sesión exitoso como {rol_usuario}. Rol: {session['rol']}. estado: {session['estado']}")
                             flash(f'Inicio de sesión exitoso como {rol_usuario}', 'success')
                             return redirect(url_for('nutriologo_paciente.index_informacion'))
                         else:
@@ -89,14 +120,34 @@ def inicio_sesion():
                     elif rol_usuario in ['nutriologo', 'superusuario']:
                         if contrasena_usuario == contraseña:
                             session['rol'] = rol_usuario
-                            session['correo'] = correo_usuario  # Guardar correo en sesión
-                            print(f"Inicio de sesión exitoso como {rol_usuario}. Rol: {session['rol']}")
+                            session['correo'] = correo_usuario  # Guardar correo en sesió
+                            if estado == False:
+                                session['estado']=True
+                                Config.CUD(
+                                    """
+                                    UPDATE public.nutriologo
+                                    SET 
+                                    estado_sesion = True
+                                    WHERE 
+                                        correo_electronico = %s
+                                    """,
+                                    (correo_usuario,)
+                                )
+                                print("sesion activa")
+                            else:
+                                session['estado']=estado
+                                print("estado en false")
+                          
+                           
+                            print(f"Inicio de sesión exitoso como {rol_usuario}. Rol: {session['rol']}. estado: {session['estado']}")
                             flash(f'Inicio de sesión exitoso como {rol_usuario}', 'success')
 
                             # Redirigir según el rol
                             if rol_usuario == 'superusuario':
+                                
                                 return redirect(url_for('superusuario.sala_superusuario'))
                             elif rol_usuario == 'nutriologo':
+                                estado=True
                                 return redirect(url_for('nutriologo.salaNutriologo'))
                         else:
                             print("Contraseña incorrecta para el usuario:", correo_usuario)
@@ -111,5 +162,8 @@ def inicio_sesion():
         except Exception as e:
             print(f"Error al conectar a la base de datos: {e}")
             flash('Ha ocurrido un error al iniciar sesión. Por favor, inténtalo de nuevo.', 'danger')
-
+    print("session: ")
+    print(session)
+    
+    
     return render_template("inicio_sesion.html")
