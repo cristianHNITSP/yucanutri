@@ -476,11 +476,59 @@
             /* Mantiene la proporción de la imagen */
         }
     </style>
+
+    <style>
+        .offcanvas-header {
+            background-color: black;
+            /* Fondo negro para el encabezado */
+            color: white;
+            /* Texto en blanco */
+        }
+
+        .offcanvas {
+            border-radius: 10px;
+            /* Esquinas redondeadas para el offcanvas */
+        }
+
+        .btn-close {
+            filter: invert(1);
+            /* Invierte los colores para que el botón se vea blanco */
+        }
+
+        .btn-close:hover {
+            filter: invert(0.8);
+            /* Un poco menos de inversión al pasar el ratón */
+        }
+
+        .offcanvas-body::-webkit-scrollbar {
+            width: 8px;
+            /* Ancho de la barra de desplazamiento */
+        }
+
+        .offcanvas-body::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            /* Color del fondo de la barra de desplazamiento */
+            border-radius: 10px;
+            /* Esquinas redondeadas para el fondo */
+        }
+
+        .offcanvas-body::-webkit-scrollbar-thumb {
+            background: #888;
+            /* Color de la barra de desplazamiento */
+            border-radius: 10px;
+            /* Esquinas redondeadas para la barra */
+        }
+
+        .offcanvas-body::-webkit-scrollbar-thumb:hover {
+            background: #555;
+            /* Color de la barra al pasar el ratón */
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="container col-10 mt-5 animate__animated animate__fadeIn">
+    <div class="container col-10 mt-5 animate__animated animate__fadeIn" id="progress-tbody">
         {% include 'avisos.html' %}
 
         <div class="row">
@@ -493,7 +541,7 @@
             </div>
             <div class="col-3 text-end">
                 <!-- Botón con flecha curvada para regresar -->
-                <a href="{{ url_for('nutriologo.cerrar_sesion_paciente') }}" class="btn btn-primary mt-4">
+                <a href="{{ url_for('nutriologo.cerrar_sesion_paciente') }}" class="btn btn-outline-dark mt-4">
                     <i class="fas fa-arrow-left"></i> Volver
                 </a>
             </div>
@@ -559,12 +607,7 @@
                         <div class="col-6 mt-3 mb-3 d-flex">
                             <h5 class="mt-1">Progresos</h5>
                             <!-- Botón de signo más recibira cambios a furuo -->
-                            <button type="button" class="btn btn-outline-dark ms-2" data-bs-toggle="modal"
-                                data-bs-target="#modalNuevoProgreso">
-                                <span class="material-symbols-outlined" style="vertical-align: middle;">
-                                    add_box
-                                </span>
-                            </button>
+
                         </div>
 
 
@@ -727,114 +770,211 @@
         </div>
     </div>
 
-    <!-- Modal para agregar un nuevo progreso-->
-    <div class="modal fade" id="modalNuevoProgreso" data-bs-backdrop="static" tabindex="-1"
-        aria-labelledby="modalNuevoProgresoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalNuevoProgresoLabel">Agregar nuevo progreso</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Aquí puedes agregar el formulario o contenido del modal -->
-                    <form class="mx-1">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="pesoInput" placeholder="Peso">
-                            <label for="pesoInput">Peso (kg)</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="abdomenInput" placeholder="Abdomen">
-                            <label for="abdomenInput">Circunferencia del abdomen (cm)</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="brazoDerRelajadoInput"
-                                placeholder="Brazo derecho relajado">
-                            <label for="brazoDerRelajadoInput">Brazo derecho relajado (cm)</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="brazoDerContraidoInput"
-                                placeholder="Brazo derecho contraído">
-                            <label for="brazoDerContraidoInput">Brazo derecho contraído (cm)</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="brazoIzqRelajadoInput"
-                                placeholder="Brazo izquierdo relajado">
-                            <label for="brazoIzqRelajadoInput">Brazo izquierdo relajado (cm)</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="brazoIzqContraidoInput"
-                                placeholder="Brazo izquierdo contraído">
-                            <label for="brazoIzqContraidoInput">Brazo izquierdo contraído (cm)</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="piernaDerRelajadaInput"
-                                placeholder="Pierna derecha relajada">
-                            <label for="piernaDerRelajadaInput">Pierna derecha relajada (cm)</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="piernaDerContraidaInput"
-                                placeholder="Pierna derecha contraída">
-                            <label for="piernaDerContraidaInput">Pierna derecha contraída (cm)</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="piernaIzqRelajadaInput"
-                                placeholder="Pierna izquierda relajada">
-                            <label for="piernaIzqRelajadaInput">Pierna izquierda relajada (cm)</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="piernaIzqContraidaInput"
-                                placeholder="Pierna izquierda contraída">
-                            <label for="piernaIzqContraidaInput">Pierna izquierda contraída (cm)</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="pantorrillaInput" placeholder="Pantorrilla">
-                            <label for="pantorrillaInput">Circunferencia de pantorrilla (cm)</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="porcentajeGrasaInput"
-                                placeholder="Porcentaje de grasa">
-                            <label for="porcentajeGrasaInput">Porcentaje de grasa (%)</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="porcentajeMusculoInput"
-                                placeholder="Porcentaje de músculo">
-                            <label for="porcentajeMusculoInput">Porcentaje de músculo (%)</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary">Guardar progreso</button>
-                </div>
-            </div>
-        </div>
+    <!-- Menú dropdown oculto -->
+    <div class="dropdown" id="context-menu" style="display: none; position: absolute;">
+        <ul class="dropdown-menu show" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="#" onclick="showOffcanvas('addProgress')">Agregar nuevo progreso</a></li>
+            <li><a class="dropdown-item" href="#" onclick="showOffcanvas('editProgress')">Editar progresos</a></li>
+        </ul>
     </div>
 
-
-    <!-- Offcanvas para ver el historial (un ejemplo) -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasHistorialPeso"
-        aria-labelledby="offcanvasHistorialPesoLabel">
+    <!-- Offcanvas para Agregar Progreso -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-add" aria-labelledby="offcanvas-addLabel"
+        style="width: 500px;">
         <div class="offcanvas-header">
-            <h5 id="offcanvasHistorialPesoLabel">Historial de Peso</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <h5 id="offcanvas-addLabel" class="offcanvas-title">Agregar Progreso</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
         </div>
         <div class="offcanvas-body">
-            <p>Aquí iría el historial de peso.</p>
-            <!-- Más detalles del historial aquí -->
+            <form action="{{ url_for('nutriologo_paciente.crear_nuevo_progreso') }}" method="POST">
+                <div class="mb-3">
+                    <label for="peso" class="form-label">Peso (kg)</label>
+                    <input type="number" name="peso" class="form-control" id="peso" placeholder="Ingrese el peso"
+                        step="0.1" min="0" required>
+                </div>
+                <div class="mb-3">
+                    <label for="abdomen" class="form-label">Medida de Abdomen (cm)</label>
+                    <input type="number" name="abdomen" class="form-control" id="abdomen"
+                        placeholder="Ingrese la medida de abdomen" step="0.1" min="0" required>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="brazo_der_relajado" class="form-label">Brazo Derecho Relajado (cm)</label>
+                        <input type="number" name="brazo_der_relajado" class="form-control" id="brazo_der_relajado"
+                            placeholder="Ingrese medida" step="0.1" min="0" required>
+                    </div>
+                    <div class="col">
+                        <label for="brazo_der_contraido" class="form-label">Brazo Derecho Contraído (cm)</label>
+                        <input type="number" name="brazo_der_contraido" class="form-control" id="brazo_der_contraido"
+                            placeholder="Ingrese medida" step="0.1" min="0" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="brazo_izq_relajado" class="form-label">Brazo Izquierdo Relajado (cm)</label>
+                        <input type="number" name="brazo_izq_relajado" class="form-control" id="brazo_izq_relajado"
+                            placeholder="Ingrese medida" step="0.1" min="0" required>
+                    </div>
+                    <div class="col">
+                        <label for="brazo_izq_contraido" class="form-label">Brazo Izquierdo Contraído (cm)</label>
+                        <input type="number" name="brazo_izq_contraido" class="form-control" id="brazo_izq_contraido"
+                            placeholder="Ingrese medida" step="0.1" min="0" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="pierna_der_relajada" class="form-label">Pierna Derecha Relajada (cm)</label>
+                        <input type="number" name="pierna_der_relajada" class="form-control" id="pierna_der_relajada"
+                            placeholder="Ingrese medida" step="0.1" min="0" required>
+                    </div>
+                    <div class="col">
+                        <label for="pierna_der_contraida" class="form-label">Pierna Derecha Contraída (cm)</label>
+                        <input type="number" name="pierna_der_contraida" class="form-control" id="pierna_der_contraida"
+                            placeholder="Ingrese medida" step="0.1" min="0" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="pierna_izq_relajada" class="form-label">Pierna Izquierda Relajada (cm)</label>
+                        <input type="number" name="pierna_izq_relajada" class="form-control" id="pierna_izq_relajada"
+                            placeholder="Ingrese medida" step="0.1" min="0" required>
+                    </div>
+                    <div class="col">
+                        <label for="pierna_izq_contraida" class="form-label">Pierna Izquierda Contraída (cm)</label>
+                        <input type="number" name="pierna_izq_contraida" class="form-control" id="pierna_izq_contraida"
+                            placeholder="Ingrese medida" step="0.1" min="0" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="pantorrilla" class="form-label">Medida de Pantorrilla (cm)</label>
+                    <input type="number" name="pantorrilla" class="form-control" id="pantorrilla"
+                        placeholder="Ingrese medida" step="0.1" min="0" required>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="porcentaje_grasa" class="form-label">Porcentaje de Grasa (%)</label>
+                        <input type="number" name="porcentaje_grasa" class="form-control" id="porcentaje_grasa"
+                            placeholder="Ingrese porcentaje" step="0.1" min="0" required>
+                    </div>
+                    <div class="col">
+                        <label for="porcentaje_musculo" class="form-label">Porcentaje de Músculo (%)</label>
+                        <input type="number" name="porcentaje_musculo" class="form-control" id="porcentaje_musculo"
+                            placeholder="Ingrese porcentaje" step="0.1" min="0" required>
+                    </div>
+                </div>
+                <!-- Mensaje de error -->
+                <div id="error-message" class="alert alert-danger d-none" role="alert">
+                    Por favor, ingrese valores válidos con hasta un decimal.
+                </div>
+                <!-- Botones para guardar o cancelar -->
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-outline-danger me-2"
+                        data-bs-dismiss="offcanvas">Cancelar</button>
+                    <button type="submit" class="btn btn-outline-dark">Agregar Progreso</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasHistorialAbdomen"
-        aria-labelledby="offcanvasHistorialAbdomenLabel">
+
+
+    <!-- Offcanvas para Editar Progreso -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-edit" aria-labelledby="offcanvas-editLabel"
+        style="width: 500px;">
         <div class="offcanvas-header">
-            <h5 id="offcanvasHistorialAbdomenLabel">Historial de Abdomen</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <h5 id="offcanvas-editLabel" class="offcanvas-title">Editar Progreso</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
         </div>
         <div class="offcanvas-body">
-            <p>Aquí iría el historial de abdomen.</p>
+            <form id="editProgressForm">
+                <div class="mb-3">
+                    <label for="peso_edit" class="form-label">Peso (kg)</label>
+                    <input type="number" class="form-control" id="peso_edit" placeholder="Ingrese el peso" required
+                        step="0.1">
+                </div>
+                <div class="mb-3">
+                    <label for="abdomen_edit" class="form-label">Medida de Abdomen (cm)</label>
+                    <input type="number" class="form-control" id="abdomen_edit"
+                        placeholder="Ingrese la medida de abdomen" required step="0.1">
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="brazo_der_relajado_edit" class="form-label">Brazo Derecho Relajado (cm)</label>
+                        <input type="number" class="form-control" id="brazo_der_relajado_edit"
+                            placeholder="Ingrese medida" required step="0.1">
+                    </div>
+                    <div class="col">
+                        <label for="brazo_der_contraido_edit" class="form-label">Brazo Derecho Contraído (cm)</label>
+                        <input type="number" class="form-control" id="brazo_der_contraido_edit"
+                            placeholder="Ingrese medida" required step="0.1">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="brazo_izq_relajado_edit" class="form-label">Brazo Izquierdo Relajado (cm)</label>
+                        <input type="number" class="form-control" id="brazo_izq_relajado_edit"
+                            placeholder="Ingrese medida" required step="0.1">
+                    </div>
+                    <div class="col">
+                        <label for="brazo_izq_contraido_edit" class="form-label">Brazo Izquierdo Contraído (cm)</label>
+                        <input type="number" class="form-control" id="brazo_izq_contraido_edit"
+                            placeholder="Ingrese medida" required step="0.1">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="pierna_der_relajada_edit" class="form-label">Pierna Derecha Relajada (cm)</label>
+                        <input type="number" class="form-control" id="pierna_der_relajada_edit"
+                            placeholder="Ingrese medida" required step="0.1">
+                    </div>
+                    <div class="col">
+                        <label for="pierna_der_contraida_edit" class="form-label">Pierna Derecha Contraída (cm)</label>
+                        <input type="number" class="form-control" id="pierna_der_contraida_edit"
+                            placeholder="Ingrese medida" required step="0.1">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="pierna_izq_relajada_edit" class="form-label">Pierna Izquierda Relajada (cm)</label>
+                        <input type="number" class="form-control" id="pierna_izq_relajada_edit"
+                            placeholder="Ingrese medida" required step="0.1">
+                    </div>
+                    <div class="col">
+                        <label for="pierna_izq_contraida_edit" class="form-label">Pierna Izquierda Contraída
+                            (cm)</label>
+                        <input type="number" class="form-control" id="pierna_izq_contraida_edit"
+                            placeholder="Ingrese medida" required step="0.1">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="pantorrilla_edit" class="form-label">Medida de Pantorrilla (cm)</label>
+                    <input type="number" class="form-control" id="pantorrilla_edit" placeholder="Ingrese medida"
+                        required step="0.1">
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="porcentaje_grasa_edit" class="form-label">Porcentaje de Grasa (%)</label>
+                        <input type="number" class="form-control" id="porcentaje_grasa_edit"
+                            placeholder="Ingrese porcentaje" required step="0.1">
+                    </div>
+                    <div class="col">
+                        <label for="porcentaje_musculo_edit" class="form-label">Porcentaje de Músculo (%)</label>
+                        <input type="number" class="form-control" id="porcentaje_musculo_edit"
+                            placeholder="Ingrese porcentaje" required step="0.1">
+                    </div>
+                </div>
+                <!-- Botones para guardar o cancelar -->
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-outline-danger me-2"
+                        data-bs-dismiss="offcanvas">Cancelar</button>
+                    <button type="submit" class="btn btn-outline-dark">Guardar Cambios</button>
+                </div>
+            </form>
         </div>
     </div>
+
+
+
 
     <!-- Enlace a Bootstrap JS y dependencias -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -890,6 +1030,43 @@
         });
 
 
+    </script>
+
+    <script>
+        const contextMenu = document.getElementById('context-menu');
+        const tbody = document.getElementById('progress-tbody');
+
+        // Mostrar el menú dropdown al hacer clic derecho o mantener presionado
+        tbody.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            showContextMenu(e);
+        });
+
+        tbody.addEventListener('touchstart', (e) => {
+            this.touchTimer = setTimeout(() => showContextMenu(e), 1000); // 1 segundo
+        });
+
+        tbody.addEventListener('touchend', () => {
+            clearTimeout(this.touchTimer);
+        });
+
+        function showContextMenu(e) {
+            contextMenu.style.display = 'block';
+            contextMenu.style.left = `${e.pageX}px`;
+            contextMenu.style.top = `${e.pageY}px`;
+        }
+
+        // Ocultar el menú si se hace clic en otra parte
+        document.addEventListener('click', () => {
+            contextMenu.style.display = 'none';
+        });
+
+        // Función para mostrar el offcanvas
+        function showOffcanvas(action) {
+            const offcanvasId = action === 'addProgress' ? 'offcanvas-add' : 'offcanvas-edit';
+            const offcanvas = new bootstrap.Offcanvas(document.getElementById(offcanvasId));
+            offcanvas.show();
+        }
     </script>
 
 </body>

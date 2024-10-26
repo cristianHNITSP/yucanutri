@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 import Config as Config
 from werkzeug.security import generate_password_hash
+from datetime import datetime
 
 
-bp = Blueprint('nutriologo_paciente', __name__,
-               url_prefix='/nutriologo_paciente')
+
+bp = Blueprint('nutriologo_paciente', __name__, url_prefix='/nutriologo_paciente')
 
 
 @bp.route('/index_informacion')
@@ -128,7 +129,153 @@ def index_informacion():
         flash('Ha ocurrido un error al recuperar la información del progreso. Por favor, inténtalo de nuevo.', 'error')
         return render_template("index_informacion.html", paciente_info=paciente_info)
 
-
-@bp.route('/crear_nuevo_progreso')
+@bp.route('/crear_nuevo_progreso', methods=['POST'])
 def crear_nuevo_progreso():
-    return render_template
+    try:
+        # Obtención de datos y validación de que son numéricos
+        peso = float(request.form.get('peso', 0))
+        abdomen = float(request.form.get('abdomen', 0))
+        brazo_der_relajado = float(request.form.get('brazo_der_relajado', 0))
+        brazo_der_contraido = float(request.form.get('brazo_der_contraido', 0))
+        brazo_izq_relajado = float(request.form.get('brazo_izq_relajado', 0))
+        brazo_izq_contraido = float(request.form.get('brazo_izq_contraido', 0))
+        pierna_der_relajada = float(request.form.get('pierna_der_relajada', 0))
+        pierna_der_contraida = float(request.form.get('pierna_der_contraida', 0))
+        pierna_izq_relajada = float(request.form.get('pierna_izq_relajada', 0))
+        pierna_izq_contraida = float(request.form.get('pierna_izq_contraida', 0))
+        pantorrilla = float(request.form.get('pantorrilla', 0))
+        porcentaje_grasa = float(request.form.get('porcentaje_grasa', 0))
+        porcentaje_musculo = float(request.form.get('porcentaje_musculo', 0))
+
+        # Validación de valores positivos
+        if any(value < 0 for value in [peso, abdomen, brazo_der_relajado, brazo_der_contraido,
+                                        brazo_izq_relajado, brazo_izq_contraido,
+                                        pierna_der_relajada, pierna_der_contraida,
+                                        pierna_izq_relajada, pierna_izq_contraida,
+                                        pantorrilla, porcentaje_grasa, porcentaje_musculo]):
+            flash('Todos los valores deben ser positivos.', 'error')
+            return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+        # Verificación de información del paciente
+        paciente_info = session.get('paciente_info')
+        if not paciente_info or len(paciente_info) == 0:
+            flash('No se encontró información del paciente.', 'error')
+            return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+        # Obtener el id del paciente
+        id_paciente = paciente_info[0]
+        print(f'ID Paciente: {id_paciente}')  # Debug: mostrar ID del paciente
+
+        # Obtención de la fecha actual
+        fecha_actual = datetime.now()
+        dia = fecha_actual.day
+        mes = fecha_actual.month
+        anio = fecha_actual.year
+        print(f'Fecha Actual: {dia}-{mes}-{anio}')  # Debug: mostrar fecha actual
+
+        # Validación de la fecha
+        try:
+            fecha_validada = datetime(anio, mes, dia)
+        except ValueError as e:
+            flash('La fecha obtenida es inválida.', 'error')
+            print(f'Error de fecha: {e}')  # Mensaje de error para depuración
+            return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+        # Diccionario de meses en español
+        meses_espanol = {
+            1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril",
+            5: "Mayo", 6: "Junio", 7: "Julio", 8: "Agosto",
+            9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"
+        }
+        
+        # Obtener el mes en español
+        mes_espanol = meses_espanol[mes]
+        print(f'Mes en Español: {mes_espanol}')  # Debug: mostrar mes en español
+
+        # Consulta para obtener IDs de día, mes y año
+        consulta_ids = """
+            SELECT 
+                (SELECT id_dia FROM public.dia_progreso WHERE dia = %s) AS id_dia,
+                (SELECT id_mes FROM public.mes_progreso WHERE mes = %s) AS id_mes,
+                (SELECT id_anio FROM public.anio_progreso WHERE anio = %s) AS id_anio
+        """
+        ids_info = Config.Read(consulta_ids, (dia, mes_espanol, anio))
+        print(f'IDs Info: {ids_info}')  # Debug: mostrar resultado de la consulta de IDs
+
+        if not ids_info or len(ids_info) == 0:
+            flash('No se pudo obtener los IDs de día, mes o año.', 'error')
+            return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+        # Desempaquetar los resultados obtenidos
+        id_dia, id_mes, id_anio = ids_info[0]
+        print(f"ID Día: {id_dia}, ID Mes: {id_mes}, ID Año: {id_anio}")  # Debug: mostrar IDs obtenidos
+
+        # Datos a almacenar o procesar
+        datos_progresos = {
+            'peso': peso,
+            'abdomen': abdomen,
+            'brazo_der_relajado': brazo_der_relajado,
+            'brazo_der_contraido': brazo_der_contraido,
+            'brazo_izq_relajado': brazo_izq_relajado,
+            'brazo_izq_contraido': brazo_izq_contraido,
+            'pierna_der_relajada': pierna_der_relajada,
+            'pierna_der_contraida': pierna_der_contraida,
+            'pierna_izq_relajada': pierna_izq_relajada,
+            'pierna_izq_contraida': pierna_izq_contraida,
+            'pantorrilla': pantorrilla,
+            'porcentaje_grasa': porcentaje_grasa,
+            'porcentaje_musculo': porcentaje_musculo,
+            'id_dia': id_dia,
+            'id_mes': id_mes,
+            'id_anio': id_anio,
+            'id_paciente': id_paciente  # Agregar el id_paciente a los datos
+        }
+
+        # Imprimir datos para depuración
+        print("Datos recibidos:")
+        for key, value in datos_progresos.items():
+            print(f"{key}: {value}")  # Debug: mostrar todos los datos recibidos
+
+        # Consulta de inserción
+        Agregar_datos_progresos = """
+            INSERT INTO public.progreso (
+                peso,
+                abdomen,
+                brazo_der_relajado,
+                brazo_der_contraido,
+                brazo_izq_relajado,
+                brazo_izq_contraido,
+                pierna_der_relajada,
+                pierna_der_contraida,
+                pierna_izq_relajada,
+                pierna_izq_contraida,
+                pantorrilla,
+                porcentaje_grasa,
+                porcentaje_musculo,
+                id_paciente_paciente,
+                id_dia_progreso_id_dia,
+                id_mes_progreso_id_mes,
+                id_anio_progreso_id_anio
+            ) 
+            VALUES (%(peso)s, %(abdomen)s, %(brazo_der_relajado)s, %(brazo_der_contraido)s,
+                    %(brazo_izq_relajado)s, %(brazo_izq_contraido)s, %(pierna_der_relajada)s,
+                    %(pierna_der_contraida)s, %(pierna_izq_relajada)s, %(pierna_izq_contraida)s,
+                    %(pantorrilla)s, %(porcentaje_grasa)s, %(porcentaje_musculo)s,
+                    %(id_paciente)s, %(id_dia)s, %(id_mes)s, %(id_anio)s)
+        """
+
+        # Llamar a la función para ejecutar la inserción
+        print(f'Ejecutando inserción con la consulta: {Agregar_datos_progresos}')  # Debug: mostrar la consulta de inserción
+        Config.CUD(Agregar_datos_progresos, datos_progresos)
+        print('Inserción completada exitosamente.')  # Debug: confirmación de inserción
+
+    except ValueError as e:
+        flash('Por favor, ingrese valores numéricos válidos.', 'error')
+        print(f'Error de valor: {e}')  # Mensaje de error para depuración
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+    # Redirigir a la página de información
+    flash('Progreso creado exitosamente.', 'success')  # Mensaje de éxito
+    return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+
