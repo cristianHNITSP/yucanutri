@@ -62,9 +62,52 @@ def registrarPaciente():
         except ValueError:
             flash('Número de teléfono debe ser un entero positivo.', 'error')
             return redirect(url_for('nutriologo.registrarPaciente'))
-
-        # generar contraseña hasheada
+        
+          # generar contraseña hasheada
         contrasena_encriptada = generate_password_hash(contrasena)
+
+        try:
+            correo_ya_existe = Config.Read(
+                """
+                SELECT
+                    *
+                FROM
+                    paciente
+                WHERE
+                    %s = ANY(correo_electronico);
+                """,
+                (correo_electronico,)  # Usar el correo como parámetro
+            )
+            telefono_ya_existe = Config.Read(
+                """
+                SELECT
+                    *
+                FROM
+                    paciente
+                WHERE
+                    telefono = %s;
+                """,
+                (telefono,)  # Usar el correo como parámetro
+            )
+        except Exception as e:
+            flash(f"Error al consultar la base de datos: {e}", "error")
+            return redirect(url_for('nutriologo.registrarPaciente'))
+
+        # Comprobar si el usuario ya existe
+        # cur.execute(
+        #     "SELECT * FROM login WHERE Nombre = %s AND ID_Login != %s", (user, id))
+        # existing_user = cur.fetchone()
+
+        if correo_ya_existe:
+            flash("El correo electrónico ya está registrado", "error_email")
+            return redirect(url_for('nutriologo.registrarPaciente'))
+
+        elif telefono_ya_existe:
+            print("telefono_ya_existe")
+            flash("El telefono ya existe. Por favor, elija otro", "error_cel")
+            return redirect(url_for('nutriologo.registrarPaciente'))
+        
+      
 
         try:
             # Consulta para obtener el ID del nutriologo
@@ -114,7 +157,7 @@ def registrarPaciente():
 
                     # Añadir esto para depuración
                     print(f"Datos a insertar: {params}")
-
+                  
                     # Insertar el paciente en la base de datos
                     Config.CUD(
                         """
@@ -125,7 +168,7 @@ def registrarPaciente():
                         """,
                         params
                     )
-
+                    print("has entrado aqui")
                     flash('Paciente registrado exitosamente', 'success')
 
                     return redirect(url_for('nutriologo.salaNutriologo'))
