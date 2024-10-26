@@ -1,3 +1,4 @@
+import os
 from flask import (
     Flask,
     Blueprint,
@@ -12,21 +13,35 @@ from flask import (
 )
 
 import hashlib
-import Config as Config, locale, re  # Importar config.py en donde se hacen las consultas de la base de datos
+import Config as Config
+import locale
+import re  # Importar config.py en donde se hacen las consultas de la base de datos
+
 
 class MyException(Exception):
     def __init__(self, Tipo, mensaje):
         self.Tipo = Tipo
         self.mensaje = mensaje
 
+
 def create_app():
     app = Flask(__name__)
 
     # Configuración
-    app.config["SECRET_KEY"] = Config.HEX_SEC_KEY  # Agregar la configuración del SECRET_KEY
+    # Agregar la configuración del SECRET_KEY
+    app.config["SECRET_KEY"] = Config.HEX_SEC_KEY
     app.config.from_mapping(DEBUG=True)  # Activar modo debug
 
+ # Definir carpeta para almacenar archivos subidos
+    CARPETA_SUBIDAS = os.path.join(os.getcwd(), "subidas")
+    # Asignar la carpeta a la configuración de app
+    app.config["CARPETA_SUBIDAS"] = CARPETA_SUBIDAS
+
+    # Asegurarte de que la carpeta existe (crearla si no existe)
+    if not os.path.exists(CARPETA_SUBIDAS):
+        os.makedirs(CARPETA_SUBIDAS)
     # Métodos de validación:
+
     def validar_entrada(texto):
         # a-z y A-Z son para minusculas y mayusculas
         # \u00e1\u00e9\u00ed\u00f3\u00fa\u00f1\u00c1\u00c9\u00cd\u00d3\u00da\u00d1  Letras mayusculas y minusculas con acentos
@@ -41,10 +56,10 @@ def create_app():
             return False
         else:
             return True
-        
+
     from . import nutriologo_paciente
     app.register_blueprint(nutriologo_paciente.bp)
-    
+
     from . import cliente
     app.register_blueprint(cliente.bp)
 
@@ -56,7 +71,7 @@ def create_app():
 
     from . import superusuario
     app.register_blueprint(superusuario.bp)
-    
+
     from . import cerrar_sesion
     app.register_blueprint(cerrar_sesion.bp)
 
@@ -68,6 +83,7 @@ def create_app():
     # Ruta Principal
     @app.route("/")
     def index():
-        return render_template("index.html")  # Asegúrate de devolver el render_template con el nombre correcto de la plantilla
+        # Asegúrate de devolver el render_template con el nombre correcto de la plantilla
+        return render_template("index.html")
 
     return app

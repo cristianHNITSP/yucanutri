@@ -1,8 +1,11 @@
 import re
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, current_app, render_template, request, redirect, send_from_directory, url_for, flash, session
 import Config as Config
 from werkzeug.security import generate_password_hash
+from werkzeug.utils import secure_filename
+
 from datetime import date, datetime
+import os
 
 bp = Blueprint('nutriologo', __name__, url_prefix='/nutriologo')
 
@@ -154,6 +157,10 @@ def salaNutriologo():
         flash('Acceso denegado: La sala es solo para nutriologo, inicia sesión.', 'danger')
         return redirect(url_for('auth.inicio_sesion'))
 
+    # Obtener lista de archivos para mostrar en la vista
+    archivos = Config.Read("SELECT id, archivo FROM documento")
+    print(archivos)
+
     if request.method == 'POST':
         # Capturar el correo electrónico del formulario
         patient_email = request.form.get('patientEmail')
@@ -207,7 +214,7 @@ def salaNutriologo():
         return redirect(url_for('nutriologo_paciente.index_informacion'))
 
     # Si el método es GET, simplemente renderiza la plantilla
-    return render_template("sala_nutriologo.html")
+    return render_template("sala_nutriologo.html", archivos=archivos)
 
 
 @bp.route('/cerrar_sesion_paciente')
@@ -363,3 +370,81 @@ def actualizar_nutriologo():
             return redirect(url_for('nutriologo.editar_datos_nutriologo'))
 
     return redirect(url_for('nutriologo.editar_datos_nutriologo'))
+
+
+# Configuración para archivos
+CARPETA_SUBIDAS = 'subidas'
+EXTENSIONES_PERMITIDAS = {'pdf'}
+
+
+def archivo_permitido(nombre_archivo):
+    return '.' in nombre_archivo and nombre_archivo.rsplit('.', 1)[1].lower() in EXTENSIONES_PERMITIDAS
+
+# Ruta para subir un archivo
+
+
+@bp.route('/subir', methods=['POST'])
+def subir_archivo():
+
+    if 'archivo' not in request.files:
+        flash('No se encontró el archivo')
+        return redirect(request.url)
+
+    archivo = request.files['archivo']
+    print(archivo)
+
+    if archivo.filename == '':
+        flash('No se seleccionó ningún archivo')
+        return redirect(request.url)
+
+    # Comprobar que exista y extension
+    if archivo and archivo_permitido(archivo.filename):
+        # nombre de archivo seguro
+        nombre_archivo = secure_filename(archivo.filename)
+        # Construir ruta
+        ruta_archivo = os.path.join(
+            current_app.config['CARPETA_SUBIDAS'], nombre_archivo)
+        try:
+            # Guardar archivo en la carpeta especificada
+            archivo.save(ruta_archivo)
+            # Guardar información en la base de datos
+            id_archivo = Config.CUD(
+                "INSERT INTO documento (archivo) VALUES (%s) RETURNING id", (nombre_archivo,))
+            flash('Archivo subido con éxito')
+            return redirect(url_for('nutriologo.salaNutriologo', id_archivo=id_archivo))
+        except Exception as e:
+            flash(f'Error al guardar en la base de datos: {e}')
+            # redirigir a la misma pagina de donde se sube el archivo
+            return redirect(request.url)
+    else:
+        flash('Extensión de archivo no permitida')
+        return redirect(request.url)
+
+# Ruta para descargar un archivo
+
+
+@bp.route('/descargar/<int:id_archivo>')
+def descargar_archivo(id_archivo):
+    print("El valor de id_archivo recibido es: " +
+          str(id_archivo))  # Verificar el valor recibido
+
+    try:
+        resultado = Config.Read(
+            "SELECT archivo FROM documento WHERE id = %s", (id_archivo,))
+
+        # Verificar el resultado de la consulta
+        print("Resultado de la consulta:", resultado)
+
+        if resultado:
+            # Acceder al primer elemento de la primera fila
+            nombre_archivo = resultado[0][0]
+            # Verificar el nombre del archivo
+            print("Nombre del archivo:", nombre_archivo)
+
+            return send_from_directory(current_app.config['CARPETA_SUBIDAS'], nombre_archivo, as_attachment=True)
+        else:
+            flash('Archivo no encontrado en la base de datos')
+            return redirect(url_for('nutriologo.salaNutriologo'))
+    except Exception as e:
+        flash(f'Error al descargar el archivo: {e}')
+        return redirect(url_for('nutriologo.salaNutriologo'))

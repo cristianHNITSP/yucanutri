@@ -49,6 +49,39 @@
 
         </div>
 
+        <!--Subir archivo-->
+        <form action=" {{ url_for('nutriologo.subir_archivo') }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="archivo">
+            <input type="submit" value="Subir">
+        </form>
+
+
+        <!--descargar-->
+        <table class="table table-striped w-25">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Archivo</th>
+                    <th>Descargar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for archivo in archivos %}
+                <tr>
+                    <td>{{ archivo[0] }}</td>
+                    <td>{{ archivo[1] }}</td>
+                    <td>
+                        <a href="{{ url_for('nutriologo.descargar_archivo', id_archivo=archivo[0]) }}"
+                            class="btn btn-primary" download>Descargar archivo
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+
     </section> <!--Fin Hero-->
 
 
