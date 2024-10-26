@@ -61,6 +61,8 @@ def index_informacion():
             public.anio_progreso a ON p.id_anio_progreso_id_anio = a.id_anio
         WHERE 
             p.id_paciente_paciente = %s
+        ORDER BY 
+            a.anio DESC, m.mes DESC, d.dia DESC  -- Ordena por año, mes y día en orden descendente
         LIMIT 1;  -- Limitamos a 1 para obtener el más reciente
         """
 
@@ -210,6 +212,20 @@ def crear_nuevo_progreso():
         id_dia, id_mes, id_anio = ids_info[0]
         print(f"ID Día: {id_dia}, ID Mes: {id_mes}, ID Año: {id_anio}")  # Debug: mostrar IDs obtenidos
 
+        # Verificar si ya existe un progreso para la fecha actual y el paciente
+        consulta_existente = """
+            SELECT COUNT(*) FROM public.progreso 
+            WHERE id_paciente_paciente = %s 
+            AND id_dia_progreso_id_dia = %s 
+            AND id_mes_progreso_id_mes = %s 
+            AND id_anio_progreso_id_anio = %s
+        """
+        progreso_existente = Config.Read(consulta_existente, (id_paciente, id_dia, id_mes, id_anio))
+
+        if progreso_existente[0][0] > 0:
+            flash('Ya existe un progreso registrado para esta fecha.', 'error')
+            return redirect(url_for('nutriologo_paciente.index_informacion'))
+
         # Datos a almacenar o procesar
         datos_progresos = {
             'peso': peso,
@@ -265,7 +281,6 @@ def crear_nuevo_progreso():
         """
 
         # Llamar a la función para ejecutar la inserción
-        print(f'Ejecutando inserción con la consulta: {Agregar_datos_progresos}')  # Debug: mostrar la consulta de inserción
         Config.CUD(Agregar_datos_progresos, datos_progresos)
         print('Inserción completada exitosamente.')  # Debug: confirmación de inserción
 
@@ -274,8 +289,9 @@ def crear_nuevo_progreso():
         print(f'Error de valor: {e}')  # Mensaje de error para depuración
         return redirect(url_for('nutriologo_paciente.index_informacion'))
 
-    # Redirigir a la página de información
-    flash('Progreso creado exitosamente.', 'success')  # Mensaje de éxito
+    # Redirigir a la página de información del paciente
+    flash('Progreso registrado exitosamente.', 'success')
     return redirect(url_for('nutriologo_paciente.index_informacion'))
+
 
 
