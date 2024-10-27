@@ -247,4 +247,20 @@ body {
         display: none;
     }
 
+    .nutriologo__pildoras {
+        /* background-color: red; */
+        margin: 0 auto;
+        gap: 10px;
+        margin-top: 15px;
+        width: 70%;
+        margin-left: 13%;
+
+        justify-content: center;
+    }
+
+
+    .inicio__btn {
+        margin-left: 15px;
+    }
+
 }

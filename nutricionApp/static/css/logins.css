@@ -226,10 +226,16 @@ body {
 /*Mio*/
 @media screen and (max-width: 426px) {
 
+    /* .form-section {
+        padding: 4px 0px ;
+        height: auto;
+    } */
+
     .form-container {
-        width: 89%;
+        width: 88%;
         padding: 25px;
         height: auto;
+        /* background-color: red; */
         /* padding: 0 10px;  */
     }
 
@@ -237,6 +243,10 @@ body {
     .form__double {
         width: 90%;
         display: block;
+    }
+
+    .form__inputs {
+        margin: 6px;
     }
 
     .form__container--registro {
