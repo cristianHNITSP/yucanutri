@@ -24,7 +24,7 @@ body {
 .inicio__contenedor {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
     width: 100%;
     height: 100vh;
 }
@@ -51,14 +51,18 @@ body {
     width: 40%;
     height: 75vh;
     border-radius: 50px;
-    margin-left: -45px;
+    margin-left: 2px;
+    position: relative;
+    /* background-color: red; */
 }
 
 .inicio__imagen--img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    transform: scale(1.06);
+    object-fit: contain;
     border-radius: 50px;
+    /* background-color: yellow; */
 }
 
 .inicio__textos {
@@ -89,7 +93,7 @@ body {
 
 .inicio__desc {
     font-family: 'Neue Haas Grotesk Display Pro', Arial, Helvetica, sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.25rem;
     color: #909090;
     width: 70%;
 }
@@ -104,24 +108,51 @@ body {
     font-family: 'Neue Haas Grotesk Display Pro';
     font-size: 15px;
     font-weight: 500;
-    width: 210px;
+    width: 160px;
     height: 48px;
     filter: blur(.5);
     background: #343434;
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    border-radius: 20px;
+    border-radius: 40px;
     border: none;
     color: white;
+}
+
+/*Seccion de las pildoras*/
+
+
+.nutriologo__pildoras {
+    margin-top: 60px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 80%;
+    gap: 16px 12px;
+}
+
+.pildora {
+    min-width: 85px;
+    width: auto;
+    padding: 10px 15px;
+    height: auto;
+    border: 1.6px solid #d4d4d4;
+    color: #7e7b7b;
+    background-color: transparent;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: none;
 }
 
 /*Seccion del nutriologo imagen*/
 
 .nutriologo__container {
+    position: absolute;
+    bottom: -34px;
+    left: 10%;
     width: 230px;
     height: 83px;
     background-color: #f3f3f3;
     border-radius: 70px;
-
     margin-bottom: 40px;
     box-shadow: 1px 3px 10px -1px rgba(77, 76, 76, 0.22);
 }
@@ -217,5 +248,3 @@ body {
     }
 
 }
-
-
