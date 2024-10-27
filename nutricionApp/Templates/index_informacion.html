@@ -80,30 +80,63 @@
             }
         }
 
-        #table-container [contenteditable="true"].animate {
+        #table-container textarea.custom-textarea.animate {
             animation: subtleGrow 0.2s ease-in-out forwards;
             /* Aplicar animación */
         }
 
-        #table-container [contenteditable="true"] {
-            width: 200px;
+        #table-container textarea.custom-textarea {
+            background-color: #f0f0f000;
             /* Ancho fijo */
             height: 60px;
             /* Altura fija */
-            overflow-y: auto;
-            /* Permite el desplazamiento vertical */
             overflow-wrap: break-word;
             /* Rompe las palabras largas para ajustarse */
             white-space: pre-wrap;
             /* Permite que el texto se ajuste en varias líneas */
-            max-width: 200px;
+            max-width: 40vh;
             /* Ancho máximo de las celdas */
-            border: 1px solid #dee2e6;
-            /* Borde para las celdas editables */
+            border: 1px solid #dee2e600;
+            /* Borde para los textareas */
             padding: 5px;
             /* Espaciado interno */
             box-sizing: border-box;
             /* Asegura que el padding esté dentro del ancho definido */
+            resize: none;
+            overflow-y: hidden;
+            /* Permitir desplazamiento si es necesario */
+            /* Ajuste de altura */
+            border-radius: 5px;
+            /* Bordes redondeados */
+          
+        }
+
+        /* Scrollbar para navegadores basados en WebKit (Chrome, Safari) */
+        textarea::-webkit-scrollbar {
+            width: 10px;
+            /* Ancho del scrollbar */
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #888;
+            /* Color del thumb (parte que se mueve) */
+            border-radius: 10px;
+            /* Bordes redondeados del thumb */
+        }
+
+        textarea::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            /* Color del track (fondo del scrollbar) */
+            border-radius: 10px;
+            /* Bordes redondeados del track */
+        }
+
+        /* Scrollbar para Firefox */
+        textarea {
+            scrollbar-width: thin;
+            /* Scrollbar delgado */
+            scrollbar-color: #888 #f0f0f0;
+            /* Color del thumb y del track */
         }
     </style>
 
@@ -180,7 +213,7 @@
     <style>
         /* Estilo para el textarea */
         #avoid-foods,
-        #supplement-input,
+        #supplement-details,
         #allowed-drinks,
         #nutrition-tips,
         #low-calorie-foods {
@@ -188,8 +221,41 @@
             padding: 5px;
             overflow-y: hidden;
             /* Permitir desplazamiento si es necesario */
-            max-height: 100px;
+            max-height: 200px;
             /* Ajuste de altura */
+            border-radius: 5px;
+            /* Bordes redondeados */
+            overflow-y: auto;
+            /* Habilita el scrollbar si es necesario */
+        }
+
+
+        /* Scrollbar para navegadores basados en WebKit (Chrome, Safari) */
+        textarea::-webkit-scrollbar {
+            width: 10px;
+            /* Ancho del scrollbar */
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #888;
+            /* Color del thumb (parte que se mueve) */
+            border-radius: 10px;
+            /* Bordes redondeados del thumb */
+        }
+
+        textarea::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            /* Color del track (fondo del scrollbar) */
+            border-radius: 10px;
+            /* Bordes redondeados del track */
+        }
+
+        /* Scrollbar para Firefox */
+        textarea {
+            scrollbar-width: thin;
+            /* Scrollbar delgado */
+            scrollbar-color: #888 #f0f0f0;
+            /* Color del thumb y del track */
         }
     </style>
 
@@ -532,7 +598,6 @@
     <div class="container col-10 mt-5 animate__animated animate__fadeIn" id="progress-tbody">
 
         <div class="row">
-
             {% if paciente_info %}
             <div class="col-1"></div>
             <div class="col-7 text-start mt-4 mb-4">
@@ -557,8 +622,6 @@
             {% endif %}
         </div>
 
-
-
         <!-- Componente de pestañas -->
         <div class="row scroll-container">
             <div class="col-1"></div>
@@ -566,23 +629,57 @@
             <div class="col-10">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        {% if rol == 'paciente' %}
                         <button class="nav-link active" id="nav-progress-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-progress" type="button" role="tab" aria-controls="nav-progress"
                             aria-selected="true">Progresos</button>
 
+                        <button class="nav-link" id="nav-plans-tab" data-bs-toggle="tab" data-bs-target="#nav-plans"
+                            type="button" role="tab" aria-controls="nav-plans" aria-selected="false">Plan
+                            Alimenticio</button>
+
                         <button class="nav-link" id="nav-routines-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-routines" type="button" role="tab" aria-controls="nav-routines"
-                            aria-selected="false" onclick="openModal('nav-routines-tab')">Rutinas de
-                            Entrenamiento</button>
+                            aria-selected="false">Rutinas de Entrenamiento</button>
+                        {% else %}
+                        {% if plan_alimenticio %}
+                        <button class="nav-link" id="nav-progress-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-progress" type="button" role="tab" aria-controls="nav-progress"
+                            aria-selected="false">Progresos</button>
+                        {% endif %}
 
-                        <button class="nav-link" id="nav-plans-tab" data-bs-toggle="tab" data-bs-target="#nav-plans"
-                            type="button" role="tab" aria-controls="nav-plans" aria-selected="false"
-                            onclick="openModal('nav-plans-tab')">Plan Alimenticio</button>
+                        <button class="nav-link active" id="nav-plans-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-plans" type="button" role="tab" aria-controls="nav-plans"
+                            aria-selected="true">Plan Alimenticio</button>
+                        {% if plan_alimenticio %}
+                        <button class="nav-link" id="nav-routines-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-routines" type="button" role="tab" aria-controls="nav-routines"
+                            aria-selected="false">Rutinas de Entrenamiento</button>
+                        {% endif %}
+                        {% endif %}
                     </div>
                 </nav>
 
                 <div class="tab-content" id="nav-tabContent">
+                    <!-- Contenido de progresos -->
+                    <div class="tab-pane fade {% if rol == 'paciente' %}show active{% endif %}" id="nav-progress"
+                        role="tabpanel" aria-labelledby="nav-progress-tab" tabindex="0">
+                        <div class="col-6 mt-3 mb-3 d-flex">
+                            <h5 class="mt-1">Progresos</h5>
+                        </div>
+                        <div class="container-progress mb-5">
+                            {% include 'cards_progresos_cliente.html' %}
+                        </div>
+                    </div>
 
+                    <!-- Contenido de plan alimenticio -->
+                    <div class="tab-pane fade {% if rol != 'paciente' %}show active{% endif %}" id="nav-plans"
+                        role="tabpanel" aria-labelledby="nav-plans-tab" tabindex="0">
+                        <div class="col-6 mt-4 mb-2 d-flex">
+                            <h5>Plan alimenticio</h5>
+                        </div>
+                        {% include 'planes_alimenticios_cliente.html' %}
+                    </div>
 
                     <!-- Contenido de rutinas de entrenamiento -->
                     <div class="tab-pane fade" id="nav-routines" role="tabpanel" aria-labelledby="nav-routines-tab"
@@ -590,44 +687,18 @@
                         <div class="col-6 mt-4 mb-2 d-flex">
                             <h5>Programa de Entrenamiento</h5>
                         </div>
-
                         <div class="container-custom mb-5">
+                            {% if rol == 'nutriologo' %}
                             <div class="add-button" data-bs-toggle="modal" data-bs-target="#addRoutineModal">
                                 +
                             </div>
+                            {% endif %}
                             <h5>Rutinas de entrenamiento vacías</h5>
                         </div>
-
                     </div>
-
-                    <!-- Contenido de plan alimenticio -->
-                    <div class="tab-pane fade" id="nav-plans" role="tabpanel" aria-labelledby="nav-plans-tab"
-                        tabindex="0">
-                        <div class="col-6 mt-4 mb-2 d-flex">
-                            <h5>Plan alimenticio</h5>
-                        </div>
-
-                        {% include 'planes_alimenticios_cliente.html' %}
-                    </div>
-
-                    <!-- Contenido de progresos -->
-                    <!-- Modificar el active con el tiempo -->
-                    <div class="tab-pane fade show active" id="nav-progress" role="tabpanel"
-                        aria-labelledby="nav-progress-tab" tabindex="0">
-                        <div class="col-6 mt-3 mb-3 d-flex">
-                            <h5 class="mt-1">Progresos</h5>
-                            <!-- Botón de signo más recibira cambios a furuo -->
-
-                        </div>
-
-
-                        <div class="container-progress mb-5">
-                            {% include 'cards_progresos_cliente.html' %}
-                        </div>
-                    </div>
-
                 </div>
             </div>
+
 
         </div>
     </div>
@@ -695,49 +766,105 @@
                                 </thead>
                                 <tbody class="table-group-divider">
                                     <tr>
-                                        <td contenteditable="true" style="width: 60%;"></td>
-                                        <td contenteditable="true"></td>
-                                        <td contenteditable="true"></td>
-                                        <td contenteditable="true"></td>
+                                        <td style="width: 60%;">
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td contenteditable="true" style="width: 60%;"></td>
-                                        <td contenteditable="true"></td>
-                                        <td contenteditable="true"></td>
-                                        <td contenteditable="true"></td>
+                                        <td style="width: 60%;">
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td contenteditable="true" style="width: 60%;"></td>
-                                        <td contenteditable="true"></td>
-                                        <td contenteditable="true"></td>
-                                        <td contenteditable="true"></td>
+                                        <td style="width: 60%;">
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td contenteditable="true" style="width: 60%;"></td>
-                                        <td contenteditable="true"></td>
-                                        <td contenteditable="true"></td>
-                                        <td contenteditable="true"></td>
+                                        <td style="width: 60%;">
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td contenteditable="true" style="width: 60%;"></td>
-                                        <td contenteditable="true"></td>
-                                        <td contenteditable="true"></td>
-                                        <td contenteditable="true"></td>
+                                        <td style="width: 60%;">
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td contenteditable="true" style="width: 60%;"></td>
-                                        <td contenteditable="true"></td>
-                                        <td contenteditable="true"></td>
-                                        <td contenteditable="true"></td>
+                                        <td style="width: 60%;">
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td contenteditable="true" style="width: 60%;"></td>
-                                        <td contenteditable="true"></td>
-                                        <td contenteditable="true"></td>
-                                        <td contenteditable="true"></td>
+                                        <td style="width: 60%;">
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                        </td>
                                     </tr>
                                 </tbody>
-                            </table>
+                            </table>                            
                         </div>
                     </div>
                 </div>
@@ -748,7 +875,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- Modal para ingresar los datos del usuario -->
     <div class="modal fade" id="userModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="userModalLabel"
@@ -779,16 +905,8 @@
             </div>
         </div>
     </div>
-    {% if rol == 'nutriologo' %}
-    <!-- Menú dropdown oculto -->
-    <div class="dropdown" id="context-menu" style="display: none; position: absolute;">
-        <ul class="dropdown-menu show" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item" href="#" onclick="showOffcanvas('addProgress')">Agregar nuevo progreso</a></li>
-            <li><a class="dropdown-item" href="#" onclick="showOffcanvas('editProgress')">Editar progresos</a></li>
-        </ul>
-    </div>
-    {% endif %}
 
+    {% if rol == 'nutriologo' %}
     <!-- Offcanvas para Agregar Progreso -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-add" aria-labelledby="offcanvas-addLabel"
         style="width: 500px;">
@@ -1001,6 +1119,32 @@
         </div>
     </div>
     {% endif %}
+    {% endif %}
+
+    {% if rol == 'nutriologo' %}
+    <!-- Menú dropdown oculto -->
+    <div class="dropdown" id="context-menu" style="display: none; position: absolute;">
+        <ul class="dropdown-menu show" aria-labelledby="dropdownMenuButton">
+            {% if plan_alimenticio %}
+            <li><a class="dropdown-item" href="#" onclick="showOffcanvas('addProgress')">Agregar nuevo progreso</a></li>
+            <li><a class="dropdown-item" href="#" onclick="showOffcanvas('editProgress')">Editar progresos</a></li>
+            {% endif %}
+
+
+            {% if plan_alimenticio %}
+            <li><a class="dropdown-item" href="#">Actualizar plan
+                    alimenticio.</a></li>
+            {% else %}
+            <li><a class="dropdown-item" href="#" onclick="agregarNuevoPlan()">Agregar nuevo plan alimenticio</a></li>
+            {% endif %}
+            {% if plan_alimenticio %}
+            <li><a class="dropdown-item" href="#">Agregar nuevas rutina.</a>
+            </li>
+             {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+
 
 
     <!-- Enlace a Bootstrap JS y dependencias -->
@@ -1009,35 +1153,44 @@
         </script>
 
     <script>
-        const textareas = ['avoid-foods', 'supplement-input', 'allowed-drinks', 'nutrition-tips', 'low-calorie-foods'];
+        function autoResize(textarea) {
+            // Resetea la altura para que se ajuste al contenido
+            textarea.style.height = 'auto';
+            // Ajusta la altura según el scrollHeight
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
 
-        textareas.forEach(id => {
-            const textarea = document.getElementById(id);
+        // Llama a la función para ajustar la altura de todos los textareas al cargar
+        document.querySelectorAll('textarea').forEach(textarea => {
+            textarea.style.height = textarea.scrollHeight + 'px';
+            textarea.style.maxHeight = '200px'; // Establece una altura máxima
+            textarea.style.overflowY = 'auto';  // Habilita el scrollbar si es necesario
             textarea.addEventListener('input', function () {
-                this.style.height = 'auto'; // Restablecer la altura
-                this.style.height = (this.scrollHeight) + 'px'; // Ajustar la altura según el contenido
+                autoResize(this);
             });
-            textarea.dispatchEvent(new Event('input')); // Llamar a la función para ajustar la altura inicial
         });
-
     </script>
 
     <script>
         function toggleSupplementTextarea() {
-            const supplementYes = document.getElementById('supplementYes');
+            const yesRadio = document.getElementById('supplementYes');
             const supplementTextarea = document.getElementById('supplementTextarea');
-
-            // Muestra el textarea si se selecciona "Sí", oculta si se selecciona "No"
-            if (supplementYes.checked) {
+            // Mostrar el textarea si se selecciona "Sí"
+            if (yesRadio.checked) {
                 supplementTextarea.style.display = 'block';
             } else {
                 supplementTextarea.style.display = 'none';
             }
         }
+
+        // Llamar a la función al cargar para establecer el estado inicial
+        window.onload = function () {
+            toggleSupplementTextarea();
+        }
     </script>
 
     <script>
-        document.querySelectorAll('[contenteditable="true"]').forEach(cell => {
+        document.querySelectorAll('textarea.custom-textarea').forEach(textarea => {
             const observer = new ResizeObserver(entries => {
                 for (let entry of entries) {
                     // Si se ha detectado un cambio en el tamaño del contenido
@@ -1047,17 +1200,16 @@
                         // Remover la clase de animación después de un breve momento
                         setTimeout(() => {
                             entry.target.classList.remove('animate');
-                        }, 200); // Duración de la animación
+                        }, 400); // Duración de la animación
                     }
                 }
             });
 
-            // Observar cambios en el tamaño de la celda
-            observer.observe(cell);
+            // Observar cambios en el tamaño del textarea
+            observer.observe(textarea);
         });
-
-
     </script>
+
 
     <script>
         const contextMenu = document.getElementById('context-menu');
@@ -1065,11 +1217,17 @@
 
         // Mostrar el menú dropdown al hacer clic derecho o mantener presionado
         tbody.addEventListener('contextmenu', (e) => {
+            if (isInputOrTextareaOrEditable(e.target)) {
+                return; // No hacer nada si se clicó dentro de un input, textarea o celda editable
+            }
             e.preventDefault();
             showContextMenu(e);
         });
 
         tbody.addEventListener('touchstart', (e) => {
+            if (isInputOrTextareaOrEditable(e.target)) {
+                return; // No hacer nada si se tocó dentro de un input, textarea o celda editable
+            }
             this.touchTimer = setTimeout(() => showContextMenu(e), 1000); // 1 segundo
         });
 
@@ -1094,6 +1252,18 @@
             const offcanvas = new bootstrap.Offcanvas(document.getElementById(offcanvasId));
             offcanvas.show();
         }
+
+        // Función para verificar si el elemento es un input, textarea o celda editable
+        function isInputOrTextareaOrEditable(element) {
+            return (
+                element.tagName === 'INPUT' ||
+                element.tagName === 'TEXTAREA' ||
+                element.tagName === 'BUTTON' ||
+                (element.tagName === 'TD' && element.isContentEditable) // Verificar si es una celda editable
+            );
+        }
+
+
     </script>
 
 </body>

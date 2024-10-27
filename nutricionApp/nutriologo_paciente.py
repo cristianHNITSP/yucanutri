@@ -13,69 +13,29 @@ def index_informacion():
         flash('Debes iniciar sesión para acceder a esta página.', 'error')
         return redirect(url_for('auth.inicio_sesion'))
 
-    paciente_info = None  # Inicializamos paciente_info fuera de las condicionales
-    registro_progreso = None  # Inicializamos registro_progreso fuera de las condicionales
+    paciente_info = None
+    paciente_datos = None
+    registro_progreso = None
+    registro_plan_alimenticio = None
 
     try:
         if rol == 'nutriologo':
-            # Paso 1: Obtener el ID del paciente desde la sesión
+            # Obtener el ID del paciente desde la sesión
             paciente_info = session.get('paciente_info')
             if not paciente_info:
-                print("Error: No se encontró información del paciente en la sesión.")
                 flash('No se encontró información del paciente.', 'error')
                 return render_template("index_informacion.html", rol=rol)
 
-            # Extraemos el ID del paciente (primer elemento)
-            id_paciente = paciente_info[0]
-            print(f"ID del paciente obtenido: {id_paciente}")
-
-            # Consulta para nutriologo: obtener el progreso más reciente
-            Consultar_el_progreso_mas_reciente = """
-                SELECT 
-                    p.id_progreso,
-                    p.peso,
-                    p.abdomen,
-                    p.brazo_der_relajado,
-                    p.brazo_der_contraido,
-                    p.brazo_izq_relajado,
-                    p.brazo_izq_contraido,
-                    p.pierna_der_relajada,
-                    p.pierna_der_contraida,
-                    p.pierna_izq_relajada,
-                    p.pierna_izq_contraida,
-                    p.pantorrilla,
-                    p.porcentaje_grasa,
-                    p.porcentaje_musculo,
-                    d.dia AS dia_progreso,
-                    m.mes AS mes_progreso,
-                    a.anio AS anio_progreso
-                FROM 
-                    public.progreso p
-                INNER JOIN 
-                    public.dia_progreso d ON p.id_dia_progreso_id_dia = d.id_dia
-                INNER JOIN 
-                    public.mes_progreso m ON p.id_mes_progreso_id_mes = m.id_mes
-                INNER JOIN 
-                    public.anio_progreso a ON p.id_anio_progreso_id_anio = a.id_anio
-                WHERE 
-                    p.id_paciente_paciente = %s
-                ORDER BY 
-                    a.anio DESC, m.mes DESC, d.dia DESC
-                LIMIT 1;
-            """
-            # Ejecuta la consulta
-            registro_progreso = Config.Read(Consultar_el_progreso_mas_reciente, (id_paciente,))
-            print(f"Consulta ejecutada con éxito para el paciente ID: {id_paciente}")
+            id_paciente = paciente_info[0]  # Extraemos el ID del paciente
 
         elif rol == 'paciente':
             # Obtener el correo del paciente desde la sesión
-            correo_electronico = session.get('correo')  # Obtener el correo de la sesión
+            correo_electronico = session.get('correo')
             if not correo_electronico:
-                print("Error: No se encontró el correo electrónico en la sesión.")
                 flash('No se encontró el correo electrónico.', 'error')
                 return render_template("index_informacion.html", rol=rol)
 
-            # Consulta para paciente: obtener sus datos y progresos
+            # Consulta para obtener los datos del paciente
             Consultar_datos_paciente = """
                 SELECT 
                     id_paciente, 
@@ -91,79 +51,40 @@ def index_informacion():
                      %s = ANY(correo_electronico)
             """
             paciente_datos = Config.Read(Consultar_datos_paciente, (correo_electronico,))
-
             if paciente_datos:
                 id_paciente = paciente_datos[0][0]  # Asumimos que el id_paciente es el primer elemento
-                print("Datos del paciente:", paciente_datos[0])
-
-                # Consulta para obtener todos los progresos del paciente
-                Consultar_todos_los_progresos = """
-                    SELECT 
-                        p.id_progreso,
-                        p.peso,
-                        p.abdomen,
-                        p.brazo_der_relajado,
-                        p.brazo_der_contraido,
-                        p.brazo_izq_relajado,
-                        p.brazo_izq_contraido,
-                        p.pierna_der_relajada,
-                        p.pierna_der_contraida,
-                        p.pierna_izq_relajada,
-                        p.pierna_izq_contraida,
-                        p.pantorrilla,
-                        p.porcentaje_grasa,
-                        p.porcentaje_musculo,
-                        d.dia AS dia_progreso,
-                        m.mes AS mes_progreso,
-                        a.anio AS anio_progreso
-                    FROM 
-                        public.progreso p
-                    INNER JOIN 
-                        public.dia_progreso d ON p.id_dia_progreso_id_dia = d.id_dia
-                    INNER JOIN 
-                        public.mes_progreso m ON p.id_mes_progreso_id_mes = m.id_mes
-                    INNER JOIN 
-                        public.anio_progreso a ON p.id_anio_progreso_id_anio = a.id_anio
-                    WHERE 
-                        p.id_paciente_paciente = %s
-                    ORDER BY 
-                        a.anio DESC, m.mes DESC, d.dia DESC;
-                """
-                # Ejecuta la consulta para obtener todos los progresos
-                registro_progreso = Config.Read(Consultar_todos_los_progresos, (id_paciente,))
-                print(f"Consulta de todos los progresos ejecutada con éxito para el paciente ID: {id_paciente}")
-
             else:
-                print("Advertencia: No se encontraron datos del paciente.")
                 flash('No se encontraron datos del paciente.', 'warning')
+                return render_template("index_informacion.html", rol=rol)
 
-        else:
-            flash('Rol no reconocido.', 'error')
-            return render_template("index_informacion.html", rol=rol)
+        # Obtener datos del paciente, progreso y plan alimenticio
+        registro_progreso, registro_plan_alimenticio = obtener_datos_paciente(id_paciente)
 
-        # Paso 4: Procesar resultados y enviar a la plantilla
-        if rol == 'nutriologo':
-            paciente_datos = paciente_info  # Usar datos de la sesión
-        elif rol == 'paciente' and paciente_datos:
-            paciente_datos = paciente_datos[0]  # Usar datos obtenidos de la base de datos
-        else:
-            paciente_datos = None
-
+        # Procesar resultados para enviar a la plantilla
+        datos_progreso = None
         if registro_progreso:
             datos_progreso = registro_progreso[0]  # Obtener el primer registro de progreso
-            print("Registro más reciente de progreso del paciente:", datos_progreso)
-            return render_template("index_informacion.html", paciente_info=paciente_datos, progreso=datos_progreso, rol=rol)
         else:
-            print("Advertencia: No se encontraron registros de progreso para este paciente.")
             flash('No se encontraron registros de progreso para este paciente.', 'warning')
-            return render_template("index_informacion.html", paciente_info=paciente_datos, rol=rol)
+
+        datos_planes_alimenticios = registro_plan_alimenticio if registro_plan_alimenticio else None
+        if not datos_planes_alimenticios:
+            flash('No se encontraron planes alimenticios para este paciente.', 'warning')
+
+        print('El progreso actual del paciente es: ', registro_progreso)
+        print('El plan alimenticio es: ',registro_plan_alimenticio)
+
+        # Enviar a la plantilla
+        return render_template("index_informacion.html", 
+                               paciente_info=paciente_datos[0] if paciente_datos else paciente_info, 
+                               progreso=datos_progreso, 
+                               plan_alimenticio=datos_planes_alimenticios, 
+                               rol=rol)
 
     except Exception as e:
         print(f"Error al conectar a la base de datos: {e}")
-        flash('Ha ocurrido un error al recuperar la información del progreso. Por favor, inténtalo de nuevo.', 'error')
+        flash('Ha ocurrido un error al recuperar la información. Por favor, inténtalo de nuevo.', 'error')
         return render_template("index_informacion.html", rol=rol)
-
-
 
 @bp.route('/crear_nuevo_progreso', methods=['POST'])
 def crear_nuevo_progreso():
@@ -415,8 +336,254 @@ def editar_progreso():
 
     return redirect(url_for('nutriologo_paciente.index_informacion'))
 
+@bp.route('/agregar_nuevo_plan', methods=['POST'])
+def agregar_nuevo_plan():
+    # Obtener los datos del formulario con validación para campos requeridos
+    alimento_permitido = request.form.get('low_calorie_foods', '').strip()
+    comidas_evitar = request.form.get('avoid_foods', '').strip()
+    bebidas_permitidas = request.form.get('allowed_drinks', '').strip()
+    tips_alimentacion = request.form.get('nutrition_tips', '').strip() or "sin tips alimenticios"  # Usar "sin tips" si está vacío
+    suplementos = request.form.get('supplement_details', '').strip() or "sin suplementos"  # Usar "sin suplementos" si está vacío
+
+    tiempos_comida = request.form.getlist('tiempos_comida[]')
+
+    # Validar campos obligatorios
+    if not alimento_permitido or not comidas_evitar or not bebidas_permitidas or len(tiempos_comida) < 5:
+        flash('Por favor, complete todos los campos obligatorios.', 'warning')
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+    # Asignar los tiempos de comida
+    tiempo_desayuno = tiempos_comida[0]
+    tiempo_almuerzo = tiempos_comida[1]
+    tiempo_durante_entrenamiento = tiempos_comida[2]
+    tiempo_terminar_entrenar = tiempos_comida[3]
+    tiempo_cena = tiempos_comida[4]
+
+    # Menús para cada tiempo de comida
+    menus = [
+        {
+            'tiempo': tiempo_desayuno,
+            'menu1': request.form.get('menu1_desayuno', '').strip(),
+            'menu2': request.form.get('menu2_desayuno', '').strip(),
+            'menu3': request.form.get('menu3_desayuno', '').strip(),
+        },
+        {
+            'tiempo': tiempo_almuerzo,
+            'menu1': request.form.get('menu1_almuerzo', '').strip(),
+            'menu2': request.form.get('menu2_almuerzo', '').strip(),
+            'menu3': request.form.get('menu3_almuerzo', '').strip(),
+        },
+        {
+            'tiempo': tiempo_durante_entrenamiento,
+            'menu1': request.form.get('menu1_durante_entrenamiento', '').strip(),
+            'menu2': request.form.get('menu2_durante_entrenamiento', '').strip(),
+            'menu3': request.form.get('menu3_durante_entrenamiento', '').strip(),
+        },
+        {
+            'tiempo': tiempo_terminar_entrenar,
+            'menu1': request.form.get('menu1_terminar_entrenar', '').strip(),
+            'menu2': request.form.get('menu2_terminar_entrenar', '').strip(),
+            'menu3': request.form.get('menu3_terminar_entrenar', '').strip(),
+        },
+        {
+            'tiempo': tiempo_cena,
+            'menu1': request.form.get('menu1_cena', '').strip(),
+            'menu2': request.form.get('menu2_cena', '').strip(),
+            'menu3': request.form.get('menu3_cena', '').strip(),
+        }
+    ]
+
+    print('Diccionario de manus: ', menus)
+
+    # Validar que todos los menús estén completos
+    if any(not menu['tiempo'] or not menu['menu1'] or not menu['menu2'] or not menu['menu3'] for menu in menus):
+        flash("Todos los menús deben estar completos.", "danger")
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
 
 
+    # Obtener fecha actual y IDs de día, mes, año
+    fecha_actual = datetime.now()
+    dia, mes, anio = fecha_actual.day, fecha_actual.month, fecha_actual.year
+    meses_espanol = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
+    mes_espanol = meses_espanol[mes]
+
+    # Verificación de información del paciente
+    paciente_info = session.get('paciente_info')
+    if not paciente_info:
+        flash('No se encontró información del paciente.', 'warning')
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
+    id_paciente = paciente_info[0]
+
+    # Verificar si ya existe un plan alimenticio para el paciente
+    Verificar_existe_un_plan_alimenticio = "SELECT COUNT(*) FROM public.plan_alimenticio WHERE id_paciente_paciente = %s"
+    existe_plan = Config.Read(Verificar_existe_un_plan_alimenticio, (id_paciente,))[0][0] > 0
+
+    if existe_plan:
+        flash('Solo se permite un plan alimenticio por paciente.', 'danger')
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+    # Consulta para obtener IDs de día, mes y año
+    consulta_ids = """
+        SELECT 
+            (SELECT id_dia FROM public.dia WHERE dia = %s) AS id_dia,
+            (SELECT id_mes FROM public.mes WHERE mes = %s) AS id_mes,
+            (SELECT id_anio FROM public.anio WHERE anio = %s) AS id_anio
+    """
+    ids_info = Config.Read(consulta_ids, (dia, mes_espanol, anio))
+    if not ids_info:
+        flash('No se pudo obtener los IDs de día, mes o año.', 'warning')
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+    id_dia, id_mes, id_anio = ids_info[0]
+
+    # Registrar el nuevo plan alimenticio en la base de datos
+    try:
+
+        Registrar_nuevo_plan_alimenticio = """
+        INSERT INTO public.plan_alimenticio (
+            alimento_permitido,
+            comidas_evitar,
+            bebidas_permitidas,
+            tips_alimentacion,
+            suplementos,
+            id_paciente_paciente,
+            id_dia_id_dia,
+            id_mes_dia_mes,
+            id_anio_id_anio
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+        """
+        # Ejecutar consulta con control de valores nulos en campos opcionales
+        Config.CUD(
+            Registrar_nuevo_plan_alimenticio, 
+            (alimento_permitido, comidas_evitar, bebidas_permitidas, tips_alimentacion, suplementos, id_paciente, id_dia, id_mes, id_anio)
+        )
+
+                # Verificar si ya existe un plan alimenticio para el paciente
+        Verificar_existe_un_plan_alimenticio = """
+            SELECT id_plan_alimenticio 
+            FROM public.plan_alimenticio 
+            WHERE id_paciente_paciente = %s
+        """
+        # Ejecutar la consulta y obtener el resultado
+        Registro_id_plan_alimenticio = Config.Read(Verificar_existe_un_plan_alimenticio, (id_paciente,))
+
+        # Comprobar si se encontró un plan alimenticio
+        if Registro_id_plan_alimenticio:
+            id_plan_alimenticio = Registro_id_plan_alimenticio[0][0]  # Asumimos que id_plan_alimenticio es la primera columna
+            print(f'ID del Plan Alimenticio: {id_plan_alimenticio}')  # Depuración
+        else:
+            flash('No se encontró ningún plan alimenticio para el paciente.', 'warning')  # Mostrar mensaje de advertencia
+            print('No se encontró ningún plan alimenticio para el paciente.')  # Depuración
+            return redirect(url_for('nutriologo_paciente.index_informacion'))  # Redirigir a la página de información del paciente
+
+        # Lista para almacenar los datos de inserción
+        Guardar_diccionario_de_menus = []
+
+        for menu in menus:
+            # Extraer los datos necesarios
+            tiempo_de_comida = menu['tiempo']
+            menu1 = menu['menu1']
+            menu2 = menu['menu2']
+            menu3 = menu['menu3']
+
+            # Agregar los valores a la lista
+            Guardar_diccionario_de_menus.append((tiempo_de_comida, menu1, menu2, menu3, id_plan_alimenticio))
+
+        # Consulta de inserción masiva
+        Crear_nueva_semana_plan_comida = """
+            INSERT INTO public.semana_plan_comida (
+                tiempos_de_comida,
+                menu_uno_lunes_viernes,
+                menu_dos_martes_jueves,
+                menu_tres_miercoles_sabado,
+                id_plan_alimenticio_plan_alimenticio
+            ) VALUES (%s, %s, %s, %s, %s);
+        """
+
+        # Ejecutar la consulta para insertar todos los registros
+        Config.CUD(
+            Crear_nueva_semana_plan_comida,
+            Guardar_diccionario_de_menus,
+            is_bulk=True  # Asegúrate de que tu función CUD soporte inserciones masivas
+        )
+        
+        flash('Registro ingresado exitosamente.', 'success')
+    except Exception as e:
+        flash(f'Ocurrió un error al registrar el plan: {str(e)}', 'danger')
+        print(f'Error al ejecutar la consulta: {e}')  # Debug para error en consola
+
+    # Redirigir a la página de información del paciente
+    return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+def obtener_datos_paciente(id_paciente):
+    """Función para obtener los datos del paciente, su progreso y su plan alimenticio."""
+    # Consulta para obtener el progreso más reciente del paciente
+    Consultar_el_progreso_mas_reciente = """
+        SELECT 
+            p.id_progreso,
+            p.peso,
+            p.abdomen,
+            p.brazo_der_relajado,
+            p.brazo_der_contraido,
+            p.brazo_izq_relajado,
+            p.brazo_izq_contraido,
+            p.pierna_der_relajada,
+            p.pierna_der_contraida,
+            p.pierna_izq_relajada,
+            p.pierna_izq_contraida,
+            p.pantorrilla,
+            p.porcentaje_grasa,
+            p.porcentaje_musculo,
+            d.dia AS dia_progreso,
+            m.mes AS mes_progreso,
+            a.anio AS anio_progreso
+        FROM 
+            public.progreso p
+        INNER JOIN 
+            public.dia_progreso d ON p.id_dia_progreso_id_dia = d.id_dia
+        INNER JOIN 
+            public.mes_progreso m ON p.id_mes_progreso_id_mes = m.id_mes
+        INNER JOIN 
+            public.anio_progreso a ON p.id_anio_progreso_id_anio = a.id_anio
+        WHERE 
+            p.id_paciente_paciente = %s
+        ORDER BY 
+            a.anio DESC, m.mes DESC, d.dia DESC
+        LIMIT 1;
+    """
+
+    # Consulta para obtener el plan alimenticio del paciente
+    consulta_su_plan_alimentcio_del_paciente = """ 
+        SELECT 
+            pa.id_plan_alimenticio,
+            pa.alimento_permitido,
+            pa.comidas_evitar,
+            pa.bebidas_permitidas,
+            pa.tips_alimentacion,
+            pa.suplementos,
+            pa.id_paciente_paciente,
+            d.dia,
+            m.mes,
+            a.anio
+        FROM 
+            public.plan_alimenticio pa
+        INNER JOIN 
+            public.dia d ON pa.id_dia_id_dia = d.id_dia
+        INNER JOIN 
+            public.mes m ON pa.id_mes_dia_mes = m.id_mes
+        INNER JOIN 
+            public.anio a ON pa.id_anio_id_anio = a.id_anio
+        WHERE 
+            pa.id_paciente_paciente = %s
+        ORDER BY 
+            a.anio DESC, m.mes DESC, d.dia DESC;
+    """
+
+    # Ejecutar consultas
+    registro_progreso = Config.Read(Consultar_el_progreso_mas_reciente, (id_paciente,))
+    registro_plan_alimenticio = Config.Read(consulta_su_plan_alimentcio_del_paciente, (id_paciente,))
+
+    return registro_progreso, registro_plan_alimenticio
 
 
 

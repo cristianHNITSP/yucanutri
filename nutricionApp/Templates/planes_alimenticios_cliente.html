@@ -1,186 +1,309 @@
 <!-- Comidas -->
-<div class="col-12 mt-4 mb-4">
-    <h5>
-        <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComidas"
-            aria-expanded="true" aria-controls="collapseComidas">
-            Comidas
-        </button>
-    </h5>
-    <div id="collapseComidas" class="collapse show">
-        <!-- Tabla Editable -->
+<form id="agregarNuevoPlanForm" action="{{ url_for('nutriologo_paciente.agregar_nuevo_plan') }}" method="POST">
+
+    <div class="col-12 mt-4 mb-4">
+        <h5>
+            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#"
+                aria-expanded="true" aria-controls="collapseComidas">
+                Comidas
+            </button>
+        </h5>
+
         <div class="table-responsive" id="table-container">
             <table class="table table-striped table-hover">
                 <thead class="table-dark">
                     <tr>
                         <th scope="col" class="text-center align-top">Tiempos de comida</th>
-                        <th scope="col" class="text-center align-top">Menu 1 (Lunes y Viernes)
-                        </th>
-                        <th scope="col" class="text-center align-top">Menu 2 (Martes y Jueves)
-                        </th>
-                        <th scope="col" class="text-center align-top">Menu 3 (Miércoles y
-                            Sábado)</th>
+                        <th scope="col" class="text-center align-top">Menu 1 (Lunes y Viernes)</th>
+                        <th scope="col" class="text-center align-top">Menu 2 (Martes y Jueves)</th>
+                        <th scope="col" class="text-center align-top">Menu 3 (Miércoles y Sábado)</th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
                     <tr>
                         <td>Desayuno</td>
-                        <td contenteditable="true"></td>
-                        <td contenteditable="true"></td>
-                        <td contenteditable="true"></td>
+                        <input type="hidden" name="tiempos_comida[]" value="Desayuno">
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu1_desayuno" {{ 'disabled' if rol !='nutriologo' }} maxlength="400"></textarea>
+                        </td>
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu2_desayuno" {{ 'disabled' if rol !='nutriologo' }} maxlength="400"></textarea>
+                        </td>
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu3_desayuno" {{ 'disabled' if rol !='nutriologo' }} maxlength="400"></textarea>
+                        </td>
                     </tr>
                     <tr>
                         <td>Almuerzo</td>
-                        <td contenteditable="true"></td>
-                        <td contenteditable="true"></td>
-                        <td contenteditable="true"></td>
+                        <input type="hidden" name="tiempos_comida[]" value="Almuerzo">
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu1_almuerzo" {{ 'disabled' if rol !='nutriologo' }} maxlength="400"></textarea>
+                        </td>
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu2_almuerzo" {{ 'disabled' if rol !='nutriologo' }} maxlength="400"></textarea>
+                        </td>
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu3_almuerzo" {{ 'disabled' if rol !='nutriologo' }} maxlength="400"></textarea>
+                        </td>
                     </tr>
                     <tr>
                         <td>Durante el entrenamiento</td>
-                        <td contenteditable="true"></td>
-                        <td contenteditable="true"></td>
-                        <td contenteditable="true"></td>
+                        <input type="hidden" name="tiempos_comida[]" value="Durante el entrenamiento">
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu1_durante_entrenamiento" {{ 'disabled' if rol !='nutriologo' }}
+                                maxlength="400"></textarea>
+                        </td>
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu2_durante_entrenamiento" {{ 'disabled' if rol !='nutriologo' }}
+                                maxlength="400"></textarea>
+                        </td>
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu3_durante_entrenamiento" {{ 'disabled' if rol !='nutriologo' }}
+                                maxlength="400"></textarea>
+                        </td>
                     </tr>
                     <tr>
                         <td>Terminar de entrenar</td>
-                        <td contenteditable="true"></td>
-                        <td contenteditable="true"></td>
-                        <td contenteditable="true"></td>
+                        <input type="hidden" name="tiempos_comida[]" value="Terminar de entrenar">
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu1_terminar_entrenar" {{ 'disabled' if rol !='nutriologo' }}
+                                maxlength="400"></textarea>
+                        </td>
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu2_terminar_entrenar" {{ 'disabled' if rol !='nutriologo' }}
+                                maxlength="400"></textarea>
+                        </td>
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu3_terminar_entrenar" {{ 'disabled' if rol !='nutriologo' }}
+                                maxlength="400"></textarea>
+                        </td>
                     </tr>
                     <tr>
                         <td>Cena</td>
-                        <td contenteditable="true"></td>
-                        <td contenteditable="true"></td>
-                        <td contenteditable="true"></td>
+                        <input type="hidden" name="tiempos_comida[]" value="Cena">
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu1_cena" {{ 'disabled' if rol !='nutriologo' }} maxlength="400"></textarea>
+                        </td>
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu2_cena" {{ 'disabled' if rol !='nutriologo' }} maxlength="400"></textarea>
+                        </td>
+                        <td>
+                            <textarea
+                                class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                                name="menu3_cena" {{ 'disabled' if rol !='nutriologo' }} maxlength="400"></textarea>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-</div>
 
-<hr class="my-4"> <!-- Separador horizontal -->
 
-<!-- Alimentos Permitidos con Pocas Calorías -->
-<div class="col-12 mt-4 mb-4">
-    <h5>
-        <button class="btn text-start" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAlimentos"
-            aria-expanded="false" aria-controls="collapseAlimentos">
-            Alimentos Permitidos con Pocas Calorías
-        </button>
-    </h5>
-    <div id="collapseAlimentos" class="collapse">
-        <div class="row ms-1">
-            <div class="col-12 col-md-6">
-                <label for="low-calorie-foods" class="form-label">Escriba los alimentos
-                    permitidos con pocas calorías para el paciente:</label>
-                <textarea class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2" id="low-calorie-foods" rows="1"></textarea>
-            </div>
-        </div>
-    </div>
-</div>
+    <hr class="my-4"> <!-- Separador horizontal -->
+    {% for item in plan_alimenticio %}
 
-<hr class="my-4"> <!-- Separador horizontal -->
+    <input type="hidden" name="plan_id" value="{{ item[0] }}">
 
-<!-- Comidas a Evitar -->
-<div class="col-12 mt-4 mb-4">
-    <h5>
-        <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComidasEvitar"
-            aria-expanded="false" aria-controls="collapseComidasEvitar">
-            Comidas a Evitar
-        </button>
-    </h5>
-    <div id="collapseComidasEvitar" class="collapse">
-        <div class="row ms-1">
-            <div class="col-12 col-md-6">
-                <label for="avoid-foods" class="form-label">Escriba las comidas a evitar del
-                    paciente:</label>
-                <textarea class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2" id="avoid-foods" rows="1"></textarea>
-            </div>
-        </div>
-    </div>
-</div>
-
-<hr class="my-4"> <!-- Separador horizontal -->
-
-<!-- Bebidas Permitidas -->
-<div class="col-12 mt-4 mb-4">
-    <h5>
-        <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBebidasPermitidas"
-            aria-expanded="false" aria-controls="collapseBebidasPermitidas">
-            Bebidas Permitidas
-        </button>
-    </h5>
-    <div id="collapseBebidasPermitidas" class="collapse">
-        <div class="row ms-1">
-            <div class="col-12 col-md-6">
-                <label for="allowed-drinks" class="form-label">Escriba las bebidas permitidas
-                    del paciente:</label>
-                <textarea class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2" id="allowed-drinks" rows="1"></textarea>
-            </div>
-        </div>
-    </div>
-</div>
-
-<hr class="my-4"> <!-- Separador horizontal -->
-
-<!-- Tips de Alimentación -->
-<div class="col-12 mt-4 mb-4">
-    <h5>
-        <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTipsAlimentacion"
-            aria-expanded="false" aria-controls="collapseTipsAlimentacion">
-            Tips de Alimentación
-        </button>
-    </h5>
-    <div id="collapseTipsAlimentacion" class="collapse">
-        <div class="row ms-1">
-            <div class="col-12 col-md-6">
-                <label for="nutrition-tips" class="form-label">Escriba los tips de alimentación
-                    para el paciente:</label>
-                <textarea class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2" id="nutrition-tips" rows="1"></textarea>
-            </div>
-        </div>
-    </div>
-</div>
-
-<hr class="my-4"> <!-- Separador horizontal -->
-
-<!-- Suplementos -->
-<div class="col-12 mt-4 mb-4">
-    <h5>
-        <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSuplementos"
-            aria-expanded="false" aria-controls="collapseSuplementos">
-            Suplementos
-        </button>
-    </h5>
-    <div id="collapseSuplementos" class="collapse">
-        <div class="container mt-4 bg-transparent">
-            <div class="form-group">
-                <label class="form-label">¿El paciente desea ingerir suplementos?</label>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="supplementRadio" id="supplementYes" value="yes"
-                        onchange="toggleSupplementTextarea()">
-                    <label class="form-check-label" for="supplementYes">
-                        Sí, si desea consumir suplementos
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="supplementRadio" id="supplementNo" value="no"
-                        onchange="toggleSupplementTextarea()" checked>
-                    <label class="form-check-label" for="supplementNo">
-                        No, no desea consumir suplementos
-                    </label>
-                </div>
-            </div>
-            <!-- Textarea para suplementos -->
-            <div id="supplementTextarea" class="row mt-3" style="display: none;">
-                <div class="col-12 col-md-6">
-                    <label for="supplement-input" class="form-label">Ingrese los suplementos que
-                        consumirá el paciente:</label>
-                    <textarea class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2" id="supplement-input" rows="1"></textarea>
+    <!-- Alimentos Permitidos con Pocas Calorías -->
+    <div class="col-12 mt-4 mb-4">
+        <h5>
+            <button class="btn text-start" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAlimentos"
+                aria-expanded="false" aria-controls="collapseAlimentos">
+                Alimentos Permitidos con Pocas Calorías
+            </button>
+        </h5>
+        <div id="collapseAlimentos" class="collapse">
+            <div class="row ms-1">
+                <div class="col-12 col-md-7">
+                    <label for="low-calorie-foods" class="form-label">Escriba los alimentos
+                        permitidos con pocas calorías para el paciente:</label>
+                    <textarea
+                        class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2"
+                        id="low-calorie-foods" name="low_calorie_foods" rows="1" maxlength="1000" required {% if
+                        rol=='paciente' %}readonly{% endif %}>{{ item[1] }}</textarea>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<hr class="my-4"> <!-- Separador horizontal -->
+    <hr class="my-4"> <!-- Separador horizontal -->
+
+    <!-- Comidas a Evitar -->
+    <div class="col-12 mt-4 mb-4">
+        <h5>
+            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComidasEvitar"
+                aria-expanded="false" aria-controls="collapseComidasEvitar">
+                Comidas a Evitar
+            </button>
+        </h5>
+        <div id="collapseComidasEvitar" class="collapse">
+            <div class="row ms-1">
+                <div class="col-12 col-md-7">
+                    <label for="avoid-foods" class="form-label">Escriba las comidas a evitar del
+                        paciente:</label>
+                    <textarea
+                        class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2"
+                        id="avoid-foods" name="avoid_foods" rows="1" maxlength="1000" required {% if rol=='paciente'
+                        %}readonly{% endif %}>{{ item[2] }}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4"> <!-- Separador horizontal -->
+
+    <!-- Bebidas Permitidas -->
+    <div class="col-12 mt-4 mb-4">
+        <h5>
+            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBebidasPermitidas"
+                aria-expanded="false" aria-controls="collapseBebidasPermitidas">
+                Bebidas Permitidas
+            </button>
+        </h5>
+        <div id="collapseBebidasPermitidas" class="collapse">
+            <div class="row ms-1">
+                <div class="col-12 col-md-7">
+                    <label for="allowed-drinks" class="form-label">Escriba las bebidas permitidas
+                        del paciente:</label>
+                    <textarea
+                        class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2"
+                        id="allowed-drinks" name="allowed_drinks" rows="1" maxlength="1000" required {% if
+                        rol=='paciente' %}readonly{% endif %}>{{ item[3] }}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4"> <!-- Separador horizontal -->
+
+    <!-- Tips de Alimentación -->
+    <div class="col-12 mt-4 mb-4">
+        <h5>
+            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTipsAlimentacion"
+                aria-expanded="false" aria-controls="collapseTipsAlimentacion">
+                Tips de Alimentación
+            </button>
+        </h5>
+        <div id="collapseTipsAlimentacion" class="collapse">
+            <div class="row ms-1">
+                <div class="col-12 col-md-7">
+                    <label for="nutrition-tips" class="form-label">Escriba los tips de alimentación
+                        para el paciente:</label>
+                    <textarea
+                        class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2"
+                        id="nutrition-tips" name="nutrition_tips" rows="1" maxlength="1000" {% if rol=='paciente'
+                        %}readonly{% endif %}>{{ item[4] }}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4"> <!-- Separador horizontal -->
+
+    <!-- Suplementos -->
+    <div class="col-12 mt-4 mb-4">
+        <h5>
+            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSuplementos"
+                aria-expanded="false" aria-controls="collapseSuplementos">
+                Suplementos
+            </button>
+        </h5>
+        <div id="collapseSuplementos" class="collapse">
+            <div class="container mt-4 bg-transparent">
+                <div class="form-group">
+                    <label class="form-label">¿El paciente desea ingerir suplementos?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="supplementRadio" id="supplementYes"
+                            value="yes" {% if rol=='paciente' %}disabled{% endif %}
+                            onclick="toggleSupplementTextarea()">
+                        <label class="form-check-label" for="supplementYes">
+                            Sí, si desea consumir suplementos
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="supplementRadio" id="supplementNo" value="no"
+                            {% if rol=='paciente' %}disabled{% endif %} checked onclick="toggleSupplementTextarea()">
+                        <label class="form-check-label" for="supplementNo">
+                            No, no desea consumir suplementos
+                        </label>
+                    </div>
+                </div>
+                <!-- Textarea para suplementos -->
+                <div id="supplementTextarea" class="row mt-3" style="display: none;">
+                    <div class="col-12 col-md-7">
+                        <label for="supplement-details" class="form-label">Escriba los suplementos que desee el
+                            paciente:</label>
+                        <textarea
+                            class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2"
+                            id="supplement-details" name="supplement_details" rows="1" maxlength="1000" {% if
+                            rol=='paciente' %}readonly{% endif %}>{{ item[5] }}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</form>
+
+
+<script>
+    function agregarNuevoPlan() {
+        // Obtener todos los <textarea> específicos
+        const specificTextareas = [
+            document.getElementById('low-calorie-foods'),
+            document.getElementById('avoid-foods'),
+            document.getElementById('allowed-drinks'),
+        ];
+
+        // Obtener todos los <textarea> dentro de la tabla
+        const tableTextareas = document.querySelectorAll('#table-container textarea');
+
+        // Verificar si alguno de los campos específicos está vacío
+        for (const textarea of specificTextareas) {
+            if (!textarea.value.trim() && !textarea.readOnly) { // Ignorar si es de solo lectura
+                alert('Por favor, complete todos los campos requeridos.');
+                return;
+            }
+        }
+
+        // Verificar si alguno de los campos de la tabla está vacío
+        for (const textarea of tableTextareas) {
+            if (!textarea.value.trim() && !textarea.readOnly) { // Ignorar si es de solo lectura
+                alert('Por favor, complete todos los campos de la tabla requeridos.');
+                return;
+            }
+        }
+
+        // Si todos los campos están llenos, enviar el formulario
+        document.getElementById('agregarNuevoPlanForm').submit();
+    }
+</script>
