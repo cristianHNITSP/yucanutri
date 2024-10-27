@@ -1,0 +1,110 @@
+@bp.route('/agregar_nuevo_plan', methods=['POST'])
+def agregar_nuevo_plan():
+    # Obtener los datos del formulario
+    low_calorie_foods = request.form.get('low_calorie_foods', '').strip()
+    avoid_foods = request.form.get('avoid_foods', '').strip()
+    allowed_drinks = request.form.get('allowed_drinks', '').strip()
+    nutrition_tips = request.form.get('nutrition_tips', '').strip()
+    supplement_details = request.form.get('supplement_details', '').strip()
+
+    # Obtener los menús para cada tiempo de comida
+    breakfast_menus = [
+        request.form.get('breakfast_menu_1', '').strip(),
+        request.form.get('breakfast_menu_2', '').strip(),
+        request.form.get('breakfast_menu_3', '').strip()
+    ]
+
+    lunch_menus = [
+        request.form.get('lunch_menu_1', '').strip(),
+        request.form.get('lunch_menu_2', '').strip(),
+        request.form.get('lunch_menu_3', '').strip()
+    ]
+
+    dinner_menus = [
+        request.form.get('dinner_menu_1', '').strip(),
+        request.form.get('dinner_menu_2', '').strip(),
+        request.form.get('dinner_menu_3', '').strip()
+    ]
+
+    snack_menus = [
+        request.form.get('snack_menu_1', '').strip(),
+        request.form.get('snack_menu_2', '').strip(),
+        request.form.get('snack_menu_3', '').strip()
+    ]
+
+    dessert_menus = [
+        request.form.get('dessert_menu_1', '').strip(),
+        request.form.get('dessert_menu_2', '').strip(),
+        request.form.get('dessert_menu_3', '').strip()
+    ]
+
+    # Obtener la fecha actual
+    fecha_actual = datetime.now()
+    dia = fecha_actual.day
+    mes = fecha_actual.month
+    anio = fecha_actual.year
+    print(f'Fecha Actual: {dia}-{mes}-{anio}')  # Debug: mostrar fecha actual
+
+    # Validación de la fecha
+    try:
+        fecha_validada = datetime(anio, mes, dia)
+    except ValueError as e:
+        flash('La fecha obtenida es inválida.', 'warning')
+        print(f'Error de fecha: {e}')  # Mensaje de error para depuración
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+    # Diccionario de meses en español
+    meses_espanol = {
+        1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril",
+        5: "Mayo", 6: "Junio", 7: "Julio", 8: "Agosto",
+        9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"
+    }
+
+    # Obtener el mes en español
+    mes_espanol = meses_espanol[mes]
+    print(f'Mes en Español: {mes_espanol}')  # Debug: mostrar mes en español
+
+    # Verificación de información del paciente
+    paciente_info = session.get('paciente_info')
+    if not paciente_info or len(paciente_info) == 0:
+        flash('No se encontró información del paciente.', 'warning')
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+    # Obtener el id del paciente
+    id_paciente = paciente_info[0]
+    print(f'ID Paciente: {id_paciente}')  # Debug: mostrar ID del paciente
+
+    # Depurar e imprimir en consola
+    print(f"Alimentos permitidos con pocas calorías: {low_calorie_foods}")
+    print(f"Comidas a evitar: {avoid_foods}")
+    print(f"Bebidas permitidas: {allowed_drinks}")
+    print(f"Tips de alimentación: {nutrition_tips}")
+    print(f"Suplementos: {supplement_details}")
+    print(f"Menús de desayuno: {breakfast_menus}")
+    print(f"Menús de almuerzo: {lunch_menus}")
+    print(f"Menús de cena: {dinner_menus}")
+    print(f"Menús de snacks: {snack_menus}")
+    print(f"Menús de postre: {dessert_menus}")
+
+    # Consulta para obtener IDs de día, mes y año
+    consulta_ids = """
+        SELECT 
+            (SELECT id_dia FROM public.dia WHERE dia = %s) AS id_dia,
+            (SELECT id_mes FROM public.mes WHERE mes = %s) AS id_mes,
+            (SELECT id_anio FROM public.anio WHERE anio = %s) AS id_anio
+    """
+    ids_info = Config.Read(consulta_ids, (dia, mes_espanol, anio))
+    print(f'IDs Info: {ids_info}')  # Debug: mostrar resultado de la consulta de IDs
+
+    if not ids_info or len(ids_info) == 0:
+        flash('No se pudo obtener los IDs de día, mes o año.', 'warning')
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+    # Desempaquetar los resultados obtenidos
+    id_dia, id_mes, id_anio = ids_info[0]
+    print(f"ID Día: {id_dia}, ID Mes: {id_mes}, ID Año: {id_anio}")  # Debug: mostrar IDs obtenidos
+
+    # Aquí puedes realizar otras operaciones como almacenar los datos en una base de datos
+
+    # Redirigir después de procesar el formulario
+    return redirect(url_for('nutriologo_paciente.index_informacion'))

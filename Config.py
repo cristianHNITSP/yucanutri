@@ -29,7 +29,7 @@ def get_credentials(role):
     return ROLE_CREDENTIALS.get(role, ROLE_CREDENTIALS['visitante'])  # Devuelve visitante si el rol no existe
 
 # Método para realizar CUD: CREATE, UPDATE y DELETE
-def CUD(query, params=None):
+def CUD(query, params=None, is_bulk=False):
     print("<-------------------- Conectando... --------------------")
     connection = None
     try:
@@ -45,17 +45,23 @@ def CUD(query, params=None):
         # Conectar a la base de datos usando las credenciales obtenidas
         connection = psycopg2.connect(
             dbname="nutriologo_db",  # Nombre de la base de datos
-            user = str(credentials['user']),  # Convertir a string  # Usuario según el rol
-            password = str(credentials['password']),  # Convertir a string  # Contraseña según el rol
+            user=str(credentials['user']),  # Convertir a string  # Usuario según el rol
+            password=str(credentials['password']),  # Convertir a string  # Contraseña según el rol
             host="localhost",  # Cambia esto si tu servidor está en otra dirección
             port="5432"  # Puerto por defecto de PostgreSQL
         )
         print(f"conexion a la debe desde: {connection}")
         cursor = connection.cursor()
-        if params:
-            cursor.execute(query, params)
+
+        # Comprobar si es una inserción masiva
+        if is_bulk and isinstance(params, list):
+            cursor.executemany(query, params)  # Ejecutar inserciones masivas
         else:
-            cursor.execute(query)
+            if params:
+                cursor.execute(query, params)
+            else:
+                cursor.execute(query)
+
         connection.commit()  # Confirmar los cambios en la base de datos
         print("<-------------------- Conexión exitosa --------------------")
     except psycopg2.OperationalError as op_err:
@@ -63,7 +69,6 @@ def CUD(query, params=None):
     except psycopg2.ProgrammingError as prog_err:
         print(f"<-------------------- Error de programación: {prog_err} -------------------->")
         flash(f"Error: {prog_err}", 'permiso_denegado')
-
     except psycopg2.DataError as data_err:
         print(f"<-------------------- Error de datos: {data_err} -------------------->")
     except UnicodeDecodeError as decode_err:
@@ -74,6 +79,7 @@ def CUD(query, params=None):
         if connection:
             connection.close()
             print("-------------------- Conexión finalizada -------------------->")
+
 
 def Read(query, params=None):
     print("<-------------------- Conectando... --------------------")
