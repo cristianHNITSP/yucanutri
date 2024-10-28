@@ -32,7 +32,7 @@
 
         @media screen and (max-width: 426px) {
 
-          
+
 
             .mensajes {
                 width: 90% !important;
@@ -109,7 +109,7 @@
             /* Ajuste de altura */
             border-radius: 5px;
             /* Bordes redondeados */
-          
+
         }
 
         /* Scrollbar para navegadores basados en WebKit (Chrome, Safari) */
@@ -183,32 +183,6 @@
                 transform: scale(1.02);
             }
         }
-
-        #routineTable [contenteditable="true"].animate {
-            animation: subtleGrowRoutine 0.2s ease-in-out forwards;
-            /* Aplicar animación */
-        }
-
-        #routineTable [contenteditable="true"] {
-            width: 200px;
-            /* Ancho fijo */
-            height: 50px;
-            /* Altura fija */
-            overflow-y: auto;
-            /* Permite el desplazamiento vertical */
-            overflow-wrap: break-word;
-            /* Rompe las palabras largas para ajustarse */
-            white-space: pre-wrap;
-            /* Permite que el texto se ajuste en varias líneas */
-            max-width: 200px;
-            /* Ancho máximo de las celdas */
-            border: 1px solid #dee2e6;
-            /* Borde para las celdas editables */
-            padding: 5px;
-            /* Espaciado interno */
-            box-sizing: border-box;
-            /* Asegura que el padding esté dentro del ancho definido */
-        }
     </style>
 
     <style>
@@ -219,6 +193,7 @@
         #nutrition-tips,
         #low-calorie-foods {
             resize: none;
+            height: 200px;
             padding: 5px;
             overflow-y: hidden;
             /* Permitir desplazamiento si es necesario */
@@ -768,104 +743,132 @@
                                 <tbody class="table-group-divider">
                                     <tr>
                                         <td style="width: 60%;">
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="width: 60%;">
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="width: 60%;">
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="width: 60%;">
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="width: 60%;">
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="width: 60%;">
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="width: 60%;">
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                         <td>
-                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol != 'nutriologo' }} maxlength="400"></textarea>
+                                            <textarea class="form-control custom-textarea" {{ 'disabled' if rol
+                                                !='nutriologo' }} maxlength="400"></textarea>
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table>                            
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -1133,15 +1136,14 @@
 
 
             {% if plan_alimenticio %}
-            <li><a class="dropdown-item" href="#">Actualizar plan
-                    alimenticio.</a></li>
+            <li><a class="dropdown-item" href="#" onclick="actualizarPlan()">Actualizar plan alimenticio.</a></li>
             {% else %}
             <li><a class="dropdown-item" href="#" onclick="agregarNuevoPlan()">Agregar nuevo plan alimenticio</a></li>
             {% endif %}
             {% if plan_alimenticio %}
             <li><a class="dropdown-item" href="#">Agregar nuevas rutina.</a>
             </li>
-             {% endif %}
+            {% endif %}
         </ul>
     </div>
     {% endif %}
@@ -1161,16 +1163,21 @@
             textarea.style.height = textarea.scrollHeight + 'px';
         }
 
-        // Llama a la función para ajustar la altura de todos los textareas al cargar
-        document.querySelectorAll('textarea').forEach(textarea => {
-            textarea.style.height = textarea.scrollHeight + 'px';
-            textarea.style.maxHeight = '200px'; // Establece una altura máxima
-            textarea.style.overflowY = 'auto';  // Habilita el scrollbar si es necesario
-            textarea.addEventListener('input', function () {
-                autoResize(this);
+        // Llama a la función para ajustar la altura de todos los textareas con la clase 'custom-textarea' al cargar
+        window.addEventListener('load', function () {
+            document.querySelectorAll('.custom-textarea').forEach(textarea => {
+                textarea.style.height = textarea.scrollHeight + 'px'; // Ajusta la altura inicial
+                textarea.style.maxHeight = '200px'; // Establece una altura máxima
+                textarea.style.overflowY = 'auto';  // Habilita el scrollbar si es necesario
+
+                // Agrega el evento para ajustar la altura en la entrada de texto
+                textarea.addEventListener('input', function () {
+                    autoResize(this);
+                });
             });
         });
     </script>
+
 
     <script>
         function toggleSupplementTextarea() {
@@ -1210,7 +1217,6 @@
             observer.observe(textarea);
         });
     </script>
-
 
     <script>
         const contextMenu = document.getElementById('context-menu');

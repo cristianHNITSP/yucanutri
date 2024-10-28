@@ -515,6 +515,11 @@ def agregar_nuevo_plan():
     # Redirigir a la página de información del paciente
     return redirect(url_for('nutriologo_paciente.index_informacion'))
 
+@bp.route('/actualizar_plan', methods=['POST'])
+def actualizar_plan():
+    print('hola mundo')
+    return redirect(url_for('nutriologo_paciente.index_informacion'))
+
 def obtener_datos_paciente(id_paciente):
     """Función para obtener los datos del paciente, su progreso y su plan alimenticio."""
     # Consulta para obtener el progreso más reciente del paciente
