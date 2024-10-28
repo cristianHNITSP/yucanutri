@@ -145,12 +145,23 @@ body {
         width: 70%;
         height: 140px;
         margin-top: 20px;
+
+    }
+
+    .menu__text__wrap {
+        display: flex;
+        flex-direction: column;
+        /* background-color: red; */
+        justify-content: center;
+        align-items: center;
+        height: 100%;
     }
 
 
     .menu__tarjeta__desc {
-        line-height: 140px;
-        font-size: 1.2rem;
+        line-height: 30px;
+        font-size: 1rem;
+        /* background-color: red; */
     }
 
     .menu__correo {
@@ -158,12 +169,12 @@ body {
     }
 
     .menu__cerrar-sesion {
-        gap: 5px;
+        gap: 10px;
         font-size: 14.5px;
         /* background-color: yellow; */
     }
 
-    .menu__cerrar-sesion a{
+    .menu__cerrar-sesion a {
         padding: 2px 5px;
     }
 
