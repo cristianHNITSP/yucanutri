@@ -57,6 +57,17 @@
                     <a href=" {{ url_for('auth.inicio_sesion') }} ">
                         <button class="inicio__btn">Iniciar Sesión</button>
                     </a>
+                    
+                    <div class="profiles-wrap">
+                        <figure class="imagen__profiles">
+                            <img src="{{ url_for('static', filename='img/profile1.jpeg') }}"
+                                class="imagen__profiles--img">
+                        </figure>
+                        <figure class="imagen__profiles">
+                            <img src="{{ url_for('static', filename='img/profile2.avif') }}"
+                                class="imagen__profiles--img">
+                        </figure>
+                    </div>
 
                     <a href="">
                         <button class="inicio__btn d-none">Como Cliente</button>
@@ -79,13 +90,13 @@
 
             <!--Imagen-->
             <figure class="inicio__imagen">
-                <img src="{{ url_for('static', filename='img/fondo5.webp') }}" class="inicio__imagen--img">
+                <img src="{{ url_for('static', filename='img/fondo_inicio.webp') }}" class="inicio__imagen--img">
 
-                <div class="nutriologo__container">
+                <!-- <div class="nutriologo__container">
                     <div class="nutriologo__flex">
                         <figure class="imagen__nutriologo">
                             <img src="{{ url_for('static', filename='img/nutriologo.png') }}"
-                                class="imagen__nutriologo--img">
+                                class="imagen__profiles--img">
                         </figure>
                         <div class="nutriologo__flex__textos">
                             <h2 class="nutriologo__text">Nutricionista</h2>
@@ -94,7 +105,7 @@
 
                     </div>
 
-                </div>
+                </div> -->
             </figure>
         </div>
 

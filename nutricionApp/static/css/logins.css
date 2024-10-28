@@ -214,13 +214,25 @@ body {
 
 /*Responsive*/
 /*tablet*/
-@media screen and (max-width: 1144px) {
-    .form-container {
-        margin-top: -13vh;
-        width: 36%;
-        height: auto;
-        /* background-color: red; */
+@media screen and (max-width: 1367px) {
+
+
+    .form__container--registro {
+        padding: 10px 20px;
+        gap: 8px;
+
     }
+
+    .form__container--registro .input-container .form__inputs {
+        /* background-color: red !important; */
+        margin: 6.5px;
+    }
+
+    /* .form__inputs{
+        background-color: red;
+    } */
+
+
 }
 
 /*Mio*/
