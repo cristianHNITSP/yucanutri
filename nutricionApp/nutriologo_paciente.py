@@ -70,16 +70,24 @@ def index_informacion():
         datos_planes_alimenticios = registro_plan_alimenticio if registro_plan_alimenticio else None
         if not datos_planes_alimenticios:
             flash('No se encontraron planes alimenticios para este paciente.', 'warning')
+        else:
+            # Obtener el ID del plan alimenticio
+            id_plan_alimenticio = registro_plan_alimenticio[0][0]  # Extrae el ID del primer registro del plan alimenticio
+            print("ID del plan alimenticio:", id_plan_alimenticio)  # Imprime para verificación o depuración
+            
+        datos_plan_comidas_semanales = obtener_plan_comidas_semanal_paciente(id_plan_alimenticio)
 
         print('El progreso actual del paciente es: ', registro_progreso)
         print('El plan alimenticio es: ',registro_plan_alimenticio)
+        print('El plan semanal de comida es es: ', datos_plan_comidas_semanales)
 
         # Enviar a la plantilla
         return render_template("index_informacion.html", 
-                               paciente_info=paciente_datos[0] if paciente_datos else paciente_info, 
-                               progreso=datos_progreso, 
-                               plan_alimenticio=datos_planes_alimenticios, 
-                               rol=rol)
+                                paciente_info=paciente_datos[0] if paciente_datos else paciente_info, 
+                                progreso=datos_progreso, 
+                                plan_alimenticio=datos_planes_alimenticios,
+                                plan_comidas_semanales=datos_plan_comidas_semanales,
+                                rol=rol)
 
     except Exception as e:
         print(f"Error al conectar a la base de datos: {e}")
@@ -458,7 +466,7 @@ def agregar_nuevo_plan():
             (alimento_permitido, comidas_evitar, bebidas_permitidas, tips_alimentacion, suplementos, id_paciente, id_dia, id_mes, id_anio)
         )
 
-                # Verificar si ya existe un plan alimenticio para el paciente
+        # Verificar si ya existe un plan alimenticio para el paciente
         Verificar_existe_un_plan_alimenticio = """
             SELECT id_plan_alimenticio 
             FROM public.plan_alimenticio 
@@ -517,11 +525,187 @@ def agregar_nuevo_plan():
 
 @bp.route('/actualizar_plan', methods=['POST'])
 def actualizar_plan():
-    print('hola mundo')
+
+    # Obtener los datos del formulario con validación para campos requeridos
+    alimento_permitido = request.form.get('low_calorie_foods', '').strip()
+    comidas_evitar = request.form.get('avoid_foods', '').strip()
+    bebidas_permitidas = request.form.get('allowed_drinks', '').strip()
+    tips_alimentacion = request.form.get('nutrition_tips', '').strip() or "sin tips alimenticios"  # Usar "sin tips" si está vacío
+    suplementos = request.form.get('supplement_details', '').strip() or "sin suplementos"  # Usar "sin suplementos" si está vacío
+
+    # Validar id_plan
+    id_plan_alimenticio = request.form.get('plan_id', '').strip()
+    if not id_plan_alimenticio or not id_plan_alimenticio.isdigit() or int(id_plan_alimenticio) <= 0:
+        flash('El ID del plan no puede estar vacío y debe ser un entero positivo.', 'warning')
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
+    
+    # Validar que id_plan no esté vacío y sea un número entero
+    if id_plan_alimenticio and id_plan_alimenticio.isdigit():  # Verifica que no esté vacío y que contenga solo dígitos
+        id_plan_alimenticio = int(id_plan_alimenticio)  # Convertir a entero
+    else:
+        # Manejar el caso en que id_plan no sea válido
+        flash("El ID del plan debe ser un número entero válido.", "warning")
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+
+    id_tiempos_comida = request.form.getlist('plan_semanal_comida_id[]')
+
+    # Validar campos obligatorios
+    if not alimento_permitido or not comidas_evitar or not bebidas_permitidas or len(id_tiempos_comida) < 5:
+        flash('Por favor, complete todos los campos obligatorios.', 'warning')
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
+    
+        # Asignar los tiempos de comida
+    id_tiempo_desayuno = id_tiempos_comida[0]
+    id_tiempo_almuerzo = id_tiempos_comida[1]
+    id_tiempo_durante_entrenamiento = id_tiempos_comida[2]
+    id_tiempo_terminar_entrenar = id_tiempos_comida[3]
+    id_tiempo_cena = id_tiempos_comida[4]
+
+    # Menús para cada tiempo de comida
+    menus_actualizar = [
+        {
+            'id_tiempo': id_tiempo_desayuno,
+            'menu1': request.form.get('menu1_desayuno', '').strip(),
+            'menu2': request.form.get('menu2_desayuno', '').strip(),
+            'menu3': request.form.get('menu3_desayuno', '').strip(),
+        },
+        {
+            'id_tiempo': id_tiempo_almuerzo,
+            'menu1': request.form.get('menu1_almuerzo', '').strip(),
+            'menu2': request.form.get('menu2_almuerzo', '').strip(),
+            'menu3': request.form.get('menu3_almuerzo', '').strip(),
+        },
+        {
+            'id_tiempo': id_tiempo_durante_entrenamiento,
+            'menu1': request.form.get('menu1_durante_entrenamiento', '').strip(),
+            'menu2': request.form.get('menu2_durante_entrenamiento', '').strip(),
+            'menu3': request.form.get('menu3_durante_entrenamiento', '').strip(),
+        },
+        {
+            'id_tiempo': id_tiempo_terminar_entrenar,
+            'menu1': request.form.get('menu1_terminar_entrenar', '').strip(),
+            'menu2': request.form.get('menu2_terminar_entrenar', '').strip(),
+            'menu3': request.form.get('menu3_terminar_entrenar', '').strip(),
+        },
+        {
+            'id_tiempo': id_tiempo_cena,
+            'menu1': request.form.get('menu1_cena', '').strip(),
+            'menu2': request.form.get('menu2_cena', '').strip(),
+            'menu3': request.form.get('menu3_cena', '').strip(),
+        }
+    ]
+    # Imprimir en consola
+    print("identificador del plan", id_plan_alimenticio)
+    print("Alimento permitido:", alimento_permitido)
+    print("Comidas a evitar:", comidas_evitar)
+    print("Bebidas permitidas:", bebidas_permitidas)
+    print("Tips de alimentación:", tips_alimentacion)
+    print("Suplementos:", suplementos)
+
+    print('Diccionario de manus: ', menus_actualizar)
+
+    # Validar que todos los menús estén completos
+    if any(not menu['id_tiempo'] or not menu['menu1'] or not menu['menu2'] or not menu['menu3'] for menu in menus_actualizar):
+        flash("Todos los menús deben estar completos.", "danger")
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
+    
+    # Obtener fecha actual y IDs de día, mes, año
+    fecha_actual = datetime.now()
+    dia, mes, anio = fecha_actual.day, fecha_actual.month, fecha_actual.year
+    meses_espanol = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
+    mes_espanol = meses_espanol[mes]
+
+    # Consulta para obtener IDs de día, mes y año
+    consulta_ids = """
+        SELECT 
+            (SELECT id_dia FROM public.dia WHERE dia = %s) AS id_dia,
+            (SELECT id_mes FROM public.mes WHERE mes = %s) AS id_mes,
+            (SELECT id_anio FROM public.anio WHERE anio = %s) AS id_anio
+    """
+    ids_info = Config.Read(consulta_ids, (dia, mes_espanol, anio))
+    if not ids_info:
+        flash('No se pudo obtener los IDs de día, mes o año.', 'warning')
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+    id_dia, id_mes, id_anio = ids_info[0]
+
+        # Definir los parámetros para la actualización
+    params = (
+        alimento_permitido,  # %s
+        comidas_evitar,      # %s
+        bebidas_permitidas,  # %s
+        tips_alimentacion,   # %s
+        suplementos,         # %s
+        id_dia,      # %s
+        id_mes,     # %s
+        id_anio,    # %s
+        id_plan_alimenticio  # %s (esto es el ID que quieres actualizar)
+    )
+
+    try:
+        Actualizar_plan_alimenticio = """
+        UPDATE public.plan_alimenticio
+        SET
+            alimento_permitido = %s,
+            comidas_evitar = %s,
+            bebidas_permitidas = %s,
+            tips_alimentacion = %s,
+            suplementos = %s,
+            id_dia_id_dia = %s,
+            id_mes_dia_mes = %s,
+            id_anio_id_anio = %s
+        WHERE
+            id_plan_alimenticio = %s;
+        """
+        # Ejecutar la consulta de actualización
+        Config.CUD(Actualizar_plan_alimenticio, params)
+
+        # Lista para almacenar los datos de inserción
+        Guardar_diccionario_de_menus = []
+
+        for menu in menus_actualizar:
+            # Extraer los datos necesarios
+            id_tiempo_de_comida = menu['id_tiempo']
+            menu1 = menu['menu1']
+            menu2 = menu['menu2']
+            menu3 = menu['menu3']
+
+            # Agregar los valores a la lista
+            Guardar_diccionario_de_menus.append((menu1, menu2, menu3, id_tiempo_de_comida))
+
+        # Consulta de inserción masiva
+        Actualizar_semana_plan_comida = """
+            UPDATE public.semana_plan_comida
+            SET
+                menu_uno_lunes_viernes = %s,
+                menu_dos_martes_jueves = %s,
+                menu_tres_miercoles_sabado = %s
+            WHERE
+                id_comida = %s;
+        """
+
+        # Ejecutar la consulta para insertar todos los registros
+        Config.CUD(
+            Actualizar_semana_plan_comida,
+            Guardar_diccionario_de_menus, 
+            is_bulk=True  # Asegúrate de que tu función CUD soporte actualizaciones masivas
+        )
+
+        print("Actualización exitosa del plan alimenticio.")
+        flash("Plan alimenticio actualizado correctamente.", "success")  # Mensaje de éxito
+    except Exception as e:
+        # Captura cualquier excepción y muestra un mensaje de error
+        print(f"Error durante la actualización del plan alimenticio: {e}")
+        flash("Error durante la actualización del plan alimenticio.", "error")  # Mensaje de error
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+
     return redirect(url_for('nutriologo_paciente.index_informacion'))
 
 def obtener_datos_paciente(id_paciente):
     """Función para obtener los datos del paciente, su progreso y su plan alimenticio."""
+    
     # Consulta para obtener el progreso más reciente del paciente
     Consultar_el_progreso_mas_reciente = """
         SELECT 
@@ -588,8 +772,58 @@ def obtener_datos_paciente(id_paciente):
     registro_progreso = Config.Read(Consultar_el_progreso_mas_reciente, (id_paciente,))
     registro_plan_alimenticio = Config.Read(consulta_su_plan_alimentcio_del_paciente, (id_paciente,))
 
+    # Asegurarse de que la consulta devolvió resultados para el plan alimenticio
+    if registro_plan_alimenticio:
+        # Extraer el primer dato de la primera fila
+        id_plan_alimenticio = registro_plan_alimenticio[0][0]
+        print("ID del plan alimenticio:", id_plan_alimenticio)
+
+        # Consulta para obtener comidas por semana usando el id del plan alimenticio
+        Consultar_comidas_por_semana_paciente = """
+            SELECT 
+                id_comida, 
+                tiempos_de_comida, 
+                menu_uno_lunes_viernes, 
+                menu_dos_martes_jueves, 
+                menu_tres_miercoles_sabado
+            FROM 
+                public.semana_plan_comida
+            WHERE 
+                id_plan_alimenticio_plan_alimenticio = %s
+            LIMIT 5;
+        """
+    # Retorna los datos del progreso, el plan alimenticio y el diccionario de comidas
     return registro_progreso, registro_plan_alimenticio
 
+def obtener_plan_comidas_semanal_paciente(id_plan_alimenticio):
+
+    Consultar_comidas_por_semana_paciente = """
+    SELECT 
+        id_comida, 
+        menu_uno_lunes_viernes, 
+        menu_dos_martes_jueves, 
+        menu_tres_miercoles_sabado
+    FROM 
+        public.semana_plan_comida
+    WHERE 
+        id_plan_alimenticio_plan_alimenticio = %s
+    LIMIT 5;
+    """
+
+    registro_comidas_por_semana_paciente = Config.Read(Consultar_comidas_por_semana_paciente, (id_plan_alimenticio,))
+
+    comidas_dict = {
+        "comidas": [
+            {
+                "id_comida": row[0],
+                "menu_uno_lunes_viernes": row[1],
+                "menu_dos_martes_jueves": row[2],
+                "menu_tres_miercoles_sabado": row[3],
+            }
+            for row in registro_comidas_por_semana_paciente
+        ]
+    }
+    return comidas_dict
 
 
 
