@@ -43,6 +43,7 @@
 
     <style>
         .table-planes {
+            background-color: rgba(255, 255, 255, 0.8);
             width: 120vh;
         }
 
@@ -272,6 +273,8 @@
 
     <style>
         .scroll-container {
+            border-radius: 10px;
+        
             max-height: 82vh;
             /* El contenedor ocupará como máximo el 80% de la altura de la ventana */
 
@@ -653,7 +656,7 @@
                             data-bs-target="#nav-routines" type="button" role="tab" aria-controls="nav-routines"
                             aria-selected="false">Rutinas de Entrenamiento</button>
                         {% else %}
-                        {% if plan_alimenticio %}
+                        {% if has_plan_alimentacion %}
                         <button class="nav-link" id="nav-progress-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-progress" type="button" role="tab" aria-controls="nav-progress"
                             aria-selected="false">Progresos</button>
@@ -662,7 +665,7 @@
                         <button class="nav-link active" id="nav-plans-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-plans" type="button" role="tab" aria-controls="nav-plans"
                             aria-selected="true">Plan Alimenticio</button>
-                        {% if plan_alimenticio %}
+                        {% if has_plan_alimentacion %}
                         <button class="nav-link" id="nav-routines-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-routines" type="button" role="tab" aria-controls="nav-routines"
                             aria-selected="false">Rutinas de Entrenamiento</button>
@@ -720,6 +723,7 @@
 
     </div>
 
+    {% if rol == 'nutriologo' %}
     <!-- Modal agregar rutinas de entramiento -->
     <div class="modal fade modal-lg" id="addRoutineModal" tabindex="-1" data-bs-backdrop="static"
         aria-labelledby="addRoutineModalLabel" aria-hidden="true">
@@ -915,37 +919,6 @@
         </div>
     </div>
 
-    <!-- Modal para ingresar los datos del usuario -->
-    <div class="modal fade" id="userModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="userModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="userModalLabel">Ingrese los datos del paciente</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="userForm">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="username" placeholder="Nombre" required>
-                            <label for="username">Nombre</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="email" placeholder="Correo electrónico"
-                                required>
-                            <label for="email">Correo electrónico</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary">Aceptar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {% if rol == 'nutriologo' %}
     <!-- Offcanvas para Agregar Progreso -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-add" aria-labelledby="offcanvas-addLabel"
         style="width: 500px;">
@@ -1164,19 +1137,21 @@
     <!-- Menú dropdown oculto -->
     <div class="dropdown" id="context-menu" style="display: none; position: absolute;">
         <ul class="dropdown-menu show" aria-labelledby="dropdownMenuButton">
-            {% if plan_alimenticio %}
+            {% if has_plan_alimentacion %}
             <li><a class="dropdown-item" href="#" onclick="showOffcanvas('addProgress')">Agregar nuevos progresos</a>
             </li>
+            {% if progreso %}
             <li><a class="dropdown-item" href="#" onclick="showOffcanvas('editProgress')">Editar progresos</a></li>
             {% endif %}
-
-
-            {% if plan_alimenticio %}
-            <li><a class="dropdown-item" href="#" onclick="actualizarPlan()">Actualizar plan alimenticio.</a></li>
-            {% else %}
-            <li><a class="dropdown-item" href="#" onclick="agregarNuevoPlan()">Agregar nuevo plan alimenticio</a></li>
             {% endif %}
-            {% if plan_alimenticio %}
+
+
+            {% if has_plan_alimentacion %}
+            <button class="dropdown-item" type="submit" form="actualizarPlanForm">Actualizar plan alimenticio</button>
+            {% else %}
+            <button class="dropdown-item" type="submit" form="agregarNuevoPlanForm">Agregar nuevo plan alimenticio</button>
+            {% endif %}
+            {% if has_plan_alimentacion %}
             <li><a class="dropdown-item" href="#">Agregar nuevas rutina.</a>
             </li>
             {% endif %}

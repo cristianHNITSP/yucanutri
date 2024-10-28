@@ -97,24 +97,34 @@ def Read(query, params=None):
         # Conectar a la base de datos usando las credenciales obtenidas
         connection = psycopg2.connect(
             dbname="nutriologo_db",  # Nombre de la base de datos
-            user = str(credentials['user']),  # Convertir a string  # Usuario según el rol
-            password = str(credentials['password']),  # Convertir a string  # Contraseña según el rol
+            user=str(credentials['user']),  # Usuario según el rol
+            password=str(credentials['password']),  # Contraseña según el rol
             host="localhost",  # Cambia esto si tu servidor está en otra dirección
             port="5432"  # Puerto por defecto de PostgreSQL
         )
-        print(f"conexion a la debe desde: {connection}")
+        print(f"Conexión a la base de datos: {connection}")
         cursor = connection.cursor()
+        
+        # Ejecutar la consulta
         if params:
             cursor.execute(query, params)
         else:
             cursor.execute(query)
+        
         rows = cursor.fetchall()
         results = [list(row) for row in rows]  # Convertir cada fila a una lista
         print("<-------------------- Conexión exitosa --------------------")
-        for result in results: # mostrar los resultados
-            print(result)
+        
+        # Mostrar los resultados
+        if results:
+            for result in results:
+                print(result)
+        else:
+            print("No se encontraron resultados.")
+        
         print("---------------------------------------->")
         return results
+
     except psycopg2.OperationalError as op_err:
         print(f"<-------------------- Error de operación: {op_err} -------------------->")
     except psycopg2.ProgrammingError as prog_err:
@@ -125,7 +135,7 @@ def Read(query, params=None):
         print(f"<-------------------- Error de codificación: {decode_err} -------------------->")
     except Exception as ex:
         print(f"<-------------------- Error inesperado: {ex} -------------------->")
-        return None
+        return []  # Devolver lista vacía en lugar de None
     finally:
         if connection:
             connection.close()

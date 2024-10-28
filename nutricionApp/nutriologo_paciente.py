@@ -7,35 +7,33 @@ bp = Blueprint('nutriologo_paciente', __name__, url_prefix='/nutriologo_paciente
 
 @bp.route('/index_informacion')
 def index_informacion():
-    # Verificar si el rol está en la sesión
     rol = session.get('rol')
     if not rol:
         flash('Debes iniciar sesión para acceder a esta página.', 'error')
         return redirect(url_for('auth.inicio_sesion'))
-
+    
     paciente_info = None
-    paciente_datos = None
-    registro_progreso = None
-    registro_plan_alimenticio = None
+    paciente_datos = []  # Inicializado como una lista vacía
+    registro_progreso = []  # Cambiado a lista vacía
+    registro_plan_alimenticio = []  # Cambiado a lista vacía
+    has_plan_alimentacion = False
+    plan_comidas_semanales = {"comidas": []}
 
     try:
         if rol == 'nutriologo':
-            # Obtener el ID del paciente desde la sesión
             paciente_info = session.get('paciente_info')
             if not paciente_info:
                 flash('No se encontró información del paciente.', 'error')
-                return render_template("index_informacion.html", rol=rol)
+                return redirect(url_for('nutriologo.cambiar_paciente'))
 
-            id_paciente = paciente_info[0]  # Extraemos el ID del paciente
+            id_paciente = paciente_info[0]
 
         elif rol == 'paciente':
-            # Obtener el correo del paciente desde la sesión
             correo_electronico = session.get('correo')
             if not correo_electronico:
                 flash('No se encontró el correo electrónico.', 'error')
-                return render_template("index_informacion.html", rol=rol)
+                return render_template("index_informacion.html", rol=rol, has_plan_alimentacion=has_plan_alimentacion, plan_comidas_semanales=plan_comidas_semanales)
 
-            # Consulta para obtener los datos del paciente
             Consultar_datos_paciente = """
                 SELECT 
                     id_paciente, 
@@ -48,51 +46,73 @@ def index_informacion():
                 FROM 
                     public.paciente 
                 WHERE 
-                     %s = ANY(correo_electronico)
+                    %s = ANY(correo_electronico)
             """
             paciente_datos = Config.Read(Consultar_datos_paciente, (correo_electronico,))
-            if paciente_datos:
-                id_paciente = paciente_datos[0][0]  # Asumimos que el id_paciente es el primer elemento
-            else:
+            
+            if not paciente_datos:
                 flash('No se encontraron datos del paciente.', 'warning')
-                return render_template("index_informacion.html", rol=rol)
+                return render_template("index_informacion.html", rol=rol, has_plan_alimentacion=has_plan_alimentacion, plan_comidas_semanales=plan_comidas_semanales)
+
+            id_paciente = paciente_datos[0][0]
 
         # Obtener datos del paciente, progreso y plan alimenticio
         registro_progreso, registro_plan_alimenticio = obtener_datos_paciente(id_paciente)
 
-        # Procesar resultados para enviar a la plantilla
-        datos_progreso = None
-        if registro_progreso:
-            datos_progreso = registro_progreso[0]  # Obtener el primer registro de progreso
-        else:
-            flash('No se encontraron registros de progreso para este paciente.', 'warning')
+        # Verificar si hay datos de progreso
+        if not registro_progreso:
+            flash('No se encontraron datos de progreso para este paciente.', 'warning')
 
+        # Verificar si hay datos del plan alimenticio
+        if not registro_plan_alimenticio:
+            flash('No se encontraron datos del plan alimenticio para este paciente.', 'warning')
+
+        # Asegúrate de que registro_progreso y registro_plan_alimenticio no estén vacíos antes de acceder a sus elementos
+        datos_progreso = registro_progreso[0] if registro_progreso else None
         datos_planes_alimenticios = registro_plan_alimenticio if registro_plan_alimenticio else None
-        if not datos_planes_alimenticios:
-            flash('No se encontraron planes alimenticios para este paciente.', 'warning')
+
+        if datos_planes_alimenticios:
+            has_plan_alimentacion = True
+            id_plan_alimenticio = datos_planes_alimenticios[0][0]
+
+            # Obtener el plan de comidas semanales
+            try:
+                plan_comidas_semanales = obtener_plan_comidas_semanal_paciente(id_plan_alimenticio)
+                if not plan_comidas_semanales.get("comidas"):
+                    flash('No se encontró el plan de comidas semanales.', 'warning')
+            except Exception as e:
+                print(f"Error al obtener el plan de comidas: {e}")
+                flash('Error al recuperar el plan de comidas, se devolverá una lista vacía.', 'warning')
+                plan_comidas_semanales = {"comidas": []}  # Devuelve un dict con comidas vacías
+
         else:
-            # Obtener el ID del plan alimenticio
-            id_plan_alimenticio = registro_plan_alimenticio[0][0]  # Extrae el ID del primer registro del plan alimenticio
-            print("ID del plan alimenticio:", id_plan_alimenticio)  # Imprime para verificación o depuración
-            
-        datos_plan_comidas_semanales = obtener_plan_comidas_semanal_paciente(id_plan_alimenticio)
+            flash('No se encontraron planes alimenticios para este paciente.', 'warning')
 
+        print('¿Se encontraron los planes alimenticios semanales?:', has_plan_alimentacion)   
+        print('Datos del paciente actual: ', paciente_datos)    
         print('El progreso actual del paciente es: ', registro_progreso)
-        print('El plan alimenticio es: ',registro_plan_alimenticio)
-        print('El plan semanal de comida es es: ', datos_plan_comidas_semanales)
+        print('El plan alimenticio es: ', registro_plan_alimenticio)
+        print('El plan semanal de comida es: ', plan_comidas_semanales)
 
-        # Enviar a la plantilla
         return render_template("index_informacion.html", 
                                 paciente_info=paciente_datos[0] if paciente_datos else paciente_info, 
                                 progreso=datos_progreso, 
                                 plan_alimenticio=datos_planes_alimenticios,
-                                plan_comidas_semanales=datos_plan_comidas_semanales,
+                                plan_comidas_semanales=plan_comidas_semanales,
+                                has_plan_alimentacion=has_plan_alimentacion,  
                                 rol=rol)
 
     except Exception as e:
         print(f"Error al conectar a la base de datos: {e}")
         flash('Ha ocurrido un error al recuperar la información. Por favor, inténtalo de nuevo.', 'error')
-        return render_template("index_informacion.html", rol=rol)
+        return render_template("index_informacion.html", 
+                                rol=rol, 
+                                paciente_info=paciente_datos[0] if paciente_datos else paciente_info, 
+                                has_plan_alimentacion=has_plan_alimentacion, 
+                                plan_comidas_semanales=plan_comidas_semanales)
+
+
+
 
 @bp.route('/crear_nuevo_progreso', methods=['POST'])
 def crear_nuevo_progreso():
@@ -120,6 +140,38 @@ def crear_nuevo_progreso():
                                         pantorrilla, porcentaje_grasa, porcentaje_musculo]):
             flash('Ha ingresado un valor invalido, intentelo nuevamente.', 'warning')
             return redirect(url_for('nutriologo_paciente.index_informacion'))
+        
+                # Validar límites
+        if peso > 700:
+            flash('El peso no puede exceder los 700kg.', 'warning')
+            return redirect(url_for('nutriologo_paciente.index_informacion'))
+        
+        if porcentaje_grasa > 70 or porcentaje_musculo > 70:
+            flash('Los porcentajes de grasa y músculo no pueden exceder el 70%.', 'warning')
+            return redirect(url_for('nutriologo_paciente.index_informacion'))
+        
+        medidas_brazos = [
+            abdomen, brazo_der_relajado, brazo_der_contraido, brazo_izq_relajado, 
+            brazo_izq_contraido
+        ]
+        
+        medidas_piernas = [
+            pierna_der_relajada, pierna_der_contraida, 
+            pierna_izq_relajada, pierna_izq_contraida
+        ]
+
+                # Definimos las categorías de medidas y sus límites máximos, junto con el mensaje a mostrar
+        categorias_medidas = [
+            (medidas_brazos, 80, 'Las medidas referentes a brazos no pueden exceder los 80cm.'),
+            (medidas_piernas, 120, 'Las medidas referentes a piernas no pueden exceder los 120cm.'),
+            ([pantorrilla], 100, 'La medida de la pantorrilla no puede exceder los 100cm.')
+        ]
+
+        # Iteramos sobre cada categoría de medida, su límite y mensaje de error
+        for medidas, limite, mensaje in categorias_medidas:
+            if any(medida > limite for medida in medidas):
+                flash(mensaje, 'warning')
+                return redirect(url_for('nutriologo_paciente.index_informacion'))
 
         # Verificación de información del paciente
         paciente_info = session.get('paciente_info')
@@ -287,6 +339,37 @@ def editar_progreso():
                                          pantorrilla, porcentaje_grasa, porcentaje_musculo]):
             flash('Ha ingresado un valor invalido, intentelo nuevamente.', 'warning')
             return redirect(url_for('nutriologo_paciente.index_informacion'))
+        
+        if peso > 700:
+            flash('El peso no puede exceder los 700kg.', 'warning')
+            return redirect(url_for('nutriologo_paciente.index_informacion'))
+        
+        if porcentaje_grasa > 70 or porcentaje_musculo > 70:
+            flash('Los porcentajes de grasa y músculo no pueden exceder el 70%.', 'warning')
+            return redirect(url_for('nutriologo_paciente.index_informacion'))
+        
+        medidas_brazos = [
+            abdomen, brazo_der_relajado, brazo_der_contraido, brazo_izq_relajado, 
+            brazo_izq_contraido
+        ]
+        
+        medidas_piernas = [
+            pierna_der_relajada, pierna_der_contraida, 
+            pierna_izq_relajada, pierna_izq_contraida
+        ]
+
+                # Definimos las categorías de medidas y sus límites máximos, junto con el mensaje a mostrar
+        categorias_medidas = [
+            (medidas_brazos, 80, 'Las medidas referentes a brazos no pueden exceder los 80cm.'),
+            (medidas_piernas, 120, 'Las medidas referentes a piernas no pueden exceder los 120cm.'),
+            ([pantorrilla], 100, 'La medida de la pantorrilla no puede exceder los 100cm.')
+        ]
+
+        # Iteramos sobre cada categoría de medida, su límite y mensaje de error
+        for medidas, limite, mensaje in categorias_medidas:
+            if any(medida > limite for medida in medidas):
+                flash(mensaje, 'warning')
+                return redirect(url_for('nutriologo_paciente.index_informacion'))
 
         # Verificación de información del paciente
         paciente_info = session.get('paciente_info')
@@ -354,6 +437,17 @@ def agregar_nuevo_plan():
     suplementos = request.form.get('supplement_details', '').strip() or "sin suplementos"  # Usar "sin suplementos" si está vacío
 
     tiempos_comida = request.form.getlist('tiempos_comida[]')
+
+    max_length = 1000
+    if (
+        len(alimento_permitido) > max_length or
+        len(comidas_evitar) > max_length or
+        len(bebidas_permitidas) > max_length or
+        len(tips_alimentacion) > max_length or
+        len(suplementos) > max_length
+    ):
+        flash('Cada campo debe contener un máximo de 1000 caracteres.', 'warning')
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
 
     # Validar campos obligatorios
     if not alimento_permitido or not comidas_evitar or not bebidas_permitidas or len(tiempos_comida) < 5:
@@ -532,6 +626,17 @@ def actualizar_plan():
     bebidas_permitidas = request.form.get('allowed_drinks', '').strip()
     tips_alimentacion = request.form.get('nutrition_tips', '').strip() or "sin tips alimenticios"  # Usar "sin tips" si está vacío
     suplementos = request.form.get('supplement_details', '').strip() or "sin suplementos"  # Usar "sin suplementos" si está vacío
+        # Validar la longitud máxima de los campos
+    max_length = 1000
+    if (
+        len(alimento_permitido) > max_length or
+        len(comidas_evitar) > max_length or
+        len(bebidas_permitidas) > max_length or
+        len(tips_alimentacion) > max_length or
+        len(suplementos) > max_length
+    ):
+        flash('Cada campo debe contener un máximo de 1000 caracteres.', 'warning')
+        return redirect(url_for('nutriologo_paciente.index_informacion'))
 
     # Validar id_plan
     id_plan_alimenticio = request.form.get('plan_id', '').strip()
@@ -796,7 +901,6 @@ def obtener_datos_paciente(id_paciente):
     return registro_progreso, registro_plan_alimenticio
 
 def obtener_plan_comidas_semanal_paciente(id_plan_alimenticio):
-
     Consultar_comidas_por_semana_paciente = """
     SELECT 
         id_comida, 
@@ -809,21 +913,33 @@ def obtener_plan_comidas_semanal_paciente(id_plan_alimenticio):
         id_plan_alimenticio_plan_alimenticio = %s
     LIMIT 5;
     """
+    
+    try:
+        # Ejecuta la consulta y obtiene los registros
+        registro_comidas_por_semana_paciente = Config.Read(Consultar_comidas_por_semana_paciente, (id_plan_alimenticio,))
+        
+        # Si no hay registros, se retorna un dict con lista vacía
+        if not registro_comidas_por_semana_paciente:
+            return {"comidas": []}
 
-    registro_comidas_por_semana_paciente = Config.Read(Consultar_comidas_por_semana_paciente, (id_plan_alimenticio,))
+        # Crear el diccionario de comidas
+        comidas_dict = {
+            "comidas": [
+                {
+                    "id_comida": row[0],
+                    "menu_uno_lunes_viernes": row[1],
+                    "menu_dos_martes_jueves": row[2],
+                    "menu_tres_miercoles_sabado": row[3],
+                }
+                for row in registro_comidas_por_semana_paciente
+            ]
+        }
+        return comidas_dict
 
-    comidas_dict = {
-        "comidas": [
-            {
-                "id_comida": row[0],
-                "menu_uno_lunes_viernes": row[1],
-                "menu_dos_martes_jueves": row[2],
-                "menu_tres_miercoles_sabado": row[3],
-            }
-            for row in registro_comidas_por_semana_paciente
-        ]
-    }
-    return comidas_dict
+    except Exception as e:
+        print(f"Error al obtener el plan de comidas: {e}")
+        return {"comidas": []}  # Retorna un dict vacío si ocurre un error
+
 
 
 

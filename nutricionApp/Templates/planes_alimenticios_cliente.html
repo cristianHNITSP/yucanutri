@@ -1,5 +1,5 @@
 <!-- Comidas -->
-{% if plan_alimenticio %}
+{% if has_plan_alimentacion %}
 <form id="actualizarPlanForm" action="{{ url_for('nutriologo_paciente.actualizar_plan') }}" method="POST">
     {% else %}
     <form id="agregarNuevoPlanForm" action="{{ url_for('nutriologo_paciente.agregar_nuevo_plan') }}" method="POST">
@@ -26,123 +26,133 @@
                         <tr>
                             <td>Desayuno</td>
                             <input type="hidden" name="tiempos_comida[]" value="Desayuno">
-                            <input type="hidden" name="plan_semanal_comida_id[]" value="{{ plan_comidas_semanales.comidas[0].id_comida }}">
+                            <input type="hidden" name="plan_semanal_comida_id[]"
+                                value="{{ plan_comidas_semanales.comidas[0].id_comida if plan_comidas_semanales.comidas|length > 0 else '' }}">
 
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu1_desayuno" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400">{{ plan_comidas_semanales.comidas[0].menu_uno_lunes_viernes }}</textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[0].menu_uno_lunes_viernes if plan_comidas_semanales.comidas|length > 0 else '' }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu2_desayuno" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400">{{ plan_comidas_semanales.comidas[0].menu_dos_martes_jueves }}</textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[0].menu_dos_martes_jueves if plan_comidas_semanales.comidas|length > 0 else '' }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu3_desayuno" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400">{{ plan_comidas_semanales.comidas[0].menu_tres_miercoles_sabado }}</textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[0].menu_tres_miercoles_sabado if plan_comidas_semanales.comidas|length > 0 else '' }}</textarea>
                             </td>
                         </tr>
                         <tr>
                             <td>Almuerzo</td>
                             <input type="hidden" name="tiempos_comida[]" value="Almuerzo">
-                            <input type="hidden" name="plan_semanal_comida_id[]" value="{{ plan_comidas_semanales.comidas[1].id_comida }}">
+                            <input type="hidden" name="plan_semanal_comida_id[]"
+                                value="{{ plan_comidas_semanales.comidas[1].id_comida if plan_comidas_semanales.comidas|length > 1 else '' }}">
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu1_almuerzo" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400">{{ plan_comidas_semanales.comidas[1].menu_uno_lunes_viernes }}</textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[1].menu_uno_lunes_viernes if plan_comidas_semanales.comidas|length > 1 else '' }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu2_almuerzo" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400">{{ plan_comidas_semanales.comidas[1].menu_dos_martes_jueves }}</textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[1].menu_dos_martes_jueves if plan_comidas_semanales.comidas|length > 1 else '' }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu3_almuerzo" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400">{{ plan_comidas_semanales.comidas[1].menu_tres_miercoles_sabado }}</textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[1].menu_tres_miercoles_sabado if plan_comidas_semanales.comidas|length > 1 else '' }}</textarea>
                             </td>
                         </tr>
                         <tr>
                             <td>Durante el entrenamiento</td>
                             <input type="hidden" name="tiempos_comida[]" value="Durante el entrenamiento">
-                            <input type="hidden" name="plan_semanal_comida_id[]" value="{{ plan_comidas_semanales.comidas[2].id_comida }}">
+                            <input type="hidden" name="plan_semanal_comida_id[]"
+                                value="{{ plan_comidas_semanales.comidas[2].id_comida if plan_comidas_semanales.comidas|length > 2 else '' }}">
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu1_durante_entrenamiento" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400">{{ plan_comidas_semanales.comidas[2].menu_uno_lunes_viernes }}</textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[2].menu_uno_lunes_viernes if plan_comidas_semanales.comidas|length > 2 else '' }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu2_durante_entrenamiento" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400">{{ plan_comidas_semanales.comidas[2].menu_dos_martes_jueves }}</textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[2].menu_dos_martes_jueves if plan_comidas_semanales.comidas|length > 2 else '' }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu3_durante_entrenamiento" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400">{{ plan_comidas_semanales.comidas[2].menu_tres_miercoles_sabado }}</textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[2].menu_tres_miercoles_sabado if plan_comidas_semanales.comidas|length > 2 else '' }}</textarea>
                             </td>
                         </tr>
                         <tr>
                             <td>Terminar de entrenar</td>
                             <input type="hidden" name="tiempos_comida[]" value="Terminar de entrenar">
-                            <input type="hidden" name="plan_semanal_comida_id[]" value="{{ plan_comidas_semanales.comidas[3].id_comida }}">
+                            <input type="hidden" name="plan_semanal_comida_id[]"
+                                value="{{ plan_comidas_semanales.comidas[3].id_comida if plan_comidas_semanales.comidas|length > 3 else '' }}">
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu1_terminar_entrenar" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400">{{ plan_comidas_semanales.comidas[3].menu_uno_lunes_viernes }}</textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[3].menu_uno_lunes_viernes if plan_comidas_semanales.comidas|length > 3 else '' }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu2_terminar_entrenar" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400">{{ plan_comidas_semanales.comidas[3].menu_dos_martes_jueves }}</textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[3].menu_dos_martes_jueves if plan_comidas_semanales.comidas|length > 3 else '' }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu3_terminar_entrenar" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400">{{ plan_comidas_semanales.comidas[3].menu_tres_miercoles_sabado }}</textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[3].menu_tres_miercoles_sabado if plan_comidas_semanales.comidas|length > 3 else '' }}</textarea>
                             </td>
                         </tr>
                         <tr>
                             <td>Cena</td>
                             <input type="hidden" name="tiempos_comida[]" value="Cena">
-                            <input type="hidden" name="plan_semanal_comida_id[]" value="{{ plan_comidas_semanales.comidas[4].id_comida }}">
+                            <input type="hidden" name="plan_semanal_comida_id[]"
+                                value="{{ plan_comidas_semanales.comidas[4].id_comida if plan_comidas_semanales.comidas|length > 4 else '' }}">
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
-                                    name="menu1_cena" {{ 'disabled' if rol !='nutriologo' }} maxlength="400">{{ plan_comidas_semanales.comidas[4].menu_uno_lunes_viernes }}</textarea>
+                                    name="menu1_cena" {{ 'disabled' if rol !='nutriologo' }}
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[4].menu_uno_lunes_viernes if plan_comidas_semanales.comidas|length > 4 else '' }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
-                                    name="menu2_cena" {{ 'disabled' if rol !='nutriologo' }} maxlength="400">{{ plan_comidas_semanales.comidas[4].menu_dos_martes_jueves }}</textarea>
+                                    name="menu2_cena" {{ 'disabled' if rol !='nutriologo' }}
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[4].menu_dos_martes_jueves if plan_comidas_semanales.comidas|length > 4 else '' }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
-                                    name="menu3_cena" {{ 'disabled' if rol !='nutriologo' }} maxlength="400">{{ plan_comidas_semanales.comidas[4].menu_tres_miercoles_sabado }}</textarea>
+                                    name="menu3_cena" {{ 'disabled' if rol !='nutriologo' }}
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[4].menu_tres_miercoles_sabado if plan_comidas_semanales.comidas|length > 4 else '' }}</textarea>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+
         </div>
 
 
         <hr class="my-4"> <!-- Separador horizontal -->
+        {% if plan_alimenticio %}
         {% for item in plan_alimenticio %}
 
         <input type="hidden" name="plan_id" value="{{ item[0] }}">
@@ -303,72 +313,139 @@
 
         </div>
         {% endfor %}
+        {% else %}
+        <!-- Alimentos Permitidos con Pocas Calorías -->
+        <div class="col-12 mt-4 mb-4">
+            <h5>
+                <button class="btn text-start" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseAlimentos" aria-expanded="false" aria-controls="collapseAlimentos">
+                    Alimentos Permitidos con Pocas Calorías
+                </button>
+            </h5>
+            <div id="collapseAlimentos" class="collapse">
+                <div class="row ms-1">
+                    <div class="col-12 col-md-7">
+                        <label for="low-calorie-foods" class="form-label">Escriba los alimentos
+                            permitidos con pocas calorías para el paciente:</label>
+                        <textarea class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                            id="low-calorie-foods" name="low_calorie_foods" rows="1" maxlength="1000"
+                            required></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <hr class="my-4"> <!-- Separador horizontal -->
+
+        <!-- Comidas a Evitar -->
+        <div class="col-12 mt-4 mb-4">
+            <h5>
+                <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComidasEvitar"
+                    aria-expanded="false" aria-controls="collapseComidasEvitar">
+                    Comidas a Evitar
+                </button>
+            </h5>
+            <div id="collapseComidasEvitar" class="collapse">
+                <div class="row ms-1">
+                    <div class="col-12 col-md-7">
+                        <label for="avoid-foods" class="form-label">Escriba las comidas a evitar del
+                            paciente:</label>
+                        <textarea
+                            class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2"
+                            id="avoid-foods" name="avoid_foods" rows="1" maxlength="1000" required></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4"> <!-- Separador horizontal -->
+
+        <!-- Bebidas Permitidas -->
+        <div class="col-12 mt-4 mb-4">
+            <h5>
+                <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBebidasPermitidas"
+                    aria-expanded="false" aria-controls="collapseBebidasPermitidas">
+                    Bebidas Permitidas
+                </button>
+            </h5>
+            <div id="collapseBebidasPermitidas" class="collapse">
+                <div class="row ms-1">
+                    <div class="col-12 col-md-7">
+                        <label for="allowed-drinks" class="form-label">Escriba las bebidas permitidas
+                            del paciente:</label>
+                        <textarea class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                            id="allowed-drinks" name="allowed_drinks" rows="1" maxlength="1000" required></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4"> <!-- Separador horizontal -->
+
+        <!-- Tips de Alimentación -->
+        <div class="col-12 mt-4 mb-4">
+            <h5>
+                <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTipsAlimentacion"
+                    aria-expanded="false" aria-controls="collapseTipsAlimentacion">
+                    Tips de Alimentación
+                </button>
+            </h5>
+            <div id="collapseTipsAlimentacion" class="collapse">
+                <div class="row ms-1">
+                    <div class="col-12 col-md-7">
+                        <label for="nutrition-tips" class="form-label">Escriba los tips de alimentación
+                            para el paciente:</label>
+                        <textarea
+                            class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2"
+                            id="nutrition-tips" name="nutrition_tips" rows="1" maxlength="1000"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4"> <!-- Separador horizontal -->
+
+        <!-- Suplementos -->
+        <div class="col-12 mt-4 mb-4">
+            <h5>
+                <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSuplementos"
+                    aria-expanded="false" aria-controls="collapseSuplementos">
+                    Suplementos
+                </button>
+            </h5>
+            <div id="collapseSuplementos" class="collapse">
+                <div class="container mt-4 bg-transparent">
+                    <div class="form-group">
+                        <label class="form-label">¿El paciente desea ingerir suplementos?</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="supplementRadio" id="supplementYes"
+                                value="yes" onclick="toggleSupplementTextarea()" checked>
+                            <label class="form-check-label" for="supplementYes">
+                                Sí, si desea consumir suplementos
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="supplementRadio" id="supplementNo"
+                                value="no" onclick="toggleSupplementTextarea()">
+                            <label class="form-check-label" for="supplementNo">
+                                No, no desea consumir suplementos
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Textarea para suplementos -->
+                    <div id="supplementTextarea" class="row mt-3" style="display: none;">
+                        <div class="col-12 col-md-7">
+                            <label for="supplement-details" class="form-label">Escriba los suplementos que desee el
+                                paciente:</label>
+                            <textarea
+                                class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2"
+                                id="supplement-details" name="supplement_details" rows="1" maxlength="1000"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </form>
 
 
-    <script>
-        function agregarNuevoPlan() {
-            // Obtener todos los <textarea> específicos
-            const specificTextareas = [
-                document.getElementById('low-calorie-foods'),
-                document.getElementById('avoid-foods'),
-                document.getElementById('allowed-drinks'),
-            ];
-
-            // Obtener todos los <textarea> dentro de la tabla
-            const tableTextareas = document.querySelectorAll('#table-container textarea');
-
-            // Verificar si alguno de los campos específicos está vacío
-            for (const textarea of specificTextareas) {
-                if (!textarea.value.trim() && !textarea.readOnly) { // Ignorar si es de solo lectura
-                    alert('Por favor, complete todos los campos requeridos.');
-                    return;
-                }
-            }
-
-            // Verificar si alguno de los campos de la tabla está vacío
-            for (const textarea of tableTextareas) {
-                if (!textarea.value.trim() && !textarea.readOnly) { // Ignorar si es de solo lectura
-                    alert('Por favor, complete todos los campos de la tabla requeridos.');
-                    return;
-                }
-            }
-
-            // Si todos los campos están llenos, enviar el formulario
-            document.getElementById('agregarNuevoPlanForm').submit();
-        }
-    </script>
-
-    <script>
-        function actualizarPlan() {
-            // Obtener todos los <textarea> específicos
-            const specificTextareas = [
-                document.getElementById('low-calorie-foods'),
-                document.getElementById('avoid-foods'),
-                document.getElementById('allowed-drinks'),
-            ];
-
-            // Obtener todos los <textarea> dentro de la tabla
-            const tableTextareas = document.querySelectorAll('#table-container textarea');
-
-            // Verificar si alguno de los campos específicos está vacío
-            for (const textarea of specificTextareas) {
-                if (!textarea.value.trim() && !textarea.readOnly) { // Ignorar si es de solo lectura
-                    alert('Por favor, complete todos los campos requeridos.');
-                    return;
-                }
-            }
-
-            // Verificar si alguno de los campos de la tabla está vacío
-            for (const textarea of tableTextareas) {
-                if (!textarea.value.trim() && !textarea.readOnly) { // Ignorar si es de solo lectura
-                    alert('Por favor, complete todos los campos de la tabla requeridos.');
-                    return;
-                }
-            }
-
-            // Si todos los campos están llenos, enviar el formulario
-            document.getElementById('actualizarPlanForm').submit();
-        }
-    </script>

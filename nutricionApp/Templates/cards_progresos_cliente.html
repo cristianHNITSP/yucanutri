@@ -436,7 +436,11 @@
 </div> -->
 {% else %}
 <div class=" text-center mt-4 mb-4">
+    {% if has_plan_alimentacion %}
+    <h5>Aun no tienes ningun progreso registrado. Por favor, espera al nutriologo.</h5>
+    {% else %}
     <h5>El paciente no tiene nigun progreso registrado.</h5>
+    {% endif %}
 </div>
 
 {% endif %}
