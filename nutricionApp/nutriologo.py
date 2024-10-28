@@ -63,8 +63,49 @@ def registrarPaciente():
             flash('Número de teléfono debe ser un entero positivo.', 'error')
             return redirect(url_for('nutriologo.registrarPaciente'))
 
-        # generar contraseña hasheada
+          # generar contraseña hasheada
         contrasena_encriptada = generate_password_hash(contrasena)
+
+        try:
+            correo_ya_existe = Config.Read(
+                """
+                SELECT
+                    *
+                FROM
+                    paciente
+                WHERE
+                    %s = ANY(correo_electronico);
+                """,
+                (correo_electronico,)  # Usar el correo como parámetro
+            )
+            telefono_ya_existe = Config.Read(
+                """
+                SELECT
+                    *
+                FROM
+                    paciente
+                WHERE
+                    telefono = %s;
+                """,
+                (telefono,)  # Usar el correo como parámetro
+            )
+        except Exception as e:
+            flash(f"Error al consultar la base de datos: {e}", "error")
+            return redirect(url_for('nutriologo.registrarPaciente'))
+
+        # Comprobar si el usuario ya existe
+        # cur.execute(
+        #     "SELECT * FROM login WHERE Nombre = %s AND ID_Login != %s", (user, id))
+        # existing_user = cur.fetchone()
+
+        if correo_ya_existe:
+            flash("El correo electrónico ya está registrado", "error_email")
+            return redirect(url_for('nutriologo.registrarPaciente'))
+
+        elif telefono_ya_existe:
+            print("telefono_ya_existe")
+            flash("El telefono ya existe. Por favor, elija otro", "error_cel")
+            return redirect(url_for('nutriologo.registrarPaciente'))
 
         try:
             # Consulta para obtener el ID del nutriologo
@@ -125,7 +166,7 @@ def registrarPaciente():
                         """,
                         params
                     )
-
+                    print("has entrado aqui")
                     flash('Paciente registrado exitosamente', 'success')
 
                     return redirect(url_for('nutriologo.salaNutriologo'))
@@ -202,16 +243,17 @@ def salaNutriologo():
         # Si se encontró al paciente, guardar los datos en la sesión (opcional)
         session['paciente_info'] = paciente_info[0]  # Guardar en la sesión
         print(f"Datos guardados en la sesión: {session['paciente_info']}")
+        flash(f"Ver datos del paciente con el correo: {patient_email}", "success")
 
-        # Redirigir a 'nutriologo_paciente.index_informacion' con los datos del paciente
+# Redirigir a 'nutriologo_paciente.index_informacion' con los datos del paciente
         return redirect(url_for('nutriologo_paciente.index_informacion'))
 
     # Si el método es GET, simplemente renderiza la plantilla
     return render_template("sala_nutriologo.html")
 
 
-@bp.route('/cerrar_sesion_paciente')
-def cerrar_sesion_paciente():
+@bp.route('/cambiar_paciente')
+def cambiar_paciente():
     # Limpiar solo la clave 'paciente_info' de la sesión
     session.pop('paciente_info', None)
 

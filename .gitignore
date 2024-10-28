@@ -29,3 +29,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 nutricionApp/__pycache__/superusuario.cpython-312.pyc
+
+#directorios de maquina virtual
+venv/

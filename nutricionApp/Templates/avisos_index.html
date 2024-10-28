@@ -1,0 +1,14 @@
+{% with messages = get_flashed_messages(with_categories=True) %}
+{% if messages %}
+<div class="container w-50 mt-5 mb-0 bg-transparent ">
+    {% for category, message in messages %}
+    {% set alert_class = category if category in ['success', 'danger', 'warning', 'info'] else 'primary' %}
+    <div class="alert alert-{{ alert_class }} alert-dismissible fade show mb-2" role="alert">
+        <strong class="text-center">{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+<script src="../static/Js/eliminar_alertas.js"></script>
+{% endif %}
+{% endwith %}
