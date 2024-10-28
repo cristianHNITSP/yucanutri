@@ -53,7 +53,6 @@ body {
     border-radius: 50px;
     margin-left: -12px;
     position: relative;
-    background-color: red;
 }
 
 .inicio__imagen--img {
@@ -229,7 +228,7 @@ body {
         margin-left: 0px;
     }
 
-    .inicio__desc{
+    .inicio__desc {
         font-size: 1.4rem;
     }
 
@@ -238,7 +237,7 @@ body {
         margin-top: 20px;
     }
 
-    .profiles-wrap{
+    .profiles-wrap {
         display: none;
     }
 }
@@ -252,7 +251,10 @@ body {
 
     .inicio {
         /* background-color: red; */
+        /* background-color: rgba(111, 245, 158, 0.572); */
         height: 100vh;
+        overflow: hidden;
+        position: relative;
     }
 
     .inicio__contenedor {
@@ -306,4 +308,40 @@ body {
         margin-left: 15px;
     }
 
+    .imagenes-decora {
+        width: 100px;
+        position: absolute;
+        top: 0;
+        transform: scale(.8);
+        /* opacity: .85; */
+        /* background-color: red; */
+    }
+
+    .decora--container .imagenes-decora:nth-child(1) {
+        transform: scale(.5);
+        /* opacity: .8; */
+    }
+
+    .decora--container .imagenes-decora:nth-child(2) {
+        right: -2.2rem;
+        top: 20px;
+        transform: scale(.6) rotate(-40deg);
+        opacity: .8;
+    }
+
+    .decora--container .imagenes-decora:nth-child(3) {
+        left: -50px;
+        top: 37%;
+    }
+
+    .decora--container .imagenes-decora:nth-child(4) {
+        top: 55%;
+        right: -2.5rem;
+        /* background-color: red; */
+    }
+
+    .decora--container .imagenes-decora:nth-child(5) {
+        top: 85%;
+        left: 2.5rem;
+    }
 }

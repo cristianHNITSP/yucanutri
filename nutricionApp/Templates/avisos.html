@@ -1,30 +1,28 @@
-<!-- {% with acceso_denegado_registro_usuario = get_flashed_messages(category_filter=["acceso_denegado_registro_usuario"]) %}
-{% if acceso_denegado_registro_usuario %}
-<div class="alert alert-danger alert-dismissible fade show position-absolute top-0 mt-4" role="alert">
-    <p>{{acceso_denegado_registro_usuario[0]}}</p>
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>
-<script src="../static/Js/eliminar_alertas.js"></script>
-{% endif %}
-{% endwith %} -->
-
-
-<!-- <div class="container"> -->
 {% with messages = get_flashed_messages(with_categories=True) %}
 {% if messages %}
-{% for category, message in messages %}
-{% set alert_class = category if category in ['success', 'danger', 'warning', 'info'] else 'primary' %}
 <style>
     .top-0 {
         z-index: 1000;
+        left: 25%;
+    }
+
+    @media screen and (max-width:500px) {
+
+        .mensajes {
+            left: calc(50vw - 40%);
+            width: 80% !important;
+        }
     }
 </style>
-<div class="alert alert-{{ alert_class }} alert-dismissible fade show position-absolute top-0 mt-5" role="alert">
-    <strong>{{ message }}</strong>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="container w-50 mt-5 mb-0 bg-transparent position-absolute top-0  mensajes">
+    {% for category, message in messages %}
+    {% set alert_class = category if category in ['success', 'danger', 'warning', 'info'] else 'primary' %}
+    <div class="alert alert-{{ alert_class }} alert-dismissible   fade show mb-2 pos" role="alert">
+        <strong class="text-center">{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
 </div>
 <script src="../static/Js/eliminar_alertas.js"></script>
-{% endfor %}
 {% endif %}
 {% endwith %}
-<!-- </div> -->
