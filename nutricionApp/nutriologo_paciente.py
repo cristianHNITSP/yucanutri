@@ -3,25 +3,31 @@ import Config as Config
 from werkzeug.security import generate_password_hash
 
 
-bp = Blueprint('nutriologo_paciente', __name__, url_prefix='/nutriologo_paciente')
+bp = Blueprint('nutriologo_paciente', __name__,
+               url_prefix='/nutriologo_paciente')
 
 
 @bp.route('/index_informacion')
 def index_informacion():
+  
+
     # Verificar si el rol está en la sesión
     rol = session.get('rol')
     if not rol:
         flash('Debes iniciar sesión para acceder a esta página.', 'error')
-        return redirect(url_for('auth.inicio_sesion'))  # Redirige a la página de inicio de sesión
+        # Redirige a la página de inicio de sesión
+        return redirect(url_for('auth.inicio_sesion'))
 
     # Paso 1: Obtener el ID del paciente desde la sesión
-    paciente_info = session.get('paciente_info')  # Suponiendo que paciente_info ya está guardado
+    # Suponiendo que paciente_info ya está guardado
+    paciente_info = session.get('paciente_info')
     if not paciente_info:
         print("Error: No se encontró información del paciente en la sesión.")
         flash('No se encontró información del paciente.', 'error')
         return render_template("index_informacion.html")
 
-    id_paciente = paciente_info[0]  # Extraemos el ID del paciente (primer elemento)
+    # Extraemos el ID del paciente (primer elemento)
+    id_paciente = paciente_info[0]
     print(f"ID del paciente obtenido: {id_paciente}")
 
     # Paso 2: Realizar la consulta para obtener el registro más reciente de progreso
@@ -56,7 +62,7 @@ def index_informacion():
             p.id_paciente_paciente = %s
         LIMIT 1;  -- Limitamos a 1 para obtener el más reciente
         """
-    
+
     Consultar_los_4_progresos_mas_recientes = """
         SELECT 
             p.id_progreso,
@@ -93,8 +99,11 @@ def index_informacion():
 
     # Paso 3: Ejecutar la consulta
     try:
-        registro_progreso = Config.Read(Consultar_el_progreso_mas_reciente, (id_paciente,))  # Llamamos a Config.Read pasándole el ID del paciente
-        print(f"Consulta ejecutada con éxito para el paciente ID: {id_paciente}")
+        # Llamamos a Config.Read pasándole el ID del paciente
+        registro_progreso = Config.Read(
+            Consultar_el_progreso_mas_reciente, (id_paciente,))
+        print(f"Consulta ejecutada con éxito para el paciente ID: {
+              id_paciente}")
 
         # Depurar el resultado de la consulta
         print("Resultado de la consulta registro_progreso:", registro_progreso)
@@ -108,14 +117,17 @@ def index_informacion():
             # Paso 5: Pasar los datos a la plantilla
             return render_template("index_informacion.html", paciente_info=paciente_info, progreso=datos_progreso)
         else:
-            print("Advertencia: No se encontraron registros de progreso para este paciente.")
-            flash('No se encontraron registros de progreso para este paciente.', 'warning')
+            print(
+                "Advertencia: No se encontraron registros de progreso para este paciente.")
+            flash(
+                'No se encontraron registros de progreso para este paciente.', 'warning')
             return render_template("index_informacion.html", paciente_info=paciente_info)
 
     except Exception as e:
         print(f"Error al conectar a la base de datos: {e}")
         flash('Ha ocurrido un error al recuperar la información del progreso. Por favor, inténtalo de nuevo.', 'error')
         return render_template("index_informacion.html", paciente_info=paciente_info)
+
 
 @bp.route('/crear_nuevo_progreso')
 def crear_nuevo_progreso():

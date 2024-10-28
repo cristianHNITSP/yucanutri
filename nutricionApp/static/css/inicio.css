@@ -3,6 +3,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
+@font-face {
+    font-family: "Neue Haas Grotesk Display Pro";
+    src: url(../tipografia/NeueHaasDisplayRoman.ttf);
+}
+
 * {
     margin: 0px;
     padding: 0px;
@@ -14,11 +19,6 @@ body {
     font-family: 'Raleway', sans-serif;
 }
 
-.inicio__titulo {
-    font-family: 'Neue Haas Grotesk Display Pro', Arial, Helvetica, sans-serif;
-    font-weight: 500;
-    text-transform: capitalize;
-}
 
 
 .inicio__contenedor {
@@ -69,10 +69,14 @@ body {
     width: 45%;
     color: #343434;
     margin-left: 40px;
+    font-family: 'Raleway', sans-serif;
 }
 
 .inicio__titulo {
     font-size: 4.7rem;
+    font-family: 'Neue Haas Grotesk Display Pro', Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    text-transform: capitalize;
 }
 
 .inicio__titulo--salud {
@@ -163,3 +167,55 @@ body {
     margin: 0;
     /* color: #909090; */
 }
+
+
+/*Responsive*/
+/*Celulares*/
+@media screen and (max-width: 425px) {
+    .inicio__imagen {
+        display: none;
+    }
+
+    .inicio {
+        /* background-color: red; */
+        height: 100vh;
+    }
+
+    .inicio__contenedor {
+        flex-direction: column;
+        height: 100vh;
+        width: 100%;
+        /* background-color: red; */
+        /* background-color: #e5eeec; */
+    }
+
+    .inicio__textos {
+        /* background-color: palegreen; */
+        width: auto;
+        align-items: center;
+        margin: 0 auto;
+        /* height: auto; */
+    }
+
+    .inicio__titulo {
+        font-size: 2.3rem;
+        text-align: center;
+        /* background-color: red; */
+        /* font-weight: normal; */
+        font-weight: bold;
+    }
+
+    .inicio__desc {
+        font-size: 1.34rem;
+        font-weight: 200;
+        line-height: 1.8rem;
+        text-align: center;
+    }
+
+    .nutriologo__container {
+        display: none;
+    }
+
+}
+
+
