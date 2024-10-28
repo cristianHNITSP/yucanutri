@@ -12,8 +12,8 @@
                 </button>
             </h5>
 
-            <div class="table-responsive" id="table-container">
-                <table class="table table-striped table-hover">
+            <div class="table-responsive table-responsive-planes" id="table-container">
+                <table class="table table-striped table-hover table-planes">
                     <thead class="table-dark">
                         <tr>
                             <th scope="col" class="text-center align-top">Tiempos de comida</th>
@@ -26,108 +26,114 @@
                         <tr>
                             <td>Desayuno</td>
                             <input type="hidden" name="tiempos_comida[]" value="Desayuno">
+                            <input type="hidden" name="plan_semanal_comida_id[]" value="{{ plan_comidas_semanales.comidas[0].id_comida }}">
+
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu1_desayuno" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400"></textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[0].menu_uno_lunes_viernes }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu2_desayuno" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400"></textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[0].menu_dos_martes_jueves }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu3_desayuno" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400"></textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[0].menu_tres_miercoles_sabado }}</textarea>
                             </td>
                         </tr>
                         <tr>
                             <td>Almuerzo</td>
                             <input type="hidden" name="tiempos_comida[]" value="Almuerzo">
+                            <input type="hidden" name="plan_semanal_comida_id[]" value="{{ plan_comidas_semanales.comidas[1].id_comida }}">
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu1_almuerzo" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400"></textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[1].menu_uno_lunes_viernes }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu2_almuerzo" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400"></textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[1].menu_dos_martes_jueves }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu3_almuerzo" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400"></textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[1].menu_tres_miercoles_sabado }}</textarea>
                             </td>
                         </tr>
                         <tr>
                             <td>Durante el entrenamiento</td>
                             <input type="hidden" name="tiempos_comida[]" value="Durante el entrenamiento">
+                            <input type="hidden" name="plan_semanal_comida_id[]" value="{{ plan_comidas_semanales.comidas[2].id_comida }}">
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu1_durante_entrenamiento" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400"></textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[2].menu_uno_lunes_viernes }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu2_durante_entrenamiento" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400"></textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[2].menu_dos_martes_jueves }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu3_durante_entrenamiento" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400"></textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[2].menu_tres_miercoles_sabado }}</textarea>
                             </td>
                         </tr>
                         <tr>
                             <td>Terminar de entrenar</td>
                             <input type="hidden" name="tiempos_comida[]" value="Terminar de entrenar">
+                            <input type="hidden" name="plan_semanal_comida_id[]" value="{{ plan_comidas_semanales.comidas[3].id_comida }}">
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu1_terminar_entrenar" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400"></textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[3].menu_uno_lunes_viernes }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu2_terminar_entrenar" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400"></textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[3].menu_dos_martes_jueves }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu3_terminar_entrenar" {{ 'disabled' if rol !='nutriologo' }}
-                                    maxlength="400"></textarea>
+                                    maxlength="400">{{ plan_comidas_semanales.comidas[3].menu_tres_miercoles_sabado }}</textarea>
                             </td>
                         </tr>
                         <tr>
                             <td>Cena</td>
                             <input type="hidden" name="tiempos_comida[]" value="Cena">
+                            <input type="hidden" name="plan_semanal_comida_id[]" value="{{ plan_comidas_semanales.comidas[4].id_comida }}">
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
-                                    name="menu1_cena" {{ 'disabled' if rol !='nutriologo' }} maxlength="400"></textarea>
+                                    name="menu1_cena" {{ 'disabled' if rol !='nutriologo' }} maxlength="400">{{ plan_comidas_semanales.comidas[4].menu_uno_lunes_viernes }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
-                                    name="menu2_cena" {{ 'disabled' if rol !='nutriologo' }} maxlength="400"></textarea>
+                                    name="menu2_cena" {{ 'disabled' if rol !='nutriologo' }} maxlength="400">{{ plan_comidas_semanales.comidas[4].menu_dos_martes_jueves }}</textarea>
                             </td>
                             <td>
                                 <textarea
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
-                                    name="menu3_cena" {{ 'disabled' if rol !='nutriologo' }} maxlength="400"></textarea>
+                                    name="menu3_cena" {{ 'disabled' if rol !='nutriologo' }} maxlength="400">{{ plan_comidas_semanales.comidas[4].menu_tres_miercoles_sabado }}</textarea>
                             </td>
                         </tr>
                     </tbody>
