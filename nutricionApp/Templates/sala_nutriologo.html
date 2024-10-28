@@ -21,32 +21,36 @@
 </head>
 
 <body class="animate__animated animate__fadeIn">
-    <!--Pagina principal-->
-    <nav class="menu__nav">
-        <div class="menu__cerrar-sesion">
-            <p class="menu__correo">{{ session['correo'] }} </p>
-            <a class="menu__cerrar-sesion" href="  {{ url_for('cerrar_sesion.cerrar_sesion_nutriologo') }}">Cerrar sesion</a>
-            <a href="{{ url_for('nutriologo.editar_datos_nutriologo') }}">Editar Perfil</a>
-        </div>
-    </nav>
+
 
     <section class="menu">
         {% include 'avisos.html' %}
 
-
-
-        <h1 class="menu__titulo">Menú de acciones</h1>
-
         <div class="menu__container">
-            <a href=" {{ url_for('nutriologo.registrarPaciente') }} " class="menu__tarjeta menu__tarjeta--2">
-                <p class="menu__tarjeta__desc">Registrar Paciente</p>
-            </a>
-
-            <!-- Enlace que abrirá el modal -->
-            <a href="#" class="menu__tarjeta " data-bs-toggle="modal" data-bs-target="#modalPlanes">
-                <p class="menu__tarjeta__desc">Planes alimenticios</p>
-            </a>
-
+            <!--Pagina principal-->
+            <nav class="menu__nav">
+                <div class="menu__cerrar-sesion">
+                    <!-- <p class="menu__correo">{{ session['correo'] }} </p> -->
+                    <a href="/">Inicio</a>
+                    <a class="" href="  {{ url_for('cerrar_sesion.cerrar_sesion_nutriologo') }}">Cerrar
+                        sesion</a>
+                    <a href="{{ url_for('nutriologo.editar_datos_nutriologo') }}">Editar perfil</a>
+                </div>
+            </nav>
+            <h1 class="menu__titulo">Menú de acciones</h1>
+            <div class="menu__panells">
+                <a href=" {{ url_for('nutriologo.registrarPaciente') }} " class="menu__tarjeta ">
+                    <div class="menu__text__wrap">
+                        <p class="menu__tarjeta__desc">Registrar Pacientes</p>
+                    </div>
+                </a>
+                <!-- Enlace que abrirá el modal -->
+                <a href="#" class="menu__tarjeta " data-bs-toggle="modal" data-bs-target="#modalPlanes">
+                    <div class="menu__text__wrap">
+                        <p class="menu__tarjeta__desc">Planes y Rutinas</p>
+                    </div>
+                </a>
+            </div>
         </div>
 
     </section> <!--Fin Hero-->
