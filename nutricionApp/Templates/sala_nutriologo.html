@@ -40,11 +40,15 @@
             <h1 class="menu__titulo">Menú de acciones</h1>
             <div class="menu__panells">
                 <a href=" {{ url_for('nutriologo.registrarPaciente') }} " class="menu__tarjeta ">
-                    <p class="menu__tarjeta__desc">Registrar Pacientes</p>
+                    <div class="menu__text__wrap">
+                        <p class="menu__tarjeta__desc">Registrar Pacientes</p>
+                    </div>
                 </a>
                 <!-- Enlace que abrirá el modal -->
                 <a href="#" class="menu__tarjeta " data-bs-toggle="modal" data-bs-target="#modalPlanes">
-                    <p class="menu__tarjeta__desc">Planes y Rutinas</p>
+                    <div class="menu__text__wrap">
+                        <p class="menu__tarjeta__desc">Planes y Rutinas</p>
+                    </div>
                 </a>
             </div>
         </div>
