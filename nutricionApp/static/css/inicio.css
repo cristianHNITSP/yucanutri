@@ -221,6 +221,10 @@ body {
     /* color: #909090; */
 }
 
+.decora--container  {
+    display: none;
+}
+
 @media screen and (max-width:1367px) {
     .inicio__imagen {
         height: 73vh;
