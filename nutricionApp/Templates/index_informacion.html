@@ -10,6 +10,8 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index_informacion.css') }}" />
+
 
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_box" />
@@ -18,7 +20,7 @@
 
     <style>
         body {
-            background-image: url("{{ url_for('static', filename='img/plan_alimentacion.webp') }}");
+            /* background-image: url("{{ url_for('static', filename='img/plan_alimentacion.webp') }}"); */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -124,56 +126,17 @@
 
         #table-container textarea.custom-textarea {
             background-color: #f0f0f000;
-            /* Ancho fijo */
-            height: 200px;
-            /* Altura fija */
+            height: auto;
+            /* form-sizing: content; */
             overflow-wrap: break-word;
-            /* Rompe las palabras largas para ajustarse */
             white-space: pre-wrap;
-            /* Permite que el texto se ajuste en varias líneas */
             max-width: 30vh;
-            /* Ancho máximo de las celdas */
             border: 1px solid #dee2e600;
-            /* Borde para los textareas */
             padding: 5px;
-            /* Espaciado interno */
-            box-sizing: border-box;
-            /* Asegura que el padding esté dentro del ancho definido */
             resize: none;
-
-            /* Permitir desplazamiento si es necesario */
-            /* Ajuste de altura */
             border-radius: 5px;
-            /* Bordes redondeados */
+            overflow-y: hidden;
 
-        }
-
-        /* Scrollbar para navegadores basados en WebKit (Chrome, Safari) */
-        textarea::-webkit-scrollbar {
-            width: 10px;
-            /* Ancho del scrollbar */
-        }
-
-        textarea::-webkit-scrollbar-thumb {
-            background-color: #888;
-            /* Color del thumb (parte que se mueve) */
-            border-radius: 10px;
-            /* Bordes redondeados del thumb */
-        }
-
-        textarea::-webkit-scrollbar-track {
-            background: #f0f0f0;
-            /* Color del track (fondo del scrollbar) */
-            border-radius: 10px;
-            /* Bordes redondeados del track */
-        }
-
-        /* Scrollbar para Firefox */
-        textarea {
-            scrollbar-width: thin;
-            /* Scrollbar delgado */
-            scrollbar-color: #888 #f0f0f0;
-            /* Color del thumb y del track */
         }
     </style>
 
@@ -274,7 +237,7 @@
     <style>
         .scroll-container {
             border-radius: 10px;
-        
+
             max-height: 82vh;
             /* El contenedor ocupará como máximo el 80% de la altura de la ventana */
 
@@ -609,7 +572,7 @@
 <body>
     {% include 'avisos_index.html' %}
 
-    <div class="container col-10 mt-5 animate__animated animate__fadeIn" id="progress-tbody">
+    <div class="container col-10 mt-5  animate__animated animate__fadeIn" id="progress-tbody">
 
         <div class="row">
             {% if paciente_info %}
@@ -1149,7 +1112,8 @@
             {% if has_plan_alimentacion %}
             <button class="dropdown-item" type="submit" form="actualizarPlanForm">Actualizar plan alimenticio</button>
             {% else %}
-            <button class="dropdown-item" type="submit" form="agregarNuevoPlanForm">Agregar nuevo plan alimenticio</button>
+            <button class="dropdown-item" type="submit" form="agregarNuevoPlanForm">Agregar nuevo plan
+                alimenticio</button>
             {% endif %}
             {% if has_plan_alimentacion %}
             <li><a class="dropdown-item" href="#">Agregar nuevas rutina.</a>
