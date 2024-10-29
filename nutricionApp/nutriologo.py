@@ -217,6 +217,7 @@ def salaNutriologo():
                     p.fecha_nacimiento,
                     p.sexo,
                     p.correo_electronico[1] AS correo,
+                    p.telefono,
                     r.rol
                 FROM
                     public.paciente p

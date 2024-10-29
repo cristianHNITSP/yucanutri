@@ -40,8 +40,9 @@ def index_informacion():
                     nombres, 
                     ap_paterno, 
                     ap_materno, 
-                    fecha_nacimiento, 
+                    fecha_nacimiento,
                     sexo, 
+                    correo_electronico[1] AS correo,
                     telefono
                 FROM 
                     public.paciente 
