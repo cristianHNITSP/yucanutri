@@ -10,6 +10,8 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index_informacion.css') }}" />
+
 
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_box" />
@@ -27,7 +29,8 @@
         .container {
             /* Añadir un color de fondo semitransparente para que el contenido se destaque */
             background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
         }
 
         @media screen and (max-width: 426px) {
@@ -44,7 +47,7 @@
     <style>
         .table-planes {
             background-color: rgba(255, 255, 255, 0.8);
-            width: 120vh;
+            /* width: 120vh; */
         }
 
         /* Estilos aplicados únicamente a la tabla dentro del #table-container */
@@ -125,7 +128,7 @@
         #table-container textarea.custom-textarea {
             background-color: #f0f0f000;
             /* Ancho fijo */
-            height: 200px;
+            height: auto;
             /* Altura fija */
             overflow-wrap: break-word;
             /* Rompe las palabras largas para ajustarse */
@@ -274,7 +277,7 @@
     <style>
         .scroll-container {
             border-radius: 10px;
-        
+
             max-height: 82vh;
             /* El contenedor ocupará como máximo el 80% de la altura de la ventana */
 
@@ -1149,7 +1152,8 @@
             {% if has_plan_alimentacion %}
             <button class="dropdown-item" type="submit" form="actualizarPlanForm">Actualizar plan alimenticio</button>
             {% else %}
-            <button class="dropdown-item" type="submit" form="agregarNuevoPlanForm">Agregar nuevo plan alimenticio</button>
+            <button class="dropdown-item" type="submit" form="agregarNuevoPlanForm">Agregar nuevo plan
+                alimenticio</button>
             {% endif %}
             {% if has_plan_alimentacion %}
             <li><a class="dropdown-item" href="#">Agregar nuevas rutina.</a>

@@ -1,0 +1,45 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    /* outline: 1px solid red; */
+}
+
+body {
+    background-image: url(../img/fondo_logins.webp) !important;
+
+}
+
+.container {
+    width: 90%;
+    min-height: 80vh;
+    margin-bottom: 10vh !important;
+}
+
+#table-container {
+    margin-top: 20px;
+}
+/* 
+.custom-textarea {
+    resize: both;
+} */
+
+
+.table-planes{
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0;
+}
+
+
+@media screen and (max-width: 425px) {
+    .container {
+        width: 100%;
+        min-height: 80vh;
+        padding: 5px;
+        margin: 10px;
+        margin-top: 20px !important;
+        margin-bottom: 40px !important;
+    }
+
+}

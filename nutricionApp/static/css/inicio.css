@@ -221,7 +221,7 @@ body {
     /* color: #909090; */
 }
 
-.decora--container  {
+.decora--container {
     display: none;
 }
 
@@ -347,5 +347,9 @@ body {
     .decora--container .imagenes-decora:nth-child(5) {
         top: 85%;
         left: 2.5rem;
+    }
+
+    .decora--container {
+        display: initial;
     }
 }

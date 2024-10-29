@@ -6,15 +6,15 @@
         {% endif %}
         <div class="col-12 mt-4 mb-4">
             <h5>
-                <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#" aria-expanded="true"
+                <!-- <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#" aria-expanded="true"
                     aria-controls="collapseComidas">
                     Comidas
-                </button>
+                </button> -->
             </h5>
 
             <div class="table-responsive table-responsive-planes" id="table-container">
                 <table class="table table-striped table-hover table-planes">
-                    <thead class="table-dark">
+                    <!-- <thead class="table-dark"> -->
                         <tr>
                             <th scope="col" class="text-center align-top">Tiempos de comida</th>
                             <th scope="col" class="text-center align-top">Menu 1 (Lunes y Viernes)</th>
@@ -30,19 +30,19 @@
                                 value="{{ plan_comidas_semanales.comidas[0].id_comida if plan_comidas_semanales.comidas|length > 0 else '' }}">
 
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu1_desayuno" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[0].menu_uno_lunes_viernes if plan_comidas_semanales.comidas|length > 0 else '' }}</textarea>
                             </td>
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu2_desayuno" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[0].menu_dos_martes_jueves if plan_comidas_semanales.comidas|length > 0 else '' }}</textarea>
                             </td>
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu3_desayuno" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[0].menu_tres_miercoles_sabado if plan_comidas_semanales.comidas|length > 0 else '' }}</textarea>
@@ -54,19 +54,19 @@
                             <input type="hidden" name="plan_semanal_comida_id[]"
                                 value="{{ plan_comidas_semanales.comidas[1].id_comida if plan_comidas_semanales.comidas|length > 1 else '' }}">
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu1_almuerzo" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[1].menu_uno_lunes_viernes if plan_comidas_semanales.comidas|length > 1 else '' }}</textarea>
                             </td>
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu2_almuerzo" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[1].menu_dos_martes_jueves if plan_comidas_semanales.comidas|length > 1 else '' }}</textarea>
                             </td>
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu3_almuerzo" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[1].menu_tres_miercoles_sabado if plan_comidas_semanales.comidas|length > 1 else '' }}</textarea>
@@ -78,19 +78,19 @@
                             <input type="hidden" name="plan_semanal_comida_id[]"
                                 value="{{ plan_comidas_semanales.comidas[2].id_comida if plan_comidas_semanales.comidas|length > 2 else '' }}">
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu1_durante_entrenamiento" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[2].menu_uno_lunes_viernes if plan_comidas_semanales.comidas|length > 2 else '' }}</textarea>
                             </td>
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu2_durante_entrenamiento" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[2].menu_dos_martes_jueves if plan_comidas_semanales.comidas|length > 2 else '' }}</textarea>
                             </td>
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu3_durante_entrenamiento" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[2].menu_tres_miercoles_sabado if plan_comidas_semanales.comidas|length > 2 else '' }}</textarea>
@@ -102,19 +102,19 @@
                             <input type="hidden" name="plan_semanal_comida_id[]"
                                 value="{{ plan_comidas_semanales.comidas[3].id_comida if plan_comidas_semanales.comidas|length > 3 else '' }}">
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu1_terminar_entrenar" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[3].menu_uno_lunes_viernes if plan_comidas_semanales.comidas|length > 3 else '' }}</textarea>
                             </td>
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu2_terminar_entrenar" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[3].menu_dos_martes_jueves if plan_comidas_semanales.comidas|length > 3 else '' }}</textarea>
                             </td>
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu3_terminar_entrenar" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[3].menu_tres_miercoles_sabado if plan_comidas_semanales.comidas|length > 3 else '' }}</textarea>
@@ -126,25 +126,43 @@
                             <input type="hidden" name="plan_semanal_comida_id[]"
                                 value="{{ plan_comidas_semanales.comidas[4].id_comida if plan_comidas_semanales.comidas|length > 4 else '' }}">
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu1_cena" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[4].menu_uno_lunes_viernes if plan_comidas_semanales.comidas|length > 4 else '' }}</textarea>
                             </td>
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu2_cena" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[4].menu_dos_martes_jueves if plan_comidas_semanales.comidas|length > 4 else '' }}</textarea>
                             </td>
                             <td>
-                                <textarea
+                                <textarea id="autoResizeTextarea"
                                     class="form-control custom-textarea d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                                     name="menu3_cena" {{ 'disabled' if rol !='nutriologo' }}
                                     maxlength="400">{{ plan_comidas_semanales.comidas[4].menu_tres_miercoles_sabado if plan_comidas_semanales.comidas|length > 4 else '' }}</textarea>
                             </td>
                         </tr>
                     </tbody>
+
+                    <script>
+                        // Selecciona todos los elementos <textarea id="autoResizeTextarea">
+                        const textareas = document.querySelectorAll("textarea");
+
+                        // Añade el evento de ajuste de altura a cada textarea
+                        textareas.forEach((textarea) => {
+                            textarea.addEventListener("input", function () {
+                                // Restablece el alto antes de ajustar para evitar crecimiento continuo
+                                textarea.style.height = "auto";
+                                // Ajusta la altura según el contenido
+                                textarea.style.height = `${textarea.scrollHeight}px`;
+                            });
+
+                            // Ajusta la altura inicialmente si ya tiene contenido
+                            textarea.style.height = `${textarea.scrollHeight}px`;
+                        });
+                    </script>
                 </table>
             </div>
 
@@ -172,7 +190,7 @@
                         <label for="low-calorie-foods" class="form-label">Escriba los alimentos
                             permitidos con pocas calorías para el paciente:</label>
                         {% endif %}
-                        <textarea class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                        <textarea id="autoResizeTextarea" class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                             id="low-calorie-foods" name="low_calorie_foods" rows="1" maxlength="1000" required {% if
                             rol=='paciente' %}readonly{% endif %}>{{ item[1] }}</textarea>
                     </div>
@@ -197,7 +215,7 @@
                         <label for="avoid-foods" class="form-label">Escriba las comidas a evitar del
                             paciente:</label>
                         {% endif %}
-                        <textarea
+                        <textarea id="autoResizeTextarea"
                             class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2"
                             id="avoid-foods" name="avoid_foods" rows="1" maxlength="1000" required {% if rol=='paciente'
                             %}readonly{% endif %}>{{ item[2] }}</textarea>
@@ -223,7 +241,7 @@
                         <label for="allowed-drinks" class="form-label">Escriba las bebidas permitidas
                             del paciente:</label>
                         {% endif %}
-                        <textarea class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                        <textarea id="autoResizeTextarea" class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                             id="allowed-drinks" name="allowed_drinks" rows="1" maxlength="1000" required {% if
                             rol=='paciente' %}readonly{% endif %}>{{ item[3] }}</textarea>
                     </div>
@@ -248,7 +266,7 @@
                         <label for="nutrition-tips" class="form-label">Escriba los tips de alimentación
                             para el paciente:</label>
                         {% endif %}
-                        <textarea
+                        <textarea id="autoResizeTextarea"
                             class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2"
                             id="nutrition-tips" name="nutrition_tips" rows="1" maxlength="1000" {% if rol=='paciente'
                             %}readonly{% endif %}>{{ item[4] }}</textarea>
@@ -302,7 +320,7 @@
                             <label for="supplement-details" class="form-label">Escriba los suplementos que desee el
                                 paciente:</label>
                             {% endif %}
-                            <textarea
+                            <textarea id="autoResizeTextarea"
                                 class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2"
                                 id="supplement-details" name="supplement_details" rows="1" maxlength="1000" {% if
                                 rol=='paciente' %}readonly{% endif %}>{{ item[5] }}</textarea>
@@ -327,7 +345,7 @@
                     <div class="col-12 col-md-7">
                         <label for="low-calorie-foods" class="form-label">Escriba los alimentos
                             permitidos con pocas calorías para el paciente:</label>
-                        <textarea class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                        <textarea id="autoResizeTextarea" class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                             id="low-calorie-foods" name="low_calorie_foods" rows="1" maxlength="1000"
                             required></textarea>
                     </div>
@@ -350,7 +368,7 @@
                     <div class="col-12 col-md-7">
                         <label for="avoid-foods" class="form-label">Escriba las comidas a evitar del
                             paciente:</label>
-                        <textarea
+                        <textarea id="autoResizeTextarea"
                             class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2"
                             id="avoid-foods" name="avoid_foods" rows="1" maxlength="1000" required></textarea>
                     </div>
@@ -373,7 +391,7 @@
                     <div class="col-12 col-md-7">
                         <label for="allowed-drinks" class="form-label">Escriba las bebidas permitidas
                             del paciente:</label>
-                        <textarea class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
+                        <textarea id="autoResizeTextarea" class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2"
                             id="allowed-drinks" name="allowed_drinks" rows="1" maxlength="1000" required></textarea>
                     </div>
                 </div>
@@ -395,7 +413,7 @@
                     <div class="col-12 col-md-7">
                         <label for="nutrition-tips" class="form-label">Escriba los tips de alimentación
                             para el paciente:</label>
-                        <textarea
+                        <textarea id="autoResizeTextarea"
                             class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2"
                             id="nutrition-tips" name="nutrition_tips" rows="1" maxlength="1000"></textarea>
                     </div>
@@ -437,7 +455,7 @@
                         <div class="col-12 col-md-7">
                             <label for="supplement-details" class="form-label">Escriba los suplementos que desee el
                                 paciente:</label>
-                            <textarea
+                            <textarea id="autoResizeTextarea"
                                 class="form-control d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2"
                                 id="supplement-details" name="supplement_details" rows="1" maxlength="1000"></textarea>
                         </div>
