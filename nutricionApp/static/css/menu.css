@@ -179,3 +179,17 @@ body {
     }
 
 }
+
+
+@media screen and (max-width: 361px) {
+    .menu__cerrar-sesion {
+
+        padding: 2px;
+    }
+
+    .menu__tarjeta {
+        width: 70%;
+        height: 125px;
+        margin-top: 20px;
+    }
+}

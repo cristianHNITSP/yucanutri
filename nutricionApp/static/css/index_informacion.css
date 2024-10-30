@@ -18,14 +18,23 @@ body {
 
 #table-container {
     margin-top: 20px;
+    /* background-color: red; */
 }
+
+#autoResizeTextarea {
+    /* height: 100% !important; */
+    /* background-color: red !important; */
+    min-height: 150px;
+    /* height: 100% !important; */
+}
+
 /* 
 .custom-textarea {
     resize: both;
 } */
 
 
-.table-planes{
+.table-planes {
     width: 100% !important;
     height: 100% !important;
     margin: 0;
@@ -42,4 +51,17 @@ body {
         margin-bottom: 40px !important;
     }
 
+
+
+
+    @media screen and (max-width: 361px) {
+        .container {
+            padding: 0;
+        }
+
+        #autoResizeTextarea {
+            width: auto;
+
+        }
+    }
 }
