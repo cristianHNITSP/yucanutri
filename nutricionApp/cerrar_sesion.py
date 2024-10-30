@@ -103,6 +103,10 @@ def tiempo_de_inactividad():
 @bp.route('/cerrar_sesion_todos_dispositivos', methods=['POST'])
 def cerrar_sesion_todos_dispositivos():
     correo = request.form.get('correo')  # Obtén el correo del formulario
+    # Inicializar rol como visitante
+    session['rol'] = 'visitante'
+    print('Se cammbio se sesion a ', (session['rol'])
+ )
     
     # Verificar si el correo está vacío
     if not correo or not isinstance(correo, str):
@@ -120,6 +124,7 @@ def cerrar_sesion_todos_dispositivos():
             (correo, correo, correo)
         )
         flash("Se cerraron las sesiones exitosamente.", "success")  # Mensaje flash
+        session.clear()
     except Exception as e:
         flash("Error al cerrar las sesiones: {}".format(str(e)), "error")  # Manejo de errores
 
