@@ -27,6 +27,7 @@ body {
 
 .form-container {
     width: 29.5%;
+    max-width: 430px;
     height: 500px;
     /* height: auto; */
     display: flex;
@@ -276,4 +277,13 @@ body {
     [name="sexo"] {
         padding-left: 40px;
     }
+}
+
+
+@media screen and (max-width: 361px) {
+    .form-container{
+        gap: 3px;
+        width: 91%;
+    }
+    
 }
