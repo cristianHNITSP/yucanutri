@@ -81,15 +81,19 @@ def inicio_sesion():
 
                     print(f"Rol: {rol_usuario}, Correo: {correo_usuario}, Contraseña: {contrasena_usuario}")
 
-                    if estado:  # Si el estado_sesion es True, no permitir el inicio de sesión
-                        flash('La sesión ya está activa. Por favor, cierra la sesión primero.', 'warning')
-                        return redirect(url_for('inicio_sesion'))
-
+                    # Verificación de la contraseña
                     if rol_usuario == 'paciente':
                         if check_password_hash(contrasena_usuario, contraseña):
+                            # Almacenar el rol y correo del usuario en la sesión
                             session['rol'] = rol_usuario
                             session['correo'] = correo_usuario
-                            session['estado'] = True
+                           
+                            
+                            # Verificar si hay una sesión activa
+                            if estado:  # Si el estado_sesion es True, hay una sesión activa
+                                flash('La sesión ya está activa. Por favor, cierra la sesión primero.', 'warning')
+                                return render_template("inicio_sesion.html", correo=correo_usuario, sesionActiva=True)
+
                             Config.CUD(
                                 """
                                 UPDATE public.paciente
@@ -100,6 +104,7 @@ def inicio_sesion():
                                 """,
                                 (correo_usuario,)
                             )
+                            session['estado'] = True
                             print("sesión activa")
                             flash(f'Inicio de sesión exitoso como {rol_usuario}', 'success')
                             return redirect(url_for('nutriologo_paciente.index_informacion'))
@@ -109,9 +114,16 @@ def inicio_sesion():
 
                     elif rol_usuario in ['nutriologo', 'superusuario']:
                         if contrasena_usuario == contraseña:
+                            # Almacenar el rol y correo del usuario en la sesión
                             session['rol'] = rol_usuario
                             session['correo'] = correo_usuario
-                            session['estado'] = True
+                            
+
+                            # Verificar si hay una sesión activa
+                            if estado:  # Si el estado_sesion es True, hay una sesión activa
+                                flash('La sesión ya está activa. Por favor, cierra la sesión primero.', 'warning')
+                                return render_template("inicio_sesion.html", correo=correo_usuario, sesionActiva=True)
+
                             Config.CUD(
                                 """
                                 UPDATE public.nutriologo
@@ -122,6 +134,7 @@ def inicio_sesion():
                                 """,
                                 (correo_usuario,)
                             )
+                            session['estado'] = True
                             print("sesión activa")
                             flash(f'Inicio de sesión exitoso como {rol_usuario}', 'success')
 
@@ -135,7 +148,7 @@ def inicio_sesion():
                 
                 print("Credenciales incorrectas")
             else:
-                flash('Usuario no encontrado', 'warning')
+                flash('Usuario no encontrado, verifique con el nutriologo si no se encuentra temporalmente inactivo.', 'warning')
                 print("Usuario no encontrado en los roles")
 
         except Exception as e:
@@ -146,5 +159,6 @@ def inicio_sesion():
     print(session)
     
     return render_template("inicio_sesion.html")
+
 
 

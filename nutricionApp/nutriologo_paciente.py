@@ -90,7 +90,7 @@ def index_informacion():
             flash('No se encontraron planes alimenticios para este paciente.', 'warning')
 
         print('¿Se encontraron los planes alimenticios semanales?:', has_plan_alimentacion)   
-        print('Datos del paciente actual: ', paciente_datos)    
+        print('Datos del paciente actual: ', paciente_datos, paciente_info)    
         print('El progreso actual del paciente es: ', registro_progreso)
         print('El plan alimenticio es: ', registro_plan_alimenticio)
         print('El plan semanal de comida es: ', plan_comidas_semanales)
@@ -111,9 +111,6 @@ def index_informacion():
                                 paciente_info=paciente_datos[0] if paciente_datos else paciente_info, 
                                 has_plan_alimentacion=has_plan_alimentacion, 
                                 plan_comidas_semanales=plan_comidas_semanales)
-
-
-
 
 @bp.route('/crear_nuevo_progreso', methods=['POST'])
 def crear_nuevo_progreso():
@@ -150,9 +147,13 @@ def crear_nuevo_progreso():
         if porcentaje_grasa > 70 or porcentaje_musculo > 70:
             flash('Los porcentajes de grasa y músculo no pueden exceder el 70%.', 'warning')
             return redirect(url_for('nutriologo_paciente.index_informacion'))
+
+        if  abdomen > 200:
+            flash('El abdomen no puede exceder los 200cm.', 'warning')
+            return redirect(url_for('nutriologo_paciente.index_informacion'))
         
         medidas_brazos = [
-            abdomen, brazo_der_relajado, brazo_der_contraido, brazo_izq_relajado, 
+            brazo_der_relajado, brazo_der_contraido, brazo_izq_relajado, 
             brazo_izq_contraido
         ]
         
@@ -349,8 +350,12 @@ def editar_progreso():
             flash('Los porcentajes de grasa y músculo no pueden exceder el 70%.', 'warning')
             return redirect(url_for('nutriologo_paciente.index_informacion'))
         
+        if  abdomen > 200:
+            flash('El abdomen no puede exceder los 120cm.', 'warning')
+            return redirect(url_for('nutriologo_paciente.index_informacion'))
+        
         medidas_brazos = [
-            abdomen, brazo_der_relajado, brazo_der_contraido, brazo_izq_relajado, 
+            brazo_der_relajado, brazo_der_contraido, brazo_izq_relajado, 
             brazo_izq_contraido
         ]
         
@@ -940,7 +945,3 @@ def obtener_plan_comidas_semanal_paciente(id_plan_alimenticio):
     except Exception as e:
         print(f"Error al obtener el plan de comidas: {e}")
         return {"comidas": []}  # Retorna un dict vacío si ocurre un error
-
-
-
-

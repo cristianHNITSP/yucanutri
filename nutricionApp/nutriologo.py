@@ -185,11 +185,9 @@ def registrarPaciente():
 
     return render_template("registrar_cliente.html")
 
-
 # buscador por correo
 @bp.route('/sala_nutriologo', methods=['GET', 'POST'])
 def salaNutriologo():
-
     # Verificar si el usuario ha iniciado sesión y tiene permisos
     if 'rol' not in session or (session.get('rol') != 'nutriologo' and session.get('rol') != 'superusuario'):
         flash('Acceso denegado: La sala es solo para nutriologo, inicia sesión.', 'danger')
@@ -229,6 +227,7 @@ def salaNutriologo():
                 """,
                 (patient_email,)  # Usar el correo como parámetro
             )
+
         except Exception as e:
             flash(f"Error al consultar la base de datos: {e}", "error")
             # Redirigir a la misma página
@@ -236,8 +235,7 @@ def salaNutriologo():
 
         # Comprobar si se encontró al paciente
         if not paciente_info:
-            flash(
-                "No se encontró un paciente con el correo proporcionado o está inactivo.", "error")
+            flash("No se encontró un paciente con el correo proporcionado o está inactivo.", "error")
             # Redirigir a la misma página
             return redirect(url_for('nutriologo.salaNutriologo'))
 
@@ -246,15 +244,53 @@ def salaNutriologo():
         print(f"Datos guardados en la sesión: {session['paciente_info']}")
         flash(f"Ver datos del paciente con el correo: {patient_email}", "success")
 
-# Redirigir a 'nutriologo_paciente.index_informacion' con los datos del paciente
+        # Recuperar la información del paciente de la sesión
+        paciente_info = session.get('paciente_info')
+        if not paciente_info:
+            flash('No se encontró información del paciente.', 'error')
+            return redirect(url_for('nutriologo.cambiar_paciente'))
+
+        # Obtener el ID del paciente de la información recuperada
+        id_paciente = paciente_info[0]  # Cambiar para usar el diccionario
+
+        # Actualizar el acceso habilitado del paciente a false
+        try:
+            resultado_actualizacion = Config.CUD(
+                """
+                UPDATE public.paciente
+                SET acceso_habilitado = false
+                WHERE id_paciente = %s;
+                """,
+                (id_paciente,)  # Usar el ID del paciente encontrado
+            )
+
+            flash('El acceso del paciente ha sido deshabilitado temporalmente.', 'success')
+
+        except Exception as e:
+            flash(f"Error al actualizar el acceso del paciente: {e}", "error")
+
+        # Redirigir a 'nutriologo_paciente.index_informacion' con los datos del paciente
         return redirect(url_for('nutriologo_paciente.index_informacion'))
 
     # Si el método es GET, simplemente renderiza la plantilla
     return render_template("sala_nutriologo.html")
 
 
+
 @bp.route('/cambiar_paciente')
 def cambiar_paciente():
+    paciente_info = session.get('paciente_info')
+    id_paciente = paciente_info[0]
+    resultado_actualizacion = Config.CUD(
+    """
+    UPDATE public.paciente
+    SET acceso_habilitado = true
+    WHERE id_paciente = %s;
+    """,
+    (id_paciente,)
+    )
+
+    flash("Acceso habilitado nuevamente para el paciente.", "success")
     # Limpiar solo la clave 'paciente_info' de la sesión
     session.pop('paciente_info', None)
 

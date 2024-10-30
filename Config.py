@@ -1,108 +1,102 @@
 import psycopg2
 from flask import redirect, session, flash, url_for
 
-# Clave de seguridad (aunque no se utiliza en este código, la dejé aquí por si la necesitas)
 HEX_SEC_KEY = "d5fb8c4fa8bd46638dadc4e751e0d68d"
 
-# Contraseñas por defecto para cada rol
 ROLE_CREDENTIALS = {
     'nutriologo': {
         'user': 'nutriologo',
-        'password': 'T!6ry@9g#@c1t2b&z#@k'  # Contraseña segura
+        'password': 'T!6ry@9g#@c1t2b&z#@k'
     },
     'paciente': {
         'user': 'paciente',
-        'password': 'Y#8fL*5nV!q0G3z&xT9e'  # Contraseña segura
+        'password': 'Y#8fL*5nV!q0G3z&xT9e'
     },
     'superusuario': {
         'user': 'superusuario',
-        'password': 'T6645697#5x1@#b@z48k'  # Contraseña segura
+        'password': 'T6645697#5x1@#b@z48k'
     },
     'visitante': {
         'user': 'visitante',
-        'password': 'T!6rF@9gQ#x1V2b&zP8k'  # Contraseña segura
+        'password': 'T!6rF@9gQ#x1V2b&zP8k'
     }
 }
 
-# Método para obtener las credenciales según el rol
 def get_credentials(role):
-    return ROLE_CREDENTIALS.get(role, ROLE_CREDENTIALS['visitante'])  # Devuelve visitante si el rol no existe
+    return ROLE_CREDENTIALS.get(role, ROLE_CREDENTIALS['visitante'])
 
-# Método para realizar CUD: CREATE, UPDATE y DELETE
-def CUD(query, params=None, is_bulk=False):
+def CUD(query, params=None, is_bulk=False, max_retries=3):
     print("<-------------------- Conectando... --------------------")
     connection = None
     try:
-        # Obtener el rol de la sesión, o usar 'visitante' si no hay rol
-        role = session.get('rol', 'visitante')  # Asignar 'visitante' si no hay rol
+        role = session.get('rol', 'visitante')
         print(f"Rol en sesión: {role}")
-
-        # Obtener credenciales según el rol
         credentials = get_credentials(role)
-        print(f"Usuario en conexion: {credentials['user']}")
-        print(f"Contraseña en conexion: {credentials['password']}")
+        print(f"Usuario en conexión: {credentials['user']}")
 
-        # Conectar a la base de datos usando las credenciales obtenidas
         connection = psycopg2.connect(
-            dbname="nutriologo_db",  # Nombre de la base de datos
-            user=str(credentials['user']),  # Convertir a string  # Usuario según el rol
-            password=str(credentials['password']),  # Convertir a string  # Contraseña según el rol
-            host="localhost",  # Cambia esto si tu servidor está en otra dirección
-            port="5432"  # Puerto por defecto de PostgreSQL
+            dbname="nutriologo_db",
+            user=str(credentials['user']),
+            password=str(credentials['password']),
+            host="localhost",
+            port="5432"
         )
-        print(f"conexion a la debe desde: {connection}")
+
         cursor = connection.cursor()
+        retries = 0
 
-        # Comprobar si es una inserción masiva
-        if is_bulk and isinstance(params, list):
-            cursor.executemany(query, params)  # Ejecutar inserciones masivas
-        else:
-            if params:
-                cursor.execute(query, params)
-            else:
-                cursor.execute(query)
+        while retries < max_retries:
+            try:
+                # Iniciar la transacción
+                cursor.execute("BEGIN;")
+                
+                if is_bulk and isinstance(params, list):
+                    cursor.executemany(query, params)
+                else:
+                    if params:
+                        cursor.execute(query, params)
+                    else:
+                        cursor.execute(query)
 
-        connection.commit()  # Confirmar los cambios en la base de datos
-        print("<-------------------- Conexión exitosa --------------------")
-    except psycopg2.OperationalError as op_err:
-        print(f"<-------------------- Error de operación: {op_err} -------------------->")
-    except psycopg2.ProgrammingError as prog_err:
-        print(f"<-------------------- Error de programación: {prog_err} -------------------->")
-        flash(f"Error: {prog_err}", 'permiso_denegado')
-    except psycopg2.DataError as data_err:
-        print(f"<-------------------- Error de datos: {data_err} -------------------->")
-    except UnicodeDecodeError as decode_err:
-        print(f"<-------------------- Error de codificación: {decode_err} -------------------->")
+                # Confirmar cambios
+                cursor.execute("COMMIT;")
+                print("<-------------------- Conexión exitosa --------------------")
+                break  # Salir del bucle si la operación fue exitosa
+            
+            except (psycopg2.OperationalError, psycopg2.DataError) as err:
+                print(f"<-------------------- Error: {err} -------------------->")
+                # Revertir los cambios
+                cursor.execute("ROLLBACK;")
+                retries += 1  # Incrementar el número de reintentos
+                if retries >= max_retries:
+                    flash(f"Error: {err}", 'permiso_denegado')
+                    print("<-------------------- Fallo en los reintentos -------------------->")
+
     except Exception as ex:
         print(f"<-------------------- Error inesperado: {ex} -------------------->")
     finally:
         if connection:
-            connection.close()
+            cursor.close()  # Cerrar cursor
+            connection.close()  # Cerrar conexión
             print("-------------------- Conexión finalizada -------------------->")
-
 
 def Read(query, params=None):
     print("<-------------------- Conectando... --------------------")
     connection = None
     try:
-        # Obtener el rol de la sesión, o usar 'visitante' si no hay rol
-        role = session.get('rol', 'visitante')  # Asignar 'visitante' si no hay rol
+        role = session.get('rol', 'visitante')
         print(f"Rol en sesión: {role}")
-
-        # Obtener credenciales según el rol
         credentials = get_credentials(role)
-        print(f"Usuario en conexion: {credentials['user']}")
-        print(f"Contraseña en conexion: {credentials['password']}")
+        print(f"Usuario en conexión: {credentials['user']}")
 
-        # Conectar a la base de datos usando las credenciales obtenidas
         connection = psycopg2.connect(
-            dbname="nutriologo_db",  # Nombre de la base de datos
-            user=str(credentials['user']),  # Usuario según el rol
-            password=str(credentials['password']),  # Contraseña según el rol
-            host="localhost",  # Cambia esto si tu servidor está en otra dirección
-            port="5432"  # Puerto por defecto de PostgreSQL
+            dbname="nutriologo_db",
+            user=str(credentials['user']),
+            password=str(credentials['password']),
+            host="localhost",
+            port="5432"
         )
-        print(f"Conexión a la base de datos: {connection}")
+
         cursor = connection.cursor()
         
         # Ejecutar la consulta
@@ -112,10 +106,9 @@ def Read(query, params=None):
             cursor.execute(query)
         
         rows = cursor.fetchall()
-        results = [list(row) for row in rows]  # Convertir cada fila a una lista
+        results = [list(row) for row in rows]
         print("<-------------------- Conexión exitosa --------------------")
         
-        # Mostrar los resultados
         if results:
             for result in results:
                 print(result)
@@ -125,18 +118,11 @@ def Read(query, params=None):
         print("---------------------------------------->")
         return results
 
-    except psycopg2.OperationalError as op_err:
-        print(f"<-------------------- Error de operación: {op_err} -------------------->")
-    except psycopg2.ProgrammingError as prog_err:
-        print(f"<-------------------- Error de programación: {prog_err} -------------------->")
-    except psycopg2.DataError as data_err:
-        print(f"<-------------------- Error de datos: {data_err} -------------------->")
-    except UnicodeDecodeError as decode_err:
-        print(f"<-------------------- Error de codificación: {decode_err} -------------------->")
     except Exception as ex:
         print(f"<-------------------- Error inesperado: {ex} -------------------->")
-        return []  # Devolver lista vacía en lugar de None
+        return []
     finally:
         if connection:
-            connection.close()
+            cursor.close()  # Cerrar cursor
+            connection.close()  # Cerrar conexión
             print("-------------------- Conexión finalizada -------------------->")
