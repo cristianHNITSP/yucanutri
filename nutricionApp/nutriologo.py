@@ -186,6 +186,8 @@ def registrarPaciente():
     return render_template("registrar_cliente.html")
 
 # buscador por correo
+
+
 @bp.route('/sala_nutriologo', methods=['GET', 'POST'])
 def salaNutriologo():
     # Verificar si el usuario ha iniciado sesión y tiene permisos
@@ -235,14 +237,16 @@ def salaNutriologo():
 
         # Comprobar si se encontró al paciente
         if not paciente_info:
-            flash("No se encontró un paciente con el correo proporcionado o está inactivo.", "error")
+            flash(
+                "No se encontró un paciente con el correo proporcionado o está inactivo.", "error")
             # Redirigir a la misma página
             return redirect(url_for('nutriologo.salaNutriologo'))
 
         # Si se encontró al paciente, guardar los datos en la sesión (opcional)
         session['paciente_info'] = paciente_info[0]  # Guardar en la sesión
         print(f"Datos guardados en la sesión: {session['paciente_info']}")
-        flash(f"Ver datos del paciente con el correo: {patient_email}", "success")
+        flash(f"Ver datos del paciente con el correo: {
+              patient_email}", "success")
 
         # Recuperar la información del paciente de la sesión
         paciente_info = session.get('paciente_info')
@@ -264,7 +268,8 @@ def salaNutriologo():
                 (id_paciente,)  # Usar el ID del paciente encontrado
             )
 
-            flash('El acceso del paciente ha sido deshabilitado temporalmente.', 'success')
+            flash(
+                'El acceso del paciente ha sido deshabilitado temporalmente.', 'success')
 
         except Exception as e:
             flash(f"Error al actualizar el acceso del paciente: {e}", "error")
@@ -276,18 +281,22 @@ def salaNutriologo():
     return render_template("sala_nutriologo.html")
 
 
-
 @bp.route('/cambiar_paciente')
 def cambiar_paciente():
+    if 'paciente_info' not in session:
+        flash('Acceso denegado: Ingresa un correo', 'danger')
+        # Redirigir al login si no está autorizado
+        return redirect(url_for('nutriologo.salaNutriologo'))
+
     paciente_info = session.get('paciente_info')
     id_paciente = paciente_info[0]
     resultado_actualizacion = Config.CUD(
-    """
+        """
     UPDATE public.paciente
     SET acceso_habilitado = true
     WHERE id_paciente = %s;
     """,
-    (id_paciente,)
+        (id_paciente,)
     )
 
     flash("Acceso habilitado nuevamente para el paciente.", "success")
