@@ -31,8 +31,8 @@ def index_informacion():
         elif rol == 'paciente':
             correo_electronico = session.get('correo')
             if not correo_electronico:
-                flash('No se encontró el correo electrónico.', 'error')
-                return render_template("index_informacion.html", rol=rol, has_plan_alimentacion=has_plan_alimentacion, plan_comidas_semanales=plan_comidas_semanales)
+                flash('Su correo no se ha recuperado de forma exitosa.', 'warning')
+                return redirect(url_for("cerrar_sesion.cerrar_sesion_paciente_forzoso"))  # Asegúrate de que esta sea la URL correcta
 
             Consultar_datos_paciente = """
                 SELECT 
@@ -52,8 +52,8 @@ def index_informacion():
             paciente_datos = Config.Read(Consultar_datos_paciente, (correo_electronico,))
             
             if not paciente_datos:
-                flash('No se encontraron datos del paciente.', 'warning')
-                return render_template("index_informacion.html", rol=rol, has_plan_alimentacion=has_plan_alimentacion, plan_comidas_semanales=plan_comidas_semanales)
+                session['paciente_sesion_forzada'] = True  # Puedes asignar el valor que desees
+                return redirect(url_for("cerrar_sesion.cerrar_sesion_paciente_forzoso"))  # Asegúrate de que esta sea la URL correcta
 
             id_paciente = paciente_datos[0][0]
 

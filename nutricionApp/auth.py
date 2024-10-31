@@ -148,7 +148,7 @@ def inicio_sesion():
                 
                 print("Credenciales incorrectas")
             else:
-                flash('Usuario no encontrado, verifique con el nutriologo si no se encuentra temporalmente inactivo.', 'warning')
+                flash('Usuario no encontrado, verifique con el nutriologo si no se encuentra temporalmente inactivo su usuario.', 'warning')
                 print("Usuario no encontrado en los roles")
 
         except Exception as e:

@@ -48,6 +48,33 @@ def cerrar_sesion_paciente():
     else:
         flash('La sesión no se cerró correctamente.', 'warning')
         return redirect(url_for('auth.inicio_sesion'))
+    
+@bp.route('/cerrar_sesion_paciente_forzoso')
+def cerrar_sesion_paciente_forzoso():
+    print(session['estado'])
+    print(session['correo'])
+    
+    if session['estado'] is True:
+        Config.CUD(
+            """
+            UPDATE public.paciente
+            SET 
+                estado_sesion = False
+            WHERE 
+                correo_electronico[1] = %s
+            """,
+            (session.get('correo'),)  # Pasa el correo como un array en la consulta
+        )
+        paciente_sesion_forzada = session.get('paciente_sesion_forzada')
+        if paciente_sesion_forzada is True:
+            flash_guardar_mensaje_forsoso = "La sesión ha sido forzada a cerrarse, verifique con el nutriologo que su usuario no este en uso."
+        session.clear()
+        flash('Sesión cerrada correctamente.', 'success')
+        flash(flash_guardar_mensaje_forsoso, 'warning')
+        return redirect(url_for('auth.inicio_sesion'))
+    else:
+        flash('La sesión no se cerró correctamente.', 'warning')
+        return redirect(url_for('auth.inicio_sesion'))
 
 @bp.route('/tiempo_de_inactividad', methods=['GET'])
 def tiempo_de_inactividad():
